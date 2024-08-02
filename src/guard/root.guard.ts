@@ -22,10 +22,7 @@ export class RootGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const basicToken = request.headers?.basic;
 
-    if (
-      !basicToken ||
-      basicToken !== 'Zm9yLWNyZWF0ZS1hZG1pbjpiOTkxSTVWVnAybDFaVmxxMUZGaw=='
-    ) {
+    if (!basicToken || basicToken !== 'YWRtaW4xOmFkbWluMQ==') {
       throw new UnauthorizedException();
     }
 

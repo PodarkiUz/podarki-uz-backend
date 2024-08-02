@@ -9,4 +9,6 @@ export enum ErrorCodes {
   CATEGORY_NOT_FOUND = 601,
 
   PRODUCT_NOT_FOUND = 301,
+
+  ADMIN_PASSWORD_INCORRECT = 501,
 }

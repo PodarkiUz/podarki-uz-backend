@@ -17,14 +17,12 @@ export class FileRouterService {
 
       const filename = ObjectID().toHexString();
 
-      const data = s3
-        .putObject({
-          Body: fileContent, // The actual file content
-          Bucket: 'files',
-          Key: filename, // The name of the file
-          ContentType: mimetype,
-        })
-        .promise();
+      const data = s3.putObject({
+        Body: fileContent, // The actual file content
+        Bucket: 'files',
+        Key: filename, // The name of the file
+        ContentType: mimetype,
+      });
       await data;
 
       return {
@@ -34,7 +32,7 @@ export class FileRouterService {
       };
     } catch (error) {
       console.log(error);
-      
+
       throw new InternalServerErrorException(error);
     }
   }

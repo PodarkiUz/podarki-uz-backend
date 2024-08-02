@@ -1,16 +1,31 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { AdminUserRepo } from '../repo/user.repo';
-import { SetUserStatusDto } from '../dto/user-admin.dto';
+import {
+  AdminSignInDto,
+  CreateAdminDto,
+  SetUserStatusDto,
+} from '../dto/user-admin.dto';
 import { isEmpty } from 'lodash';
-import { EmailAlreadyRegistered, UserNotFoundException } from 'src/errors/permission.error';
+import {
+  AdminPasswordIncorrectException,
+  EmailAlreadyRegistered,
+  UserNotFoundException,
+} from 'src/errors/permission.error';
 import { ListPageDto } from 'src/shared/dto/list.dto';
-import { CreateUserDto } from 'src/domain/user/dto/user.dto';
 import { UserRoles, UserStatus } from 'src/domain/user/enum/user.enum';
 import { IUser } from 'src/domain/user/interface/user.interface';
+import { JwtService } from '@nestjs/jwt';
+import {
+  createHashPassword,
+  verifyPassword,
+} from 'src/shared/utils/password-hash';
 
 @Injectable()
 export class AdminUserService {
-  constructor(private readonly adminUserRepo: AdminUserRepo) {}
+  constructor(
+    private readonly adminUserRepo: AdminUserRepo,
+    private readonly jwtService: JwtService,
+  ) {}
 
   setStatus(params: SetUserStatusDto) {
     return this.adminUserRepo.updateById(params.user_id, {
@@ -43,22 +58,47 @@ export class AdminUserService {
     return { success: true };
   }
 
-  async createSuperAdmin(params: CreateUserDto) {
-    const hasEmail: IUser = await this.adminUserRepo.selectByEmail(
-      params.email,
+  async adminSignIn(params: AdminSignInDto) {
+    const admin = await this.adminUserRepo.selectByUsername(params.username);
+
+    if (isEmpty(admin)) {
+      throw new UserNotFoundException();
+    }
+
+    const isPasswordValid = await verifyPassword(
+      params.password,
+      admin.password,
     );
 
-    if (hasEmail) {
+    if (!isPasswordValid) {
+      throw new AdminPasswordIncorrectException();
+    }
+
+    return {
+      access_token: await this.jwtService.signAsync(
+        { id: admin.id, email: params.username, role: UserRoles.ADMIN },
+        { privateKey: 'store-app' },
+      ),
+    };
+  }
+
+  async createSuperAdmin(params: CreateAdminDto) {
+    const hasUsername: IUser = await this.adminUserRepo.selectByUsername(
+      params.username,
+    );
+
+    if (hasUsername) {
       throw new EmailAlreadyRegistered();
     }
 
     const [user]: [IUser] = await this.adminUserRepo.insert({
+      role: UserRoles.ADMIN,
+      status: UserStatus.ACTIVE,
+      username: params.username,
+      password: await createHashPassword(params.password),
       phone: params.phone,
       first_name: params.first_name,
       last_name: params.last_name,
-      role: UserRoles.ADMIN,
-      status: UserStatus.ACTIVE,
-      email: params.email,
     });
 
     return user;

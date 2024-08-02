@@ -5,8 +5,11 @@ create table users
     otp        varchar(5)  null,
     first_name varchar(24) null,
     last_name  varchar(24) null,
+    username   varchar(24) null,
     email      varchar(64) null,
+    status     smallint    not null,
     role       smallint    not null     default 1,
+    password   text        null,
     is_deleted bool        not null     default false,
     created_at timestamp with time zone default now()
 );
