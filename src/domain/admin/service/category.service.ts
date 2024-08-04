@@ -16,6 +16,8 @@ export class AdminCategoryService {
     return this.adminCategoryRepo.insert({
       name_uz: params.name_uz,
       name_ru: params.name_ru,
+      name_lat: params.name_lat,
+      image: params?.image,
     });
   }
 
@@ -29,6 +31,8 @@ export class AdminCategoryService {
     return this.adminCategoryRepo.updateById(id, {
       name_uz: params?.name_uz,
       name_ru: params?.name_ru,
+      name_lat: params.name_lat,
+      image: params?.image,
     });
   }
 

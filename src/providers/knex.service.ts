@@ -7,10 +7,10 @@ export class KnexService {
     this.instance = knex({
       client: 'postgresql',
       connection: {
-        host: 'tiny.db.elephantsql.com',
-        database: 'hbbvqrol',
-        password: '8UxRew7pJC38TkqJ9_ZyNpT09qhfsKBP',
-        user: 'hbbvqrol',
+        host: 'john.db.elephantsql.com',
+        database: 'zrdldrse',
+        password: 'vW-QMd6vea2sG9HRJxwexLS8heaQVX97',
+        user: 'zrdldrse',
       },
       pool: {
         min: 1,

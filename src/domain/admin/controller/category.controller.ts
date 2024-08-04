@@ -5,7 +5,6 @@ import {
   UseGuards,
   Delete,
   Param,
-  Patch,
   Get,
   Query,
 } from '@nestjs/common';
@@ -25,8 +24,13 @@ import { ListPageDto } from 'src/shared/dto/list.dto';
 export class AdminCategoryController {
   constructor(private readonly adminCategoryService: AdminCategoryService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() params: CreateCategoryDto) {
+    return this.adminCategoryService.create(params);
+  }
+
+  @Post('sub-category/create')
+  createSubCategory(@Body() params: CreateCategoryDto) {
     return this.adminCategoryService.create(params);
   }
 
@@ -35,12 +39,12 @@ export class AdminCategoryController {
     return this.adminCategoryService.getAllCategories(params);
   }
 
-  @Patch(':id')
+  @Post('update')
   async update(@Param('id') id: string, @Body() params: UpdateCategoryDto) {
     return this.adminCategoryService.update(id, params);
   }
 
-  @Delete(':id')
+  @Post('delete')
   async delete(@Param('id') id: string) {
     return this.adminCategoryService.delete(id);
   }
