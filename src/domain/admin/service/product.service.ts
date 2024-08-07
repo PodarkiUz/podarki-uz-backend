@@ -12,7 +12,7 @@ export class AdminProductService {
   constructor(
     private readonly adminProductRepo: AdminProductRepo,
     private readonly orderRepo: OrdersRepo,
-  ) {}
+  ) { }
 
   setStatus(params: SetProductStatusDto) {
     return this.adminProductRepo.updateById(params.product_id, {
@@ -26,8 +26,8 @@ export class AdminProductService {
         is_deleted: false,
       },
       {
-        limit: params.limit,
-        offset: params.offset,
+        limit: params.per_page,
+        offset: params.page,
         order_by: { column: 'created_at', order: 'desc', use: true },
       },
     );
@@ -52,8 +52,8 @@ export class AdminProductService {
         is_deleted: false,
       },
       {
-        limit: params.limit,
-        offset: params.offset,
+        limit: params.per_page,
+        offset: params.page,
         order_by: { column: 'created_at', order: 'desc', use: true },
       },
     );

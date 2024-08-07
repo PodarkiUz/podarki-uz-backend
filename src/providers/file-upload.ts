@@ -23,6 +23,4 @@ export const s3 = new S3({
   },
   endpoint: ENDPOINT,
   forcePathStyle: true,
-
-  
 });

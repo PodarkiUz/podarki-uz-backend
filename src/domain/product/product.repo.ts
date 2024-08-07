@@ -65,8 +65,8 @@ export class ProductRepo extends BaseRepo<any> {
       );
     }
 
-    if (params.limit) {
-      query.limit(Number(params.limit)).offset(Number(params.offset));
+    if (params?.per_page) {
+      query.limit(Number(params.per_page)).offset(Number(params.page));
     }
 
     return query;

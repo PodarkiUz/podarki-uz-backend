@@ -44,7 +44,7 @@ export class AdminAdvertisementService {
   async getAllCategories(params: ListPageDto) {
     return this.adsRepo.select(
       { is_deleted: false },
-      { limit: params.limit, offset: params.offset },
+      { limit: params.page, offset: params.page },
     );
   }
 }
