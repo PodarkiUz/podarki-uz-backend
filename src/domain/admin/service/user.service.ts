@@ -25,7 +25,7 @@ export class AdminUserService {
   constructor(
     private readonly adminUserRepo: AdminUserRepo,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   setStatus(params: SetUserStatusDto) {
     return this.adminUserRepo.updateById(params.user_id, {
