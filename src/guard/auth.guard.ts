@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate {
 
     try {
       token = await this.jwtService.verifyAsync(token, {
-        secret: `store-app`,
+        secret: `podarkiuz-app`,
       });
     } catch (error) {
       throw new ForbiddenException();

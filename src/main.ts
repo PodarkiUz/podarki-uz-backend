@@ -15,8 +15,8 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
-    .setTitle('Store API')
-    .setDescription('The store API description')
+    .setTitle('PodarkiUz API')
+    .setDescription('The PodarkiUz API description')
     .setVersion('1.0')
     .addBearerAuth(
       {

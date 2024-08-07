@@ -16,7 +16,7 @@ export class AdminGuard implements CanActivate {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -30,7 +30,7 @@ export class AdminGuard implements CanActivate {
 
     try {
       token = await this.jwtService.verifyAsync(token, {
-        secret: `store-app`,
+        secret: `podarkiuz-app`,
       });
     } catch (error) {
       throw new ForbiddenException();
