@@ -77,7 +77,7 @@ export class AdminUserService {
     return {
       access_token: await this.jwtService.signAsync(
         { id: admin.id, email: params.username, role: UserRoles.ADMIN },
-        { privateKey: 'store-app' },
+        { privateKey: 'podarkiuz-app' },
       ),
     };
   }

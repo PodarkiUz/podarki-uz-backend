@@ -15,7 +15,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly userRepo: UserRepo,
     private readonly emailService: EmailConfirmationService,
-  ) {}
+  ) { }
 
   async confirmOtp(params: ConfirmOtpDto) {
     const user: IUser = await this.userRepo.selectByEmail(params.email);
@@ -31,7 +31,7 @@ export class AuthService {
     return {
       access_token: await this.jwtService.signAsync(
         { id: user.id },
-        { privateKey: 'store-app' },
+        { privateKey: 'podarkiuz-app' },
       ),
       role: user.role,
     };
