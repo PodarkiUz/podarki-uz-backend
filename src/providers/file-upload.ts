@@ -23,7 +23,4 @@ export const s3 = new S3({
   },
   endpoint: ENDPOINT,
   forcePathStyle: true,
-  // accessKeyId: '640fd538544bad0c7d60879d0193a00c',
-  // secretAccessKey: '312a91e1c8ca403d396a9e16d20883f6',
-  // s3BucketEndpoint: true,
 });
