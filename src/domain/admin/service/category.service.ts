@@ -15,7 +15,7 @@ export class AdminCategoryService {
   constructor(
     private readonly adminCategoryRepo: AdminCategoryRepo,
     private readonly adminSubcategoryRepo: AdminSubcategoryRepo,
-  ) { }
+  ) {}
 
   create(params: CreateCategoryDto) {
     return this.adminCategoryRepo.insert({
