@@ -3,7 +3,7 @@ import { AdminProductService } from './service/product.service';
 import { AdminCategoryController } from './controller/category.controller';
 import { AdminProductController } from './controller/product.controller';
 import { AdminCategoryService } from './service/category.service';
-import { AdminCategoryRepo } from './repo/category.repo';
+import { AdminCategoryRepo, AdminSubcategoryRepo } from './repo/category.repo';
 import { AdminProductRepo } from './repo/product.repo';
 import { UserModule } from '../user/user.module';
 import { JwtService } from '@nestjs/jwt';
@@ -30,6 +30,7 @@ import { SuperAdminController } from './controller/super-admin.controller';
     AdminCategoryService,
     AdminProductService,
     AdminCategoryRepo,
+    AdminSubcategoryRepo,
     AdminProductRepo,
     AdminUserService,
     AdminUserRepo,

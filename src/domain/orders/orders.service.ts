@@ -12,7 +12,7 @@ export class OrdersService {
   constructor(
     private readonly orderRepo: OrdersRepo,
     private readonly productRepo: ProductRepo, // private readonly knexService: KnexService,
-  ) {}
+  ) { }
 
   async createOrder(params: CreateOrderDto) {
     const orderedProductArray = [];
@@ -73,8 +73,8 @@ export class OrdersService {
         is_deleted: false,
       },
       {
-        limit: params.limit,
-        offset: params.offset,
+        limit: params.per_page,
+        offset: params.page,
         order_by: { column: 'created_at', order: 'desc', use: true },
       },
     );

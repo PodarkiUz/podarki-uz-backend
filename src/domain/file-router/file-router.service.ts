@@ -52,9 +52,9 @@ export class FileRouterService {
       return {
         sucess: true,
         file_id: filename,
-        original_file_url: `https://eu2.contabostorage.com/a4fb51113a804943ad9b818ac4809297:${'images'}/${filename}/original-image`,
-        avif_file_url: `https://eu2.contabostorage.com/a4fb51113a804943ad9b818ac4809297:${'images'}/${filename}/avif-image`,
-        small_file_url: `https://eu2.contabostorage.com/a4fb51113a804943ad9b818ac4809297:${'images'}/${filename}/small-image`,
+        original_image: `https://eu2.contabostorage.com/a4fb51113a804943ad9b818ac4809297:${'images'}/${filename}/original-image`,
+        avif_image: `https://eu2.contabostorage.com/a4fb51113a804943ad9b818ac4809297:${'images'}/${filename}/avif-image`,
+        small_image: `https://eu2.contabostorage.com/a4fb51113a804943ad9b818ac4809297:${'images'}/${filename}/small-image`,
       };
     } catch (error) {
       console.log(error);
@@ -79,7 +79,8 @@ export class FileRouterService {
   async compressToSmallSize(imageBuffer: Buffer) {
     try {
       const avifBuffer = await sharp(imageBuffer)
-        .png({ compressionLevel: 9, quality: 50 }) // Adjust quality as needed
+        .png({ compressionLevel: 9 })
+        .resize({ height: 50, width: 30 }) // Adjust quality as needed
         .toBuffer();
       console.log(
         'Image successfully compressed and converted to SMALL format',

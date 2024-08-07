@@ -5,10 +5,10 @@ export class ListPageDto {
   @ApiPropertyOptional()
   @IsNumber()
   @IsOptional()
-  limit?: number;
+  page?: number;
 
   @ApiPropertyOptional()
   @IsNumber()
   @IsOptional()
-  offset?: number;
+  per_page?: number;
 }

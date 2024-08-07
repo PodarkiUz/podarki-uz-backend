@@ -156,4 +156,38 @@ export class BaseRepo<T extends {}> extends KnexBaseRepo {
       .where('username', username)
       .first();
   }
+
+  async paginatedSelect(
+    tableName: string,
+    columns: string[],
+    page = 1,
+    pageSize = 10,
+    whereClause: Record<string, any> = {},
+  ) {
+    const offset = (page - 1) * pageSize;
+
+    const results = await this.knex
+      .select([...columns, this.knex.raw('COUNT(*) OVER() AS total_count')])
+      .from(tableName)
+      .where(whereClause)
+      .limit(pageSize)
+      .offset(offset);
+
+    const totalRecords =
+      results.length > 0 ? parseInt(results[0].total_count, 10) : 0;
+    const totalPages = Math.ceil(totalRecords / pageSize);
+
+    // Remove total_count from each result item
+    results.forEach((item) => delete item.total_count);
+
+    return {
+      data: results,
+      pagination: {
+        totalRecords,
+        totalPages,
+        currentPage: page,
+        page_size: pageSize,
+      },
+    };
+  }
 }

@@ -20,7 +20,7 @@ export class ProductService {
   constructor(
     private readonly productRepo: ProductRepo,
     private readonly adsRepo: AdsRepo,
-  ) {}
+  ) { }
 
   async create(params: CreateProductDto, currentUser: IUser) {
     return this.productRepo.insert({
@@ -41,7 +41,7 @@ export class ProductService {
   getUserProducts(params: ListPageDto, user: IUser) {
     return this.productRepo.select(
       { is_deleted: false, owner_id: user.id },
-      { limit: params.limit, offset: params.offset },
+      { limit: params?.page, offset: params?.page },
     );
   }
 

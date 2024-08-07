@@ -25,7 +25,7 @@ export class AdminUserService {
   constructor(
     private readonly adminUserRepo: AdminUserRepo,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   setStatus(params: SetUserStatusDto) {
     return this.adminUserRepo.updateById(params.user_id, {
@@ -39,8 +39,8 @@ export class AdminUserService {
         is_deleted: false,
       },
       {
-        limit: params.limit,
-        offset: params.offset,
+        limit: params.per_page,
+        offset: params.page,
         order_by: { column: 'created_at', order: 'desc', use: true },
       },
     );
@@ -111,8 +111,8 @@ export class AdminUserService {
         role: UserRoles.ADMIN,
       },
       {
-        limit: params.limit,
-        offset: params.offset,
+        limit: params.per_page,
+        offset: params.page,
         order_by: { column: 'created_at', order: 'desc', use: true },
       },
     );

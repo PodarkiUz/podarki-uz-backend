@@ -18,9 +18,11 @@ create table category
 (
     id         varchar(24) not null primary key,
     name_uz    varchar(64) not null,
-    name_lat   varchar(64) not null,
+    name_en    varchar(64) not null,
     name_ru    varchar(64) not null,
-    image      text        null,
+    original_image      text        null,
+    avif_image      text        null,
+    small_image      text        null,
     is_deleted bool        not null     default false,
     created_at timestamp with time zone default now()
 );
@@ -29,9 +31,11 @@ create table sub_category
 (
     id         varchar(24) not null primary key,
     name_uz    varchar(64) not null,
-    name_lat   varchar(64) not null,
+    name_en    varchar(64) not null,
     name_ru    varchar(64) not null,
-    image      text        null,
+    original_image      text        null,
+    avif_image      text        null,
+    small_image      text        null,
     category_id  varchar(24),
     constraint fk_parent_category foreign key (category_id) references category (id),
     is_deleted bool        not null     default false,

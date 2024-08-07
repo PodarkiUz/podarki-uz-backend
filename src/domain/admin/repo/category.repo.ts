@@ -7,3 +7,10 @@ export class AdminCategoryRepo extends BaseRepo<any> {
     super('category');
   }
 }
+
+@Injectable()
+export class AdminSubcategoryRepo extends BaseRepo<any> {
+  constructor() {
+    super('sub_category');
+  }
+}
