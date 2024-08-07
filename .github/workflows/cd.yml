@@ -23,7 +23,7 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         port: 22
         script: |
-          cd ~/home/danielwetan/apps/node1
+          cd ~/projects/podarki-uz-backend
           git pull origin main
           git status
           npm install --only=prod
