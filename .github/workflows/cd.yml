@@ -37,8 +37,8 @@ jobs:
           password: ${{ secrets.HOST_PASSWORD }}
           port: 22
           script: |
-            cd projects/podarki-uz-backend
-            git pull
+            cd ~/projects/podarki-uz-backend
+            git pull origin main
             npm install
             npm run build
             pm2 restart podarki-uz-backend
