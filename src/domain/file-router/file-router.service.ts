@@ -16,25 +16,45 @@ export class FileRouterService {
       } = file;
       const BUCKET_NAME = 'images'; // Replace with your bucket name
 
-      const fileContent = Buffer.from(buffer);
-
-      const avifBuffer = await this.compressAndConvertToAvif(fileContent);
-
       const filename = ObjectID().toHexString();
 
-      const command = new PutObjectCommand({
-        Body: avifBuffer, // The actual file content
+      const originalBuffer = Buffer.from(buffer);
+      const avifBuffer = await this.compressAndConvertToAvif(originalBuffer);
+      const smallSizeBuffer = await this.compressToSmallSize(originalBuffer);
+
+      const originalCommand = new PutObjectCommand({
+        Body: originalBuffer, // The actual file content
         Bucket: BUCKET_NAME,
-        Key: filename, // The name of the file
+        Key: `${filename}/original-image`, // The name of the file
         ContentType: mimetype,
       });
 
-      await s3.send(command);
+      const avifCommand = new PutObjectCommand({
+        Body: avifBuffer, // The actual file content
+        Bucket: BUCKET_NAME,
+        Key: `${filename}/avif-image`, // The name of the file
+        ContentType: mimetype,
+      });
+
+      const smallSizeCommand = new PutObjectCommand({
+        Body: smallSizeBuffer, // The actual file content
+        Bucket: BUCKET_NAME,
+        Key: `${filename}/small-image`, // The name of the file
+        ContentType: mimetype,
+      });
+
+      await Promise.all([
+        s3.send(originalCommand),
+        s3.send(avifCommand),
+        s3.send(smallSizeCommand),
+      ]);
 
       return {
         sucess: true,
         file_id: filename,
-        file_url: `https://eu2.contabostorage.com/a4fb51113a804943ad9b818ac4809297:${'images'}/${filename}`,
+        original_file_url: `https://eu2.contabostorage.com/a4fb51113a804943ad9b818ac4809297:${'images'}/${filename}/original-image`,
+        avif_file_url: `https://eu2.contabostorage.com/a4fb51113a804943ad9b818ac4809297:${'images'}/${filename}/avif-image`,
+        small_file_url: `https://eu2.contabostorage.com/a4fb51113a804943ad9b818ac4809297:${'images'}/${filename}/small-image`,
       };
     } catch (error) {
       console.log(error);
@@ -43,12 +63,27 @@ export class FileRouterService {
     }
   }
 
-  async compressAndConvertToAvif(imageBuffer) {
+  async compressAndConvertToAvif(imageBuffer: Buffer) {
     try {
       const avifBuffer = await sharp(imageBuffer)
         .avif({ quality: 50 }) // Adjust quality as needed
         .toBuffer();
       console.log('Image successfully compressed and converted to AVIF format');
+      return avifBuffer;
+    } catch (error) {
+      console.error('Error compressing and converting image:', error);
+      throw error;
+    }
+  }
+
+  async compressToSmallSize(imageBuffer: Buffer) {
+    try {
+      const avifBuffer = await sharp(imageBuffer)
+        .png({ compressionLevel: 9, quality: 50 }) // Adjust quality as needed
+        .toBuffer();
+      console.log(
+        'Image successfully compressed and converted to SMALL format',
+      );
       return avifBuffer;
     } catch (error) {
       console.error('Error compressing and converting image:', error);
