@@ -132,5 +132,5 @@ jobs :
           VPS_PASS: ${{ secrets.HOST_PASSWORD }}
         run: |
           sshpass -p $VPS_PASS ssh $VPS_USER@$VPS_HOST "docker pull ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:latest"
-          sshpass -p $VPS_PASS ssh $VPS_USER@$VPS_HOST "docker stop myapp || true"
-          sshpass -p $VPS_PASS ssh $VPS_USER@$VPS_HOST "docker run -d --name myapp -p 80:3000 ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:latest"
+          sshpass -p $VPS_PASS ssh $VPS_USER@$VPS_HOST "docker stop podarkiuz-app || true"
+          sshpass -p $VPS_PASS ssh $VPS_USER@$VPS_HOST "docker run -d --name podarkiuz-app -p 3001:3001 ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:latest"
