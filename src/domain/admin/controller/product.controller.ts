@@ -31,13 +31,13 @@ export class AdminProductController {
     return this.adminProductService.setStatus(params);
   }
 
-  @Get('list')
-  async list(@Query() params: ListPageDto) {
+  @Post('list')
+  async list(@Body() params: ListPageDto) {
     return this.adminProductService.findAll(params);
   }
 
-  @Get('order-list')
-  async orderList(@Query() params: OrderListDto) {
+  @Post('order-list')
+  async orderList(@Body() params: OrderListDto) {
     return this.adminProductService.orderList(params);
   }
 
