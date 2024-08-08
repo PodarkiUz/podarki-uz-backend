@@ -1,0 +1,23 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 4324
+      POSTGRES_DB: podarkiuz
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    container_name: podarki-uz-backend
+    build:
+      context: .
+      dockerfile: prod.Dockerfile
+    image: podarkiuz-app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
