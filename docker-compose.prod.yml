@@ -15,7 +15,7 @@ services:
     container_name: podarki-uz-backend
     build:
       context: .
-      dockerfile: prod.Dockerfile
+      dockerfile: Dockerfile
     image: podarkiuz-app
     ports:
       - "3000:3000"
