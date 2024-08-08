@@ -38,9 +38,11 @@ jobs:
           port: 22
           script: |
             cd ~/projects/podarki-uz-backend
-            git pull origin main
-            rm -rf node_modules
-            rm -rf dist
-            npm install
-            npm run build
-            pm2 restart podarki-uz-backend
+            # git pull origin main
+            # rm -rf node_modules
+            # rm -rf dist
+            # npm install
+            # npm run build
+            # pm2 restart podarki-uz-backend
+            docker-compose up --build
+
