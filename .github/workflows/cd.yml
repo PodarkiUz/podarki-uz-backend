@@ -1,48 +1,124 @@
-name: CI/CD Pipeline
+name : ci
 
-on:
-  push:
-    branches:
-      - main
+on :
+  push :
+    branches :
+      - 'main'
+      # - 'dev'
+  pull_request :
+    branches: [ "main"]
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+jobs :
+  setup-node :
+    runs-on : ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18'
+    services :
+      postgres :
+        image : postgres:latest
+        env :
+          POSTGRES_DB : podarkiuz
+          POSTGRES_USER : postgres
+          POSTGRES_PASSWORD : 4324
+        ports :
+          - 5432:5432
+        options : --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
-      # - name: Run tests
-      #   run: npm test
+    steps :
+      - name : Checkout
+        uses : actions/checkout@v3
 
-      # - name: Install dependencies
-      #   run: npm install
+      - name : Wait for Postgres to be ready
+        run : |
+          timeout=300
+          while ! pg_isready -q -h localhost -p 5432 -U postgres; do
+            sleep 1
+            timeout=$((timeout - 1))
+            if [ $timeout -eq 0 ]; then
+              echo "Postgres did not start within timeout"
+              exit 1
+            fi
+          done
+      - name : Create database schema
+        run : |
+          PGPASSWORD=4324 psql -h localhost -U postgres -d podarkiuz -c "CREATE TABLE IF NOT EXISTS mytable (id SERIAL PRIMARY KEY, name VARCHAR(255))"
 
-      # - name: Build
-      #   run: |
-      #     npm run build
+      - name : Set up Node.js
+        uses : actions/setup-node@v3
+        with :
+          node-version : '20'
 
-      - name: Run DEV server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          # key: ${{ secrets.PRIVATE_KEY }}
-          password: ${{ secrets.HOST_PASSWORD }}
-          port: 22
-          script: |
-            cd ~/projects/podarki-uz-backend
-            git pull origin main
-            # rm -rf node_modules
-            # rm -rf dist
-            # npm install
-            # npm run build
-            # pm2 restart podarki-uz-backend
-            docker-compose up --build
+      - name : Install dependencies
+        run : npm install
 
+      - name : Set database credentials as environment variables
+        env :
+          PG_HOST : localhost
+          PG_PORT : 5432
+          PG_DB : podarkiuz
+          PG_USER : postgres
+          PG_PASS : 4324
+        run : |
+          echo "export PG_HOST=$PG_HOST" >> .env
+          echo "export PG_PORT=$PG_PORT" >> .env
+          echo "export PG_DB=$PG_DB" >> .env
+          echo "export PG_USER=$PG_USER" >> .env
+          echo "export PG_PASS=$PG_PASS" >> .env
+
+      - name : Build
+        run : npm run build
+
+      - name : Run app
+        run : |
+          npm run start:prod &
+          sleep 5
+          if ! pgrep -f "npm run start:prod" >/dev/null; then
+            echo "Application failed to start"
+            exit 1
+          fi
+
+  build-and-deploy :
+    runs-on : ubuntu-latest
+
+    needs : setup-node
+
+    steps :
+      - name : Checkout
+        uses : actions/checkout@v3
+      - name : Set up QEMU
+        uses : docker/setup-qemu-action@v2
+      - name : Set up Docker Buildx
+        uses : docker/setup-buildx-action@v2
+      - name : Login to Docker Hub
+        uses : docker/login-action@v2
+        with :
+          username : ${{ secrets.DOCKER_USERNAME }}
+          password : ${{ secrets.DOCKER_PASSWORD }}
+      - name : Build and push to Prod
+        if: github.ref_name == 'main'
+        uses : docker/build-push-action@v3
+        with :
+          context : .
+          file : ./Dockerfile
+          push : true
+          tags : ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:latest
+      # - name : Build and push to Dev
+      #   if : github.ref_name == 'dev'
+      #   uses : docker/build-push-action@v3
+      #   with :
+      #     context : .
+      #     file : ./Dockerfile
+      #     push : true
+      #     tags : ${{ secrets.DOCKER_USER }}/${{ github.event.repository.name }}:dev
+      # - name : Alert
+      #   uses: appleboy/telegram-action@master
+      #   with :
+      #     to : ${{ secrets.TELEGRAM_TO }}
+      #     token : ${{ secrets.TELEGRAM_TOKEN }}
+      #     message : |
+      #       Full Name: ${{ github.event.head_commit.author.name }}
+      #       Username: ${{ github.actor }}
+      #       Commit message: ${{ github.event.commits[0].message }}
+      #       Repository: ${{ github.repository }}
+      #       Branch: ${{ github.ref_name }}
+      #       Status: ${{ job.status }}
+      #       See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
