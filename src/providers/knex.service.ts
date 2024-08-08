@@ -29,7 +29,7 @@ export class KnexService {
     this.instance = knex({
       client: 'postgresql',
       connection: {
-        host: 'localhost',
+        host: '45.10.154.95',
         database: 'podarkiuz',
         password: '4324',
         user: 'postgres',
