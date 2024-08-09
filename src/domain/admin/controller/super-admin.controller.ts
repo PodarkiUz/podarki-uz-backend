@@ -28,8 +28,8 @@ export class SuperAdminController {
 
   @ApiBasicAuth('basic')
   @UseGuards(RootGuard)
-  @Get('list')
-  async list(@Query() params: ListPageDto) {
+  @Post('list')
+  async list(@Body() params: ListPageDto) {
     return this.adminUserService.findAllAdmins(params);
   }
 
