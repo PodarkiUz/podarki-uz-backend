@@ -122,15 +122,3 @@ jobs :
       #       Branch: ${{ github.ref_name }}
       #       Status: ${{ job.status }}
       #       See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
-      - name: Install sshpass
-        run: sudo apt-get install sshpass
-      - name: Deploy to VPS
-        if: github.ref_name == 'main'
-        env:
-          VPS_HOST: ${{ secrets.HOST }}
-          VPS_USER: ${{ secrets.USERNAME }}
-          VPS_PASS: ${{ secrets.HOST_PASSWORD }}
-        run: |
-          sshpass -p $VPS_PASS ssh $VPS_USER@$VPS_HOST "docker pull ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:latest"
-          sshpass -p $VPS_PASS ssh $VPS_USER@$VPS_HOST "docker stop podarkiuz-app || true"
-          sshpass -p $VPS_PASS ssh $VPS_USER@$VPS_HOST "docker run -d --name podarkiuz-app -p 3001:3001 ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:latest"
