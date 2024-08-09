@@ -130,6 +130,6 @@ jobs :
           password: ${{ secrets.HOST_PASSWORD }}
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/podarki-uz-backend:latest
-            docker stop podarkiuz-app || true
-            docker rm podarkiuz-app || true
-            docker run -d --name podarkiuz-app ${{ secrets.DOCKER_USERNAME }}/podarki-uz-backend:latest
+            docker stop podarki-uz-backend || true
+            docker rm podarki-uz-backend || true
+            docker run -d --name podarki-uz-backend ${{ secrets.DOCKER_USERNAME }}/podarki-uz-backend:latest
