@@ -20,7 +20,7 @@ export class CreateUserDto {
   last_name: string;
 }
 
-export class UpdateUserDto extends PartialType(CreateUserDto) { }
+export class UpdateUserDto extends PartialType(CreateUserDto) {}
 
 export class ConfirmOtpDto {
   @ApiProperty()

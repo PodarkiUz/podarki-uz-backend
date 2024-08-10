@@ -64,7 +64,7 @@ export class CreateSubcategoryDto {
   category_id: string;
 }
 
-export class UpdateCategoryDto extends PartialType(CreateCategoryDto) { 
+export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
   @ApiProperty()
   @IsString()
   id: string;

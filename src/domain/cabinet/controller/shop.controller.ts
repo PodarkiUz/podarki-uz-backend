@@ -17,7 +17,7 @@ import { CabinetProductListDto } from '../dto/product.dto';
 // @UseGuards(AdminGuard)
 @Controller('cabinet/shop')
 export class CabinetShopController {
-  constructor(private readonly cabinetShopService: CabinetShopService) { }
+  constructor(private readonly cabinetShopService: CabinetShopService) {}
 
   @Post('login')
   async create(@Body() params: ShopLoginDto) {

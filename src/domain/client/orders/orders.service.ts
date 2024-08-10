@@ -12,7 +12,7 @@ export class OrdersService {
   constructor(
     private readonly orderRepo: OrdersRepo,
     private readonly productRepo: ProductRepo, // private readonly knexService: KnexService,
-  ) { }
+  ) {}
 
   async createOrder(params: CreateOrderDto) {
     const orderedProductArray = [];

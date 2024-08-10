@@ -21,7 +21,7 @@ export class AdminProductService {
     private readonly adminProductRepo: AdminProductRepo,
     private readonly adminSubcategoryRepo: AdminSubcategoryRepo,
     private readonly orderRepo: OrdersRepo,
-  ) { }
+  ) {}
 
   async create(params: CreateProductByAdminDto) {
     const category = await this.adminProductRepo.selectById(

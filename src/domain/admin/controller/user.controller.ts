@@ -23,7 +23,7 @@ export class AdminUserController {
   constructor(
     private readonly adminUserService: AdminUserService,
     private readonly userService: UserService,
-  ) { }
+  ) {}
 
   @Post('set-status')
   async setStatus(@Body() params: SetUserStatusDto) {
