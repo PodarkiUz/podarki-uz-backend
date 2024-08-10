@@ -26,17 +26,17 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    // tokenId = tokenId.substring('Bearer '.length);
+    let user: IUser;
 
     try {
-      token = await this.jwtService.verifyAsync(token, {
+      user = await this.jwtService.verifyAsync(token, {
         secret: `podarkiuz-app`,
       });
     } catch (error) {
       throw new ForbiddenException();
     }
 
-    const user: IUser = await this.userService.findOne(token.id);
+    // const user: IUser = await this.userService.findOne(token.id);
 
     if (!user || !user.id) {
       throw new UnauthorizedException();

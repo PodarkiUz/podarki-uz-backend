@@ -22,7 +22,6 @@ import { ListPageDto } from 'src/shared/dto/list.dto';
 export class AdminUserController {
   constructor(
     private readonly adminUserService: AdminUserService,
-    private readonly userService: UserService,
   ) {}
 
   @Post('set-status')
@@ -33,11 +32,6 @@ export class AdminUserController {
   @Post('list')
   async list(@Body() params: ListPageDto) {
     return this.adminUserService.findAll(params);
-  }
-
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
   }
 
   @Delete(':id')
