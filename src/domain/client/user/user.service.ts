@@ -16,9 +16,9 @@ export class UserService {
   async signUp(params: CreateUserDto) {
     return this.userRepo.knex
       .transaction(async () => {
-        const hasEmail: IUser = await this.userRepo.selectByEmail(params.email);
+        const hasPhone: IUser = await this.userRepo.selectByPhone(params.phone);
 
-        if (hasEmail) {
+        if (hasPhone) {
           throw new EmailAlreadyRegistered();
         }
 
@@ -28,34 +28,16 @@ export class UserService {
           phone: params.phone,
           first_name: params.first_name,
           last_name: params.last_name,
-          role: UserRoles.SELLER,
           otp: otp,
           status: UserStatus.REGISTERED,
-          email: params.email,
         });
 
-        await this.emailService.sendVerificationLink(params.email, otp);
+        // await this.emailService.sendVerificationLink(params.email, otp);
 
         return { otp: user.otp, phone: user.phone };
       })
       .then((data) => {
         return data;
       });
-  }
-
-  findAll() {
-    return `This action returns all user`;
-  }
-
-  async findOne(id: string) {
-    return this.userRepo.selectById(id);
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
   }
 }

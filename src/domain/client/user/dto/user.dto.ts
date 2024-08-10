@@ -8,11 +8,6 @@ export class CreateUserDto {
 
   @ApiProperty()
   @IsString()
-  @IsEmail()
-  email: string;
-
-  @ApiProperty()
-  @IsString()
   first_name: string;
 
   @ApiProperty()
@@ -25,8 +20,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {}
 export class ConfirmOtpDto {
   @ApiProperty()
   @IsString()
-  @IsEmail()
-  email: string;
+  phone: string;
 
   @ApiProperty()
   @IsString()
@@ -36,6 +30,5 @@ export class ConfirmOtpDto {
 export class UserLoginDto {
   @ApiProperty()
   @IsString()
-  @IsEmail()
-  email: string;
+  phone: string;
 }

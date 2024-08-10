@@ -20,10 +20,7 @@ import { ListPageDto } from 'src/shared/dto/list.dto';
 @UseGuards(AdminGuard)
 @Controller('admin/users')
 export class AdminUserController {
-  constructor(
-    private readonly adminUserService: AdminUserService,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly adminUserService: AdminUserService) {}
 
   @Post('set-status')
   async setStatus(@Body() params: SetUserStatusDto) {
@@ -33,11 +30,6 @@ export class AdminUserController {
   @Post('list')
   async list(@Body() params: ListPageDto) {
     return this.adminUserService.findAll(params);
-  }
-
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
   }
 
   @Delete(':id')

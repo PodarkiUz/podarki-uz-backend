@@ -18,7 +18,7 @@ export class AuthService {
   ) {}
 
   async confirmOtp(params: ConfirmOtpDto) {
-    const user: IUser = await this.userRepo.selectByEmail(params.email);
+    const user: IUser = await this.userRepo.selectByPhone(params.phone);
 
     if (!user) {
       throw new UserNotFoundException();
@@ -28,17 +28,18 @@ export class AuthService {
       throw new IncorrectOtpException();
     }
 
+    await this.userRepo.updateById(user.id, { otp: null });
+
     return {
       access_token: await this.jwtService.signAsync(
         { id: user.id },
         { privateKey: 'podarkiuz-app' },
       ),
-      role: user.role,
     };
   }
 
   async login(params: UserLoginDto) {
-    const user: IUser = await this.userRepo.selectByEmail(params.email);
+    const user: IUser = await this.userRepo.selectByPhone(params.phone);
 
     if (!user) {
       throw new UserNotFoundException();
@@ -50,8 +51,8 @@ export class AuthService {
       otp: otp,
     });
 
-    await this.emailService.sendVerificationLink(params.email, otp);
+    // await this.emailService.sendVerificationLink(params.email, otp);
 
-    return { message: 'Check your email for OTP!' };
+    return { otp: user.otp, phone: user.phone };
   }
 }
