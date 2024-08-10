@@ -93,11 +93,11 @@ export class ProductListByCategoryDto extends ListPageDto {
   to_price?: number;
 }
 
-export class SearchDto {
+export class SearchDto extends ListPageDto {
   @ApiPropertyOptional()
   @IsString()
   @IsOptional()
-  name?: string;
+  search?: string;
 }
 
 export class CreateProductByShopDto extends OmitType(CreateProductByAdminDto, [
