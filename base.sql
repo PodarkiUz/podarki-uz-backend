@@ -1,4 +1,4 @@
-create table users
+create table user
 (
     id         varchar(24) not null primary key,
     phone      varchar(12) not null,
@@ -42,20 +42,36 @@ create table sub_category
     created_at timestamp with time zone default now()
 );
 
-create table products
+create table shop
+(
+    id             varchar(24) not null primary key,
+    name           varchar(64) not null,
+    description    text,
+    avif_image      text        null,
+    small_image      text        null,
+    login           varchar(24) not null,
+    password        text        not null,
+    is_deleted     bool        not null     default false,
+    created_at     timestamp with time zone default now()
+);
+
+create table product
 (
     id             varchar(24) not null primary key,
     name_uz        varchar(64) not null,
-    name_lat       varchar(64) not null,
+    name_en        varchar(64) not null,
     name_ru        varchar(64) not null,
     image          text        null,
     sub_category_id    varchar(24),
     constraint fk_sub_category foreign key (sub_category_id) references sub_category (id),
     price          integer       not null,
-    sale_price     integer,
-    owner_id       varchar(24),
-    constraint fk_owner foreign key (owner_id) references users (id),
-    characteristic jsonb,
+    discount_price     integer,
+    avif_images      text        null,
+    small_image      text        null,
+    status          smallint    default 1,
+    on_sale         bool        default false,
+    shop_id       varchar(24),
+    constraint fk_shop foreign key (shop_id) references shop (id),
     description    text,
     is_deleted     bool        not null     default false,
     created_at     timestamp with time zone default now()

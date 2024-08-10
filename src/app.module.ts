@@ -8,6 +8,7 @@ import { AdminModule } from './domain/admin/admin.module';
 import { PoolService } from './providers/pool.service';
 import { FileRouterModule } from './domain/file-router/file-router.module';
 import { OrdersModule } from './domain/orders/orders.module';
+import { CabinetModule } from './domain/cabinet/cabinet.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { OrdersModule } from './domain/orders/orders.module';
     AdminModule,
     FileRouterModule,
     OrdersModule,
+    CabinetModule,
   ],
   controllers: [AppController],
   providers: [AppService, PoolService],
