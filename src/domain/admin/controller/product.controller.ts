@@ -12,7 +12,6 @@ import { SetProductStatusDto } from '../dto/product-admin.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AdminGuard } from 'src/guard/admin.guard';
 import { ProductService } from 'src/domain/client/product/product.service';
-import { OrderListDto } from 'src/domain/orders/dto/order.dto';
 import { ListPageDto } from 'src/shared/dto/list.dto';
 import {
   CreateProductByAdminDto,
