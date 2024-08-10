@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { CategoryRepo } from './category.repo';
+import { CategoryRepo, SubCategoryRepo } from './category.repo';
 import { ListPageDto } from 'src/shared/dto/list.dto';
 import { SubcategoryListPageDto } from 'src/domain/admin/dto/category-admin.dto';
 
 @Injectable()
 export class CategoryService {
-  constructor(private readonly categoryRepo: CategoryRepo) {}
+  constructor(private readonly categoryRepo: CategoryRepo, private readonly subcategoryRepo: SubCategoryRepo) {}
 
   findAll() {
     return this.categoryRepo.select({ is_deleted: false }, { limit: 10 });
@@ -20,6 +20,6 @@ export class CategoryService {
   }
 
   async getSubcategoryList(params: SubcategoryListPageDto) {
-    return this.categoryRepo.getSubcategoryList(params);
+    return this.subcategoryRepo.getSubcategoryList(params);
   }
 }

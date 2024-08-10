@@ -6,7 +6,7 @@ import { ListPageDto } from 'src/shared/dto/list.dto';
 @Injectable()
 export class CategoryRepo extends BaseRepo<any> {
   constructor() {
-    super('categories');
+    super('category');
   }
 
   async getCategoryList(params: ListPageDto) {
@@ -16,6 +16,13 @@ export class CategoryRepo extends BaseRepo<any> {
       .where('is_deleted', false);
 
     return this.paginatedSelect(query, params?.page, params?.per_page);
+  }
+}
+
+@Injectable()
+export class SubCategoryRepo extends BaseRepo<any> {
+  constructor() {
+    super('sub_category');
   }
 
   async getSubcategoryList(params: SubcategoryListPageDto) {
