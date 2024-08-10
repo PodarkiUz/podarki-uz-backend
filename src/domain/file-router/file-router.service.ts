@@ -22,12 +22,12 @@ export class FileRouterService {
       const avifBuffer = await this.compressAndConvertToAvif(originalBuffer);
       const smallSizeBuffer = await this.compressToSmallSize(originalBuffer);
 
-      const originalCommand = new PutObjectCommand({
-        Body: originalBuffer, // The actual file content
-        Bucket: BUCKET_NAME,
-        Key: `${filename}/original-image`, // The name of the file
-        ContentType: mimetype,
-      });
+      // const originalCommand = new PutObjectCommand({
+      //   Body: originalBuffer, // The actual file content
+      //   Bucket: BUCKET_NAME,
+      //   Key: `${filename}/original-image`, // The name of the file
+      //   ContentType: mimetype,
+      // });
 
       const avifCommand = new PutObjectCommand({
         Body: avifBuffer, // The actual file content
@@ -44,7 +44,7 @@ export class FileRouterService {
       });
 
       await Promise.all([
-        s3.send(originalCommand),
+        // s3.send(originalCommand),
         s3.send(avifCommand),
         s3.send(smallSizeCommand),
       ]);
@@ -52,7 +52,7 @@ export class FileRouterService {
       return {
         sucess: true,
         file_id: filename,
-        original_image: `https://eu2.contabostorage.com/a4fb51113a804943ad9b818ac4809297:${'images'}/${filename}/original-image`,
+        // original_image: `https://eu2.contabostorage.com/a4fb51113a804943ad9b818ac4809297:${'images'}/${filename}/original-image`,
         avif_image: `https://eu2.contabostorage.com/a4fb51113a804943ad9b818ac4809297:${'images'}/${filename}/avif-image`,
         small_image: `https://eu2.contabostorage.com/a4fb51113a804943ad9b818ac4809297:${'images'}/${filename}/small-image`,
       };

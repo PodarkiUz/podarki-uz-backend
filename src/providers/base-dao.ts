@@ -157,19 +157,11 @@ export class BaseRepo<T extends {}> extends KnexBaseRepo {
       .first();
   }
 
-  async paginatedSelect(
-    tableName: string,
-    columns: string[],
-    page = 1,
-    pageSize = 10,
-    whereClause: Record<string, any> = {},
-  ) {
+  async paginatedSelect(trx, page = 1, pageSize = 10) {
     const offset = (page - 1) * pageSize;
 
-    const results = await this.knex
-      .select([...columns, this.knex.raw('COUNT(*) OVER() AS total_count')])
-      .from(tableName)
-      .where(whereClause)
+    const results = trx
+      .select(this.knex.raw('COUNT(*) OVER() AS total_count'))
       .limit(pageSize)
       .offset(offset);
 

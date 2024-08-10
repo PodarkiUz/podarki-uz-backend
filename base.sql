@@ -20,7 +20,7 @@ create table category
     name_uz    varchar(64) not null,
     name_en    varchar(64) not null,
     name_ru    varchar(64) not null,
-    original_image      text        null,
+    -- original_image      text        null,
     avif_image      text        null,
     small_image      text        null,
     is_deleted bool        not null     default false,
@@ -33,7 +33,7 @@ create table sub_category
     name_uz    varchar(64) not null,
     name_en    varchar(64) not null,
     name_ru    varchar(64) not null,
-    original_image      text        null,
+    -- original_image      text        null,
     avif_image      text        null,
     small_image      text        null,
     category_id  varchar(24),
@@ -51,6 +51,7 @@ create table shop
     small_image      text        null,
     login           varchar(24) not null,
     password        text        not null,
+    status         smallint     not null default 1,
     is_deleted     bool        not null     default false,
     created_at     timestamp with time zone default now()
 );

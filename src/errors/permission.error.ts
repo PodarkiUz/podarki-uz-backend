@@ -35,9 +35,9 @@ export class IncorrectOtpException extends BadRequestException {
   }
 }
 
-export class UserHasNotOwnerPermissionException extends BadRequestException {
+export class UserIsNotOwnerPermissionException extends BadRequestException {
   constructor() {
-    super({ code: ErrorCodes.USER_HAS_NOT_OWNER_PERMISSION });
+    super({ code: ErrorCodes.USER_IS_NOT_OWNER_PERMISSION });
   }
 }
 

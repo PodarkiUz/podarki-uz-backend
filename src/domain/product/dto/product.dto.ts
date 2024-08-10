@@ -1,4 +1,9 @@
-import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
+import {
+  ApiProperty,
+  ApiPropertyOptional,
+  OmitType,
+  PartialType,
+} from '@nestjs/swagger';
 import {
   IsArray,
   IsEnum,
@@ -40,12 +45,12 @@ export class CreateProductByAdminDto {
   @IsNumber()
   price: number;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsNumber()
   @IsOptional()
   discount_price?: number;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   description?: string;
@@ -93,4 +98,16 @@ export class SearchDto {
   @IsString()
   @IsOptional()
   name?: string;
+}
+
+export class CreateProductByShopDto extends OmitType(CreateProductByAdminDto, [
+  'shop_id',
+]) {}
+
+export class UpdateProductByShopDto extends PartialType(
+  OmitType(CreateProductByAdminDto, ['shop_id']),
+) {
+  @ApiProperty()
+  @IsString()
+  id: string;
 }

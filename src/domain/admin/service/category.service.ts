@@ -22,7 +22,7 @@ export class AdminCategoryService {
       name_uz: params.name_uz,
       name_ru: params.name_ru,
       name_en: params.name_en,
-      original_image: params.original_image,
+      // original_image: params.original_image,
       avif_image: params.avif_image,
       small_image: params.small_image,
     });
@@ -33,7 +33,7 @@ export class AdminCategoryService {
       name_uz: params.name_uz,
       name_ru: params.name_ru,
       name_en: params.name_en,
-      original_image: params.original_image,
+      // original_image: params.original_image,
       avif_image: params.avif_image,
       small_image: params.small_image,
       category_id: params.category_id,
@@ -51,7 +51,7 @@ export class AdminCategoryService {
       name_uz: params?.name_uz,
       name_ru: params?.name_ru,
       name_en: params?.name_en,
-      original_image: params?.original_image,
+      // original_image: params?.original_image,
       avif_image: params?.avif_image,
       small_image: params?.small_image,
     });
@@ -68,7 +68,7 @@ export class AdminCategoryService {
       name_uz: params?.name_uz,
       name_ru: params?.name_ru,
       name_en: params?.name_en,
-      original_image: params?.original_image,
+      // original_image: params?.original_image,
       avif_image: params?.avif_image,
       small_image: params?.small_image,
       cateory_id: params?.category_id,
@@ -96,20 +96,10 @@ export class AdminCategoryService {
   }
 
   async getAllCategories(params: ListPageDto) {
-    return this.adminCategoryRepo.paginatedSelect(
-      this.adminCategoryRepo._tableName,
-      ['*'],
-      params?.page,
-      params?.per_page,
-    );
+    return this.adminCategoryRepo.getAllCategories(params);
   }
 
   async getAllSubCategories(params: ListPageDto) {
-    return this.adminSubcategoryRepo.paginatedSelect(
-      this.adminSubcategoryRepo._tableName,
-      ['*'],
-      params?.page,
-      params?.per_page,
-    );
+    return this.adminSubcategoryRepo.getAllSubcategories(params);
   }
 }

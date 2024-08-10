@@ -2,8 +2,11 @@ import { Controller, Post, Body, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AdminGuard } from 'src/guard/admin.guard';
 import { AdminShopService } from '../service/shop.service';
-import { CreateShopDto, UpdateShopDto } from '../dto/shop.dto';
-import { ListPageDto } from 'src/shared/dto/list.dto';
+import {
+  AdminShopListDto,
+  CreateShopDto,
+  UpdateShopDto,
+} from '../dto/shop.dto';
 
 @ApiTags('Admin')
 // @ApiBearerAuth('authorization')
@@ -22,8 +25,8 @@ export class AdminShopController {
     return this.adminShopService.update(params);
   }
 
-  @Post('all')
-  getAllSubcategories(@Body() params: ListPageDto) {
+  @Post('list')
+  getAllShops(@Body() params: AdminShopListDto) {
     return this.adminShopService.getAllShops(params);
   }
 }
