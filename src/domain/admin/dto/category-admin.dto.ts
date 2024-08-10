@@ -22,9 +22,9 @@ export class CreateCategoryDto {
   @IsString()
   avif_image: string;
 
-  @ApiProperty()
-  @IsString()
-  original_image: string;
+  // @ApiProperty()
+  // @IsString()
+  // original_image: string;
 
   @ApiProperty()
   @IsString()
@@ -51,9 +51,9 @@ export class CreateSubcategoryDto {
   @IsString()
   avif_image: string;
 
-  @ApiProperty()
-  @IsString()
-  original_image: string;
+  // @ApiProperty()
+  // @IsString()
+  // original_image: string;
 
   @ApiProperty()
   @IsString()
