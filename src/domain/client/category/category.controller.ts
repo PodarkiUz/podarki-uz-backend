@@ -4,7 +4,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { ListPageDto } from 'src/shared/dto/list.dto';
 import { SubcategoryListPageDto } from 'src/domain/admin/dto/category-admin.dto';
 
-@ApiTags('Category')
+@ApiTags('Client/category')
 @Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}

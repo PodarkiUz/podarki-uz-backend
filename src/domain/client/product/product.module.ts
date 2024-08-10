@@ -8,7 +8,7 @@ import { AdsRepo } from './ads.repo';
 
 @Module({
   imports: [UserModule],
-  // controllers: [ProductController],
+  controllers: [ProductController],
   providers: [ProductService, ProductRepo, JwtService, AdsRepo],
   exports: [ProductService, ProductRepo],
 })

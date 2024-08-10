@@ -20,11 +20,12 @@ export class ProductRepo extends BaseRepo<any> {
         'product.name_uz',
         'product.name_ru',
         'product.price',
-        knex.raw('coalesce(product.sale_price, product.price) as sale_price'),
-        'product.count',
-        'product.image',
         knex.raw(
-          'coalesce(round(100 - ((product.sale_price / product.price) * 100)), 0) as discount',
+          'coalesce(product.sale_price, product.price) as discount_price',
+        ),
+        'product.small_image',
+        knex.raw(
+          'coalesce(round(100 - ((product.discount_price / product.price) * 100)), 0) as discount',
         ),
       ])
       .from('products as product')
@@ -33,8 +34,8 @@ export class ProductRepo extends BaseRepo<any> {
       //     .andOn(knex.raw('category.is_deleted is not true'))
       //     .andOn(knex.raw(`category.id = '${params.category_id}'`));
       // })
-      .whereRaw(`product.category_id = '${params.category_id}'`)
-      .whereRaw('product.is_deleted is not true');
+      .where('product.sub_category_id', params.sub_category_id)
+      .where('product.is_deleted', false);
 
     if (params.sort) {
       switch (params.sort) {
@@ -47,7 +48,7 @@ export class ProductRepo extends BaseRepo<any> {
           break;
 
         case SortType.DISCOUNT:
-          query.orderBy('discount', 'desc');
+          query.orderBy('discount_price', 'desc');
           break;
 
         case SortType.RATING:
@@ -65,11 +66,7 @@ export class ProductRepo extends BaseRepo<any> {
       );
     }
 
-    if (params?.per_page) {
-      query.limit(Number(params.per_page)).offset(Number(params.page));
-    }
-
-    return query;
+    return this.paginatedSelect(query, params?.page, params?.per_page);
   }
 
   async searchProductByName(params: SearchDto) {

@@ -75,7 +75,7 @@ export class UpdateProductByAdminDto extends PartialType(
 export class ProductListByCategoryDto extends ListPageDto {
   @ApiProperty()
   @IsString()
-  category_id: string;
+  sub_category_id: string;
 
   @ApiPropertyOptional({ enum: SortType })
   @IsEnum(SortType)
