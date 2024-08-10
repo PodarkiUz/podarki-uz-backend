@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ProductListByCategoryDto, SearchDto } from './dto/product.dto';
+import { ProductListByCategoryDto } from './dto/product.dto';
 import { ProductRepo } from './product.repo';
 import { IUser } from '../user/interface/user.interface';
 import {
@@ -8,7 +8,7 @@ import {
 } from 'src/errors/permission.error';
 import { isEmpty } from 'lodash';
 import { AdsRepo } from './ads.repo';
-import { ListPageDto } from 'src/shared/dto/list.dto';
+import { FindByIdDto, ListPageDto } from 'src/shared/dto/list.dto';
 
 @Injectable()
 export class ProductService {
@@ -38,8 +38,8 @@ export class ProductService {
     );
   }
 
-  findOne(id: string) {
-    return this.productRepo.selectById(id);
+  findOne(params: FindByIdDto) {
+    return this.productRepo.selectById(params.id);
   }
 
   async delete(id: string, user: IUser) {
@@ -58,7 +58,7 @@ export class ProductService {
     return { success: true };
   }
 
-  async searchProductByName(params: SearchDto) {
+  async searchProductByName(params: ListPageDto) {
     return this.productRepo.searchProductByName(params);
   }
 

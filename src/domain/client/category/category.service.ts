@@ -5,7 +5,10 @@ import { SubcategoryListPageDto } from 'src/domain/admin/dto/category-admin.dto'
 
 @Injectable()
 export class CategoryService {
-  constructor(private readonly categoryRepo: CategoryRepo, private readonly subcategoryRepo: SubCategoryRepo) {}
+  constructor(
+    private readonly categoryRepo: CategoryRepo,
+    private readonly subcategoryRepo: SubCategoryRepo,
+  ) {}
 
   findAll() {
     return this.categoryRepo.select({ is_deleted: false }, { limit: 10 });

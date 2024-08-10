@@ -4,6 +4,7 @@ import { ProductListByCategoryDto, SearchDto } from './dto/product.dto';
 import { IUser } from '../user/interface/user.interface';
 import { SortType } from './enum/product.enum';
 import { krillToLatin, latinToKrill } from 'src/shared/utils/translate';
+import { ListPageDto } from 'src/shared/dto/list.dto';
 
 @Injectable()
 export class ProductRepo extends BaseRepo<any> {
@@ -19,6 +20,7 @@ export class ProductRepo extends BaseRepo<any> {
         'product.id',
         'product.name_uz',
         'product.name_ru',
+        'product.name_en',
         'product.price',
         knex.raw(
           'coalesce(product.sale_price, product.price) as discount_price',
@@ -69,7 +71,7 @@ export class ProductRepo extends BaseRepo<any> {
     return this.paginatedSelect(query, params?.page, params?.per_page);
   }
 
-  async searchProductByName(params: SearchDto) {
+  async searchProductByName(params: ListPageDto) {
     const knex = this.knexService.instance;
 
     let query = knex
@@ -77,28 +79,31 @@ export class ProductRepo extends BaseRepo<any> {
         'product.id',
         'product.name_uz',
         'product.name_ru',
+        'product.name_en',
         'product.price',
-        knex.raw('coalesce(product.sale_price, product.price) as sale_price'),
-        'product.count',
-        'product.image',
         knex.raw(
-          'coalesce(round(100 - ((product.sale_price / product.price) * 100)), 0) as discount',
+          'coalesce(product.sale_price, product.price) as discount_price',
+        ),
+        'product.small_image',
+        knex.raw(
+          'coalesce(round(100 - ((product.discount_price / product.price) * 100)), 0) as discount',
         ),
       ])
-      .from('products as product')
-      .whereRaw('product.is_deleted is not true');
+      .from('product as product')
+      .where('product.is_deleted', false);
 
-    const searchArr = params.name.trim().split(` `) || [];
+    const searchArr = params.search.trim().split(` `) || [];
     for (const search of searchArr) {
       const name_latin = krillToLatin(search).replace(/'/g, "''");
       const name_krill = latinToKrill(search);
       query = query.andWhere((builder) =>
         builder
           .orWhere('product.name_uz', `ilike`, `%${name_latin}%`)
+          .orWhere('product.name_en', `ilike`, `%${name_latin}%`)
           .orWhere('product.name_ru', `ilike`, `%${name_krill}%`),
       );
     }
 
-    return query;
+    return this.paginatedSelect(query, params?.page, params?.per_page);
   }
 }

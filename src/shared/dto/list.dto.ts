@@ -1,4 +1,4 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class ListPageDto {
@@ -16,4 +16,10 @@ export class ListPageDto {
   @IsString()
   @IsOptional()
   search?: string;
+}
+
+export class FindByIdDto {
+  @ApiProperty()
+  @IsString()
+  id: string;
 }
