@@ -96,20 +96,10 @@ export class AdminCategoryService {
   }
 
   async getAllCategories(params: ListPageDto) {
-    return this.adminCategoryRepo.paginatedSelect(
-      this.adminCategoryRepo._tableName,
-      ['*'],
-      params?.page,
-      params?.per_page,
-    );
+    return this.adminCategoryRepo.getAllCategories(params);
   }
 
   async getAllSubCategories(params: ListPageDto) {
-    return this.adminSubcategoryRepo.paginatedSelect(
-      this.adminSubcategoryRepo._tableName,
-      ['*'],
-      params?.page,
-      params?.per_page,
-    );
+    return this.adminSubcategoryRepo.getAllSubcategories(params);
   }
 }

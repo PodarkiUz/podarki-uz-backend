@@ -1,5 +1,11 @@
 export enum ProductStatusEnum {
-  REGISTERED = 0,
-  ALLOWED = 1,
-  BLOCKED = 2,
+  REGISTERED = 1,
+  ALLOWED = 2,
+  BLOCKED = 3,
+}
+
+export enum ShopStatusEnum {
+  REGISTERED = 1,
+  ALLOWED = 2,
+  BLOCKED = 3,
 }

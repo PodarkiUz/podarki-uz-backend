@@ -1,12 +1,14 @@
-import { ApiProperty, OmitType, PartialType } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional, OmitType, PartialType } from '@nestjs/swagger';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { ListPageDto } from 'src/shared/dto/list.dto';
+import { ShopStatusEnum } from '../enum/product.enum';
 
 export class CreateShopDto {
   @ApiProperty()
   @IsString()
   name: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   description?: string;
@@ -36,4 +38,11 @@ export class UpdateShopDto extends PartialType(CreateShopDto) {
 
 export class UpdateShopByCabinetDto extends PartialType(
   OmitType(CreateShopDto, ['password', 'login']),
-) {}
+) { }
+
+export class AdminShopListDto extends ListPageDto {
+  @ApiPropertyOptional({ enum: ShopStatusEnum })
+  @IsEnum(ShopStatusEnum)
+  @IsOptional()
+  status?: ShopStatusEnum;
+}

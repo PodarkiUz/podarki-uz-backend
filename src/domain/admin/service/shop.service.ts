@@ -2,7 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { isEmpty } from 'lodash';
 import { ListPageDto } from 'src/shared/dto/list.dto';
 import { AdminShopRepo } from '../repo/shop.repo';
-import { CreateShopDto, UpdateShopDto } from '../dto/shop.dto';
+import {
+  AdminShopListDto,
+  CreateShopDto,
+  UpdateShopDto,
+} from '../dto/shop.dto';
 import { createHashPassword } from 'src/shared/utils/password-hash';
 
 @Injectable()
@@ -35,12 +39,7 @@ export class AdminShopService {
     });
   }
 
-  async getAllShops(params: ListPageDto) {
-    return this.adminShopRepo.paginatedSelect(
-      this.adminShopRepo._tableName,
-      ['*'],
-      params?.page,
-      params?.per_page,
-    );
+  async getAllShops(params: AdminShopListDto) {
+    return this.adminShopRepo.getAllShops(params);
   }
 }

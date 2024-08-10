@@ -7,7 +7,7 @@ import { ListPageDto } from 'src/shared/dto/list.dto';
 
 @Injectable()
 export class AdminAdvertisementService {
-  constructor(private readonly adsRepo: AdminAdvertisementRepo) { }
+  constructor(private readonly adsRepo: AdminAdvertisementRepo) {}
 
   async create(params: CreateAdsDto) {
     return await this.adsRepo.insert({

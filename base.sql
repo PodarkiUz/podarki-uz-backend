@@ -51,6 +51,7 @@ create table shop
     small_image      text        null,
     login           varchar(24) not null,
     password        text        not null,
+    status         smallint     not null default 1,
     is_deleted     bool        not null     default false,
     created_at     timestamp with time zone default now()
 );

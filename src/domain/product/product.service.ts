@@ -4,7 +4,7 @@ import { ProductRepo } from './product.repo';
 import { IUser } from '../user/interface/user.interface';
 import {
   ProductNotFoundException,
-  UserHasNotOwnerPermissionException,
+  UserIsNotOwnerPermissionException,
 } from 'src/errors/permission.error';
 import { isEmpty } from 'lodash';
 import { AdsRepo } from './ads.repo';
@@ -50,7 +50,7 @@ export class ProductService {
     }
 
     if (product.owner_id !== user.id) {
-      throw new UserHasNotOwnerPermissionException();
+      throw new UserIsNotOwnerPermissionException();
     }
 
     await this.productRepo.softDelete(id);
