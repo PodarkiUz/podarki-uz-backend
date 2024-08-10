@@ -48,7 +48,7 @@ export class AdminCategoryController {
     return this.adminCategoryService.createSubcategory(params);
   }
 
-  @Post('sub-category/all')
+  @Post('sub-category/list')
   getAllSubcategories(@Body() params: SubcategoryListPageDto) {
     return this.adminCategoryService.getAllSubCategories(params);
   }

@@ -12,8 +12,8 @@ import {
   UserNotFoundException,
 } from 'src/errors/permission.error';
 import { ListPageDto } from 'src/shared/dto/list.dto';
-import { UserRoles, UserStatus } from 'src/domain/user/enum/user.enum';
-import { IUser } from 'src/domain/user/interface/user.interface';
+import { UserRoles, UserStatus } from 'src/domain/client/user/enum/user.enum';
+import { IUser } from 'src/domain/client/user/interface/user.interface';
 import { JwtService } from '@nestjs/jwt';
 import {
   createHashPassword,
@@ -25,7 +25,7 @@ export class AdminUserService {
   constructor(
     private readonly adminUserRepo: AdminUserRepo,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   setStatus(params: SetUserStatusDto) {
     return this.adminUserRepo.updateById(params.user_id, {

@@ -5,13 +5,12 @@ import { AdminProductController } from './controller/product.controller';
 import { AdminCategoryService } from './service/category.service';
 import { AdminCategoryRepo, AdminSubcategoryRepo } from './repo/category.repo';
 import { AdminProductRepo } from './repo/product.repo';
-import { UserModule } from '../user/user.module';
+import { UserModule } from '../client/user/user.module';
 import { JwtService } from '@nestjs/jwt';
-import { ProductModule } from '../product/product.module';
+import { ProductModule } from '../client/product/product.module';
 import { AdminUserService } from './service/user.service';
 import { AdminUserRepo } from './repo/user.repo';
 import { AdminUserController } from './controller/user.controller';
-import { OrdersRepo } from '../orders/orders.repo';
 import { AdminAdvertisementController } from './controller/ads.controller';
 import { AdminAdvertisementService } from './service/ads.service';
 import { AdminAdvertisementRepo } from './repo/ads.repo';
@@ -19,6 +18,7 @@ import { SuperAdminController } from './controller/super-admin.controller';
 import { AdminShopController } from './controller/shop.controller';
 import { AdminShopService } from './service/shop.service';
 import { AdminShopRepo } from './repo/shop.repo';
+import { OrdersRepo } from '../client/orders/orders.repo';
 
 @Module({
   imports: [UserModule, ProductModule],
@@ -47,4 +47,4 @@ import { AdminShopRepo } from './repo/shop.repo';
     AdminShopRepo,
   ],
 })
-export class AdminModule {}
+export class AdminModule { }

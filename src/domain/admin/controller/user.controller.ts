@@ -11,7 +11,7 @@ import {
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AdminGuard } from 'src/guard/admin.guard';
 import { AdminUserService } from '../service/user.service';
-import { UserService } from 'src/domain/user/user.service';
+import { UserService } from 'src/domain/client/user/user.service';
 import { SetUserStatusDto } from '../dto/user-admin.dto';
 import { ListPageDto } from 'src/shared/dto/list.dto';
 
@@ -23,7 +23,7 @@ export class AdminUserController {
   constructor(
     private readonly adminUserService: AdminUserService,
     private readonly userService: UserService,
-  ) {}
+  ) { }
 
   @Post('set-status')
   async setStatus(@Body() params: SetUserStatusDto) {

@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CategoryRepo } from './category.repo';
+import { ListPageDto } from 'src/shared/dto/list.dto';
+import { SubcategoryListPageDto } from 'src/domain/admin/dto/category-admin.dto';
 
 @Injectable()
 export class CategoryService {
@@ -13,11 +15,11 @@ export class CategoryService {
     return this.categoryRepo.selectById(id);
   }
 
-  async getWithChildren(parent_id: string) {
-    return this.categoryRepo.getWithChildren(parent_id);
+  async getCategoryList(params: ListPageDto) {
+    return this.categoryRepo.getCategoryList(params);
   }
 
-  async getAllParentCategories() {
-    return this.categoryRepo.getAllParentCategories();
+  async getSubcategoryList(params: SubcategoryListPageDto) {
+    return this.categoryRepo.getSubcategoryList(params);
   }
 }

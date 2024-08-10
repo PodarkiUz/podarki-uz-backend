@@ -8,7 +8,7 @@ import { CurrentShop } from 'src/decorator/current-shop.decorator';
 import {
   CreateProductByShopDto,
   UpdateProductByShopDto,
-} from 'src/domain/product/dto/product.dto';
+} from 'src/domain/client/product/dto/product.dto';
 import { ListPageDto } from 'src/shared/dto/list.dto';
 import { CabinetProductListDto } from '../dto/product.dto';
 
@@ -17,7 +17,7 @@ import { CabinetProductListDto } from '../dto/product.dto';
 // @UseGuards(AdminGuard)
 @Controller('cabinet/shop')
 export class CabinetShopController {
-  constructor(private readonly cabinetShopService: CabinetShopService) {}
+  constructor(private readonly cabinetShopService: CabinetShopService) { }
 
   @Post('login')
   async create(@Body() params: ShopLoginDto) {

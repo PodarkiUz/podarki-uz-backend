@@ -6,14 +6,14 @@ import {
   CategoryNotFoundException,
   ProductNotFoundException,
 } from 'src/errors/permission.error';
-import { OrdersRepo } from 'src/domain/orders/orders.repo';
-import { OrderListDto } from 'src/domain/orders/dto/order.dto';
 import { ListPageDto } from 'src/shared/dto/list.dto';
 import {
   CreateProductByAdminDto,
   UpdateProductByAdminDto,
-} from 'src/domain/product/dto/product.dto';
+} from 'src/domain/client/product/dto/product.dto';
 import { AdminCategoryRepo, AdminSubcategoryRepo } from '../repo/category.repo';
+import { OrderListDto } from 'src/domain/client/orders/dto/order.dto';
+import { OrdersRepo } from 'src/domain/client/orders/orders.repo';
 
 @Injectable()
 export class AdminProductService {
@@ -21,7 +21,7 @@ export class AdminProductService {
     private readonly adminProductRepo: AdminProductRepo,
     private readonly adminSubcategoryRepo: AdminSubcategoryRepo,
     private readonly orderRepo: OrdersRepo,
-  ) {}
+  ) { }
 
   async create(params: CreateProductByAdminDto) {
     const category = await this.adminProductRepo.selectById(
