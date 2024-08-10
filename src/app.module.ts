@@ -23,4 +23,4 @@ import { OrdersModule } from './domain/client/orders/orders.module';
   controllers: [AppController],
   providers: [AppService, PoolService],
 })
-export class AppModule { }
+export class AppModule {}

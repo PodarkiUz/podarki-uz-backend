@@ -29,7 +29,7 @@ export class CabinetShopService {
     private readonly adminSubcategoryRepo: AdminSubcategoryRepo,
     private readonly adminProductRepo: AdminProductRepo,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   async login(params: ShopLoginDto) {
     const shop = await this.adminShopRepo.selectByLogin(params.login);

@@ -15,7 +15,7 @@ export class ProductService {
   constructor(
     private readonly productRepo: ProductRepo,
     private readonly adsRepo: AdsRepo,
-  ) { }
+  ) {}
 
   getUserProducts(params: ListPageDto, user: IUser) {
     return this.productRepo.select(

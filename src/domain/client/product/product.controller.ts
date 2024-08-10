@@ -17,7 +17,7 @@ import { ListPageDto } from 'src/shared/dto/list.dto';
 @ApiTags('Product')
 @Controller('product')
 export class ProductController {
-  constructor(private readonly productService: ProductService) { }
+  constructor(private readonly productService: ProductService) {}
 
   @UseGuards(AuthGuard)
   @ApiBearerAuth('authorization')

@@ -7,7 +7,7 @@ import { SubcategoryListPageDto } from 'src/domain/admin/dto/category-admin.dto'
 @ApiTags('Category')
 @Controller('category')
 export class CategoryController {
-  constructor(private readonly categoryService: CategoryService) { }
+  constructor(private readonly categoryService: CategoryService) {}
 
   @Post('list')
   getAll(@Body() params: ListPageDto) {

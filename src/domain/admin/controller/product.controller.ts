@@ -27,7 +27,7 @@ export class AdminProductController {
   constructor(
     private readonly adminProductService: AdminProductService,
     private readonly productService: ProductService,
-  ) { }
+  ) {}
 
   @Post('create')
   async create(@Body() params: CreateProductByAdminDto) {

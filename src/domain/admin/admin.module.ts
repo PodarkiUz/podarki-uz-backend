@@ -47,4 +47,4 @@ import { OrdersRepo } from '../client/orders/orders.repo';
     AdminShopRepo,
   ],
 })
-export class AdminModule { }
+export class AdminModule {}

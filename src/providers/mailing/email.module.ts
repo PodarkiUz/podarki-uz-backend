@@ -33,4 +33,4 @@ import { MailingService } from './email.service';
   ],
   providers: [MailingService],
 })
-export class MailingModule { }
+export class MailingModule {}

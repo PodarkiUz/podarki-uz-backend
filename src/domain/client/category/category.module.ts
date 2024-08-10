@@ -10,4 +10,4 @@ import { UserModule } from 'src/domain/client/user/user.module';
   // controllers: [CategoryController],
   providers: [CategoryService, CategoryRepo, JwtService],
 })
-export class CategoryModule { }
+export class CategoryModule {}
