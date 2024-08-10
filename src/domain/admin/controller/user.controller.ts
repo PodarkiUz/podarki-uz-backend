@@ -20,9 +20,7 @@ import { ListPageDto } from 'src/shared/dto/list.dto';
 @UseGuards(AdminGuard)
 @Controller('admin/users')
 export class AdminUserController {
-  constructor(
-    private readonly adminUserService: AdminUserService,
-  ) {}
+  constructor(private readonly adminUserService: AdminUserService) {}
 
   @Post('set-status')
   async setStatus(@Body() params: SetUserStatusDto) {
