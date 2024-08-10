@@ -10,7 +10,7 @@ import EmailService from 'src/providers/email.service';
 // import { MailerService } from '@nestjs-modules/mailer';
 
 @Module({
-  controllers: [UserController],
+  // controllers: [UserController],
   providers: [
     UserService,
     UserRepo,

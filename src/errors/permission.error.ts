@@ -61,3 +61,21 @@ export class AdminPasswordIncorrectException extends NotFoundException {
     });
   }
 }
+
+export class ShopLoginIncorrectException extends NotFoundException {
+  constructor() {
+    super({
+      code: ErrorCodes.SHOP_LOGIN_INCORRECT,
+      message: 'Login is incorrect',
+    });
+  }
+}
+
+export class ShopPasswordIncorrectException extends NotFoundException {
+  constructor() {
+    super({
+      code: ErrorCodes.SHOP_PASSWORD_INCORRECT,
+      message: 'Password is incorrect',
+    });
+  }
+}

@@ -20,27 +20,27 @@ export class AdminGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    let token = request.headers.authorization;
+    const token = request.headers.authorization;
 
     if (!token) {
       throw new UnauthorizedException();
     }
 
     // tokenId = tokenId.substring('Bearer '.length);
-
+    let user;
     try {
-      token = await this.jwtService.verifyAsync(token, {
+      user = await this.jwtService.verifyAsync(token, {
         secret: `podarkiuz-app`,
       });
     } catch (error) {
       throw new ForbiddenException();
     }
 
-    const user: IUser = await this.userService.findOne(token.id);
+    // const user: IUser = await this.userService.findOne(token.id);
 
-    if (!user || !user.id) {
-      throw new UnauthorizedException();
-    }
+    // if (!user || !user.id) {
+    //   throw new UnauthorizedException();
+    // }
 
     if (user.role !== UserRoles.ADMIN) {
       throw new UserHasNotPermissionException();

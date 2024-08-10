@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import {
+  IsArray,
   IsEnum,
   IsNumber,
   IsObject,
@@ -10,7 +11,7 @@ import {
 import { ListPageDto } from 'src/shared/dto/list.dto';
 import { SortType } from '../enum/product.enum';
 
-export class CreateProductDto {
+export class CreateProductByAdminDto {
   @ApiProperty()
   @IsString()
   @MaxLength(64)
@@ -19,7 +20,7 @@ export class CreateProductDto {
   @ApiProperty()
   @IsString()
   @MaxLength(64)
-  name_lat: string;
+  name_en: string;
 
   @ApiProperty()
   @IsString()
@@ -27,13 +28,13 @@ export class CreateProductDto {
   name_ru: string;
 
   @ApiProperty()
-  @IsString()
-  @IsOptional()
-  image_url?: string;
+  @IsString({ each: true })
+  @IsArray()
+  avif_images: string;
 
   @ApiProperty()
   @IsString()
-  category_id: string;
+  small_image: string;
 
   @ApiProperty()
   @IsNumber()
@@ -42,24 +43,29 @@ export class CreateProductDto {
   @ApiProperty()
   @IsNumber()
   @IsOptional()
-  sale_price?: number;
-
-  @ApiProperty()
-  @IsNumber()
-  count: number;
-
-  @ApiProperty()
-  @IsObject()
-  @IsOptional()
-  characteristic?: object;
+  discount_price?: number;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
   description?: string;
+
+  @ApiProperty()
+  @IsString()
+  sub_category_id: string;
+
+  @ApiProperty()
+  @IsString()
+  shop_id: string;
 }
 
-export class UpdateProductDto extends PartialType(CreateProductDto) {}
+export class UpdateProductByAdminDto extends PartialType(
+  CreateProductByAdminDto,
+) {
+  @ApiProperty()
+  @IsString()
+  id: string;
+}
 
 export class ProductListByCategoryDto extends ListPageDto {
   @ApiProperty()
