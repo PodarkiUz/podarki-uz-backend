@@ -12,4 +12,4 @@ import { AdsRepo } from './ads.repo';
   providers: [ProductService, ProductRepo, JwtService, AdsRepo],
   exports: [ProductService, ProductRepo],
 })
-export class ProductModule {}
+export class ProductModule { }

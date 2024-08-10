@@ -17,7 +17,7 @@ import { AdminSubcategoryRepo } from 'src/domain/admin/repo/category.repo';
 import {
   CreateProductByShopDto,
   UpdateProductByShopDto,
-} from 'src/domain/product/dto/product.dto';
+} from 'src/domain/client/product/dto/product.dto';
 import { AdminProductRepo } from 'src/domain/admin/repo/product.repo';
 import { ListPageDto } from 'src/shared/dto/list.dto';
 import { CabinetProductListDto } from '../dto/product.dto';
@@ -29,7 +29,7 @@ export class CabinetShopService {
     private readonly adminSubcategoryRepo: AdminSubcategoryRepo,
     private readonly adminProductRepo: AdminProductRepo,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   async login(params: ShopLoginDto) {
     const shop = await this.adminShopRepo.selectByLogin(params.login);

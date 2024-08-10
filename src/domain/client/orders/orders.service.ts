@@ -1,11 +1,11 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOrderDto, OrderListDto } from './dto/order.dto';
 import { OrdersRepo } from './orders.repo';
-import { ProductRepo } from '../product/product.repo';
 import { ProductNotFoundException } from 'src/errors/permission.error';
 // import { KnexService } from 'src/providers/knex.service';
-import { IUser } from '../user/interface/user.interface';
 import { isEmpty } from 'lodash';
+import { ProductRepo } from '../product/product.repo';
+import { IUser } from '../user/interface/user.interface';
 
 @Injectable()
 export class OrdersService {
