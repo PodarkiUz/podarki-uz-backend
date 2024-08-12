@@ -164,7 +164,6 @@ export class BaseRepo<T extends {}> extends KnexBaseRepo {
       .select(this.knex.raw('COUNT(*) OVER() AS total_count'))
       .limit(pageSize)
       .offset(offset);
-    console.log(results);
 
     const totalRecords =
       results.length > 0 ? parseInt(results[0].total_count, 10) : 0;

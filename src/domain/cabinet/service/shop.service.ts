@@ -91,11 +91,12 @@ export class CabinetShopService {
     return this.adminShopRepo.insert({
       name_uz: params.name_uz,
       name_ru: params.name_ru,
-      name_lat: params.name_en,
+      name_en: params.name_en,
       sub_category_id: params.sub_category_id,
       avif_images: params.avif_images,
       small_image: params.small_image,
       price: params.price,
+      count: params.count,
       discount_price: params.discount_price,
       description: params?.description,
       shop_id: currentShop.id,
@@ -129,11 +130,12 @@ export class CabinetShopService {
     return this.adminShopRepo.insert({
       name_uz: params?.name_uz,
       name_ru: params?.name_ru,
-      name_lat: params?.name_en,
+      name_en: params?.name_en,
       sub_category_id: params?.sub_category_id,
       avif_images: params?.avif_images,
       small_image: params?.small_image,
       price: params?.price,
+      count: params?.count,
       discount_price: params?.discount_price,
       description: params?.description,
     });

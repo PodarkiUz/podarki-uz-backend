@@ -45,6 +45,10 @@ export class CreateProductByAdminDto {
   @IsNumber()
   price: number;
 
+  @ApiProperty()
+  @IsNumber()
+  count: number;
+
   @ApiPropertyOptional()
   @IsNumber()
   @IsOptional()

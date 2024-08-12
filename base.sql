@@ -67,6 +67,7 @@ create table product
     small_image      text        null,
     status          smallint    default 1,
     on_sale         bool        default false,
+    count        smallint,
     shop_id       varchar(24),
     constraint fk_shop foreign key (shop_id) references shop (id),
     description    text,
