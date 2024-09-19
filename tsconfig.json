@@ -16,6 +16,16 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@shared/*": ["src/shared/*"],
+      "@domain/*": ["src/domain/*"],
+      "@core/*": ["src/core/*"],
+      "@auth/*": ["src/core/auth/*"],
+      "@guard/*": ["src/shared/guard/*"],
+      "@utils/*": ["src/shared/utils/*"],
+      "@errors/*": ["src/shared/errors/*"],
+      "@decorator/*": ["src/shared/decorator/*"]
+    }
   }
 }
