@@ -1,3 +1,4 @@
+-- test
 create table user
 (
     id         varchar(24) not null primary key,
