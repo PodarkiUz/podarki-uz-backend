@@ -8,77 +8,9 @@ on :
     branches: [ "main"]
 
 jobs :
-  setup-node :
-    runs-on : ubuntu-latest
-
-    services :
-      postgres :
-        image : postgres:latest
-        env :
-          POSTGRES_DB : podarkiuz
-          POSTGRES_USER : postgres
-          POSTGRES_PASSWORD : 4324
-        ports :
-          - 5432:5432
-        options : --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
-    steps :
-      - name : Checkout
-        uses : actions/checkout@v3
-
-      - name : Wait for Postgres to be ready
-        run : |
-          timeout=300
-          while ! pg_isready -q -h localhost -p 5432 -U postgres; do
-            sleep 1
-            timeout=$((timeout - 1))
-            if [ $timeout -eq 0 ]; then
-              echo "Postgres did not start within timeout"
-              exit 1
-            fi
-          done
-      - name : Create database schema
-        run : |
-          PGPASSWORD=4324 psql -h localhost -U postgres -d podarkiuz -c "CREATE TABLE IF NOT EXISTS mytable (id SERIAL PRIMARY KEY, name VARCHAR(255))"
-
-      - name : Set up Node.js
-        uses : actions/setup-node@v3
-        with :
-          node-version : '20'
-
-      - name : Install dependencies
-        run : npm install
-
-      - name : Set database credentials as environment variables
-        env :
-          PG_HOST : localhost
-          PG_PORT : 5432
-          PG_DB : podarkiuz
-          PG_USER : postgres
-          PG_PASS : 4324
-        run : |
-          echo "export PG_HOST=$PG_HOST" >> .env
-          echo "export PG_PORT=$PG_PORT" >> .env
-          echo "export PG_DB=$PG_DB" >> .env
-          echo "export PG_USER=$PG_USER" >> .env
-          echo "export PG_PASS=$PG_PASS" >> .env
-
-      - name : Build
-        run : npm run build
-
-      - name : Run app
-        run : |
-          npm run start:prod &
-          sleep 5
-          if ! pgrep -f "npm run start:prod" >/dev/null; then
-            echo "Application failed to start"
-            exit 1
-          fi
 
   build-and-deploy :
     runs-on : ubuntu-latest
-
-    needs : setup-node
 
     steps :
       - name : Checkout
