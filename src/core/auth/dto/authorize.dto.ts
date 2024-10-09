@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsNumber, IsPhoneNumber, IsString, MaxLength } from 'class-validator';
 
 export class AuthorizeDto {
   @ApiProperty()
@@ -14,4 +14,17 @@ export class RefreshTokenDto {
   @ApiProperty()
   @IsString()
   refreshToken: string;
+}
+
+export class ClientAuthorizeDto {
+  @ApiProperty()
+  @IsPhoneNumber('UZ')
+  phone: string;
+}
+
+export class ClientConfirmOTPDto extends ClientAuthorizeDto {
+  @ApiProperty()
+  @IsString()
+  @MaxLength(5)
+  otpCode: string;
 }

@@ -34,6 +34,17 @@ export class AuthUserDao extends BaseRepo<AuthToken> {
     return user;
   }
 
+  getUserByPhone(phone) {
+    const user = this.knex
+      .select('*')
+      .from(users.name)
+      .where('phone', phone)
+      .whereNot('is_deleted', true)
+      .first();
+
+    return user;
+  }
+
   removeAllAuthTokensOfUser(user_id) {
     return this.knex.transaction((trx) => {
       return trx(auth_token.name)

@@ -3,3 +3,8 @@ export enum Role {
   ProviderUser = 'provider_user',
   Dispatchet = 'dispatcher',
 }
+
+export enum UserStatus {
+  New = 1,
+  Registered = 2,
+}

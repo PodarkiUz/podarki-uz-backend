@@ -129,7 +129,7 @@ export class BaseRepo<T extends Partial<IdClass>> implements IBaseQuery<T> {
       .insert(values)
       .into(this._tableName)
       .returning(returning);
-    return data;
+    return data?.length > 1 ? data : data[0];
   }
 
   async insertWithTransactionWithoutId(
