@@ -6,6 +6,7 @@ import { KnexModule } from 'nestjs-knex';
 import config from '../knexfile';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '@auth/auth.module';
+import { AdminModule } from '@domain/admin/admin.module';
 
 console.log(config);
 
@@ -18,6 +19,7 @@ console.log(config);
     KnexModule.forRoot({ config }),
     FileRouterModule,
     AuthModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

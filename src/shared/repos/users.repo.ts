@@ -19,9 +19,15 @@ export class UsersRepo extends BaseRepo<any> {
         'u.last_name',
         'u.middle_name',
         'u.is_verified',
-        this._knex.raw(`jsonb_agg(r.role_name) filter (where r.role_name is not null) as roles`),
-        this._knex.raw(`jsonb_agg(p.permission_name) filter (where p.permission_name is not null) as permissions`),
-        this._knex.raw(`jsonb_agg(pu.provider_id) filter (where pu.provider_id is not null) as providers`),
+        this._knex.raw(
+          `jsonb_agg(r.role_name) filter (where r.role_name is not null) as roles`,
+        ),
+        this._knex.raw(
+          `jsonb_agg(p.permission_name) filter (where p.permission_name is not null) as permissions`,
+        ),
+        this._knex.raw(
+          `jsonb_agg(pu.provider_id) filter (where pu.provider_id is not null) as providers`,
+        ),
         this._knex.raw(`case when reg.id is not null then jsonb_build_object(
           'id', reg.id,
           'name_uz', reg.name_uz,

@@ -144,4 +144,23 @@ export class AuthController {
     // throw Error();
     return await this.authService.confirmOtp(body.phone, body.otpCode);
   }
+
+  @ApiBody({
+    type: ClientAuthorizeDto,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Example response',
+    type: () => LoginResponseDto, // Define your DTO (Data Transfer Object) for the response
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Example error response',
+    type: () => ErrorResponseDto, // Define your DTO (Data Transfer Object) for the response
+  })
+  @Post('shop/login')
+  async shopLogin(@Ip() ip: string, @Body() body: ClientAuthorizeDto) {
+    // throw new Error();
+    return await this.authService.clientAuthorize(body);
+  }
 }

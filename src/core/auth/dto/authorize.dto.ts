@@ -28,3 +28,9 @@ export class ClientConfirmOTPDto extends ClientAuthorizeDto {
   @MaxLength(5)
   otpCode: string;
 }
+
+export class CreateShopDto {
+  @ApiProperty()
+  @IsPhoneNumber('UZ')
+  phone: string;
+}

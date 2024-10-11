@@ -43,7 +43,7 @@ export class AuthService {
       accessToken,
       refreshToken,
     );
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, success: true };
   }
 
   async checkUser(
@@ -147,12 +147,13 @@ export class AuthService {
     otpCode: string,
   ): Promise<{ accessToken: string; refreshToken: string }> {
     const user = await this.authUserDao.getUserByPhone(phone);
+
     if (!user) {
       throw new UserNotFoundException();
     }
 
     if (!user.otp) {
-      return null;
+      throw new Error();
     }
 
     if (!bcrypt.compareSync(otpCode, user.otp)) {
@@ -166,6 +167,30 @@ export class AuthService {
       });
 
       return await this.createToken(user);
+    });
+  }
+
+  async shopAuthorize(
+    params: ClientAuthorizeDto,
+  ): Promise<{ success: boolean; otp: string }> {
+    return this.authUserDao.knex.transaction(async (trx) => {
+      const user = await this.checkUserByPhone(params.phone);
+      const otp = getFiveDigitNumberOTP().toString();
+      const hashedOtp = bcrypt.hashSync(otp, 10);
+
+      if (user) {
+        await this.userRepo.updateByIdWithTransaction(trx, user.id, {
+          otp: hashedOtp,
+        });
+      } else {
+        await this.userRepo.insertWithTransaction(trx, {
+          phone: params.phone,
+          otp: hashedOtp,
+          status: UserStatus.New,
+        });
+      }
+
+      return { success: true, otp };
     });
   }
 }

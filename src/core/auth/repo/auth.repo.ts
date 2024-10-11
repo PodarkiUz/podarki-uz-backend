@@ -39,7 +39,7 @@ export class AuthUserDao extends BaseRepo<AuthToken> {
       .select('*')
       .from(users.name)
       .where('phone', phone)
-      .whereNot('is_deleted', true)
+      .where('is_deleted', false)
       .first();
 
     return user;
