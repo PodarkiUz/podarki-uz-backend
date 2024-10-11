@@ -1,26 +1,27 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './domain/client/user/user.module';
-import { ProductModule } from './domain/client/product/product.module';
-import { AdminModule } from './domain/admin/admin.module';
-import { PoolService } from './providers/pool.service';
-import { FileRouterModule } from './domain/file-router/file-router.module';
-import { CabinetModule } from './domain/cabinet/cabinet.module';
-import { CategoryModule } from './domain/client/category/category.module';
-import { OrdersModule } from './domain/client/orders/orders.module';
+import { FileRouterModule } from './core/file-router/file-router.module';
+import { KnexModule } from 'nestjs-knex';
+import config from '../knexfile';
+import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from '@auth/auth.module';
+import { AdminModule } from '@domain/admin/admin.module';
+
+console.log(config);
 
 @Module({
   imports: [
-    CategoryModule,
-    UserModule,
-    ProductModule,
-    AdminModule,
+    ConfigModule.forRoot({
+      envFilePath: ['/app/.env', '.env'],
+      isGlobal: true,
+    }),
+    KnexModule.forRoot({ config }),
     FileRouterModule,
-    OrdersModule,
-    CabinetModule,
+    AuthModule,
+    AdminModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PoolService],
+  providers: [AppService],
 })
 export class AppModule {}
