@@ -1,13 +1,13 @@
 import * as bcrypt from 'bcrypt';
 
-export async function createHashPassword(password) {
+export async function createCodeHash(code) {
   // Generate a salt
   const salt = await bcrypt.genSalt(10);
 
   // Hash password
-  return bcrypt.hash(password, salt);
+  return bcrypt.hash(code, salt);
 }
 
-export async function verifyPassword(password, hash) {
-  return bcrypt.compare(password, hash);
+export async function verifyCode(code, hash) {
+  return bcrypt.compare(code, hash);
 }

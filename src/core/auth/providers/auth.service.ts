@@ -1,12 +1,23 @@
 import * as bcrypt from 'bcrypt';
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthUserDao } from '../repo/auth.repo';
 import { JwtService } from '@nestjs/jwt';
 import { AuthToken } from '../types';
+import { ClientAuthorizeDto } from '../dto/authorize.dto';
+import getFiveDigitNumberOTP from '@shared/utils/otp-generator';
+import { UserNotFoundException } from '@shared/errors/permission.error';
+import { UsersRepo } from '@shared/repos/users.repo';
+import { UserStatus } from '../role.enum';
 
 @Injectable()
 export class AuthService {
   @Inject() private readonly authUserDao: AuthUserDao;
+  @Inject() private readonly userRepo: UsersRepo;
   @Inject() readonly jwtService: JwtService;
   async createToken(user) {
     const accessToken = await this.jwtService.signAsync(
@@ -32,7 +43,7 @@ export class AuthService {
       accessToken,
       refreshToken,
     );
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, success: true };
   }
 
   async checkUser(
@@ -96,6 +107,90 @@ export class AuthService {
       );
 
       return this.createToken(user);
+    });
+  }
+
+  async clientAuthorize(
+    params: ClientAuthorizeDto,
+  ): Promise<{ success: boolean; otp: string }> {
+    return this.authUserDao.knex.transaction(async (trx) => {
+      const user = await this.checkUserByPhone(params.phone);
+      const otp = getFiveDigitNumberOTP().toString();
+      const hashedOtp = bcrypt.hashSync(otp, 10);
+
+      if (user) {
+        await this.userRepo.updateByIdWithTransaction(trx, user.id, {
+          otp: hashedOtp,
+        });
+      } else {
+        await this.userRepo.insertWithTransaction(trx, {
+          phone: params.phone,
+          otp: hashedOtp,
+          status: UserStatus.New,
+        });
+      }
+
+      return { success: true, otp };
+    });
+  }
+
+  async checkUserByPhone(
+    phone: string,
+  ): Promise<{ id: string; username: string }> {
+    const user = await this.authUserDao.getUserByPhone(phone);
+    if (!user) return null;
+    return user;
+  }
+
+  async confirmOtp(
+    phone: string,
+    otpCode: string,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    const user = await this.authUserDao.getUserByPhone(phone);
+
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+
+    if (!user.otp) {
+      throw new Error();
+    }
+
+    if (!bcrypt.compareSync(otpCode, user.otp)) {
+      throw new BadRequestException('INCORRECT CODE');
+    }
+
+    return this.authUserDao.knex.transaction(async (trx) => {
+      await this.userRepo.updateByIdWithTransaction(trx, user.id, {
+        status: UserStatus.Registered,
+        otp: null,
+      });
+
+      return await this.createToken(user);
+    });
+  }
+
+  async shopAuthorize(
+    params: ClientAuthorizeDto,
+  ): Promise<{ success: boolean; otp: string }> {
+    return this.authUserDao.knex.transaction(async (trx) => {
+      const user = await this.checkUserByPhone(params.phone);
+      const otp = getFiveDigitNumberOTP().toString();
+      const hashedOtp = bcrypt.hashSync(otp, 10);
+
+      if (user) {
+        await this.userRepo.updateByIdWithTransaction(trx, user.id, {
+          otp: hashedOtp,
+        });
+      } else {
+        await this.userRepo.insertWithTransaction(trx, {
+          phone: params.phone,
+          otp: hashedOtp,
+          status: UserStatus.New,
+        });
+      }
+
+      return { success: true, otp };
     });
   }
 }

@@ -81,7 +81,11 @@ export class BaseRepo<T extends Partial<IdClass>> implements IBaseQuery<T> {
       .first();
   }
 
-  async updateById(id: string, value: T, returning = ['*']): Promise<T[]> {
+  async updateById(
+    id: string,
+    value: Partial<T>,
+    returning = ['*'],
+  ): Promise<T[]> {
     const [data] = await this._knex(this._tableName)
       .update(value)
       .where('id', id)
@@ -129,7 +133,7 @@ export class BaseRepo<T extends Partial<IdClass>> implements IBaseQuery<T> {
       .insert(values)
       .into(this._tableName)
       .returning(returning);
-    return data;
+    return data?.length > 1 ? data : data[0];
   }
 
   async insertWithTransactionWithoutId(
