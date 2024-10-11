@@ -1,12 +1,13 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ICreateCategoryParam } from '../interface/category.interface';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateCategoryDto implements ICreateCategoryParam {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
   name_ru: string;
+
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
@@ -33,4 +34,36 @@ export class DeleteCategoryDto {
   @IsString()
   @IsNotEmpty()
   id: string;
+}
+
+export class UpdateCategoryDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  id: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  name_ru?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  name_uz?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  image?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  avif_image?: string;
 }
