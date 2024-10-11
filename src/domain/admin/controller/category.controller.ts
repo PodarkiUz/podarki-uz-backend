@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { CreateCategoryDto, DeleteCategoryDto } from '../dto/category.dto';
+import { CreateCategoryDto, DeleteCategoryDto, UpdateCategoryDto } from '../dto/category.dto';
 import { CategoryService } from '../service/category.service';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -16,6 +16,11 @@ export class CategoryController {
   @Post('delete')
   delete(@Body() body: DeleteCategoryDto) {
     return this.categoryService.delete(body.id);
+  }
+
+  @Post('update')
+  update(@Body() body: UpdateCategoryDto) {
+    return this.categoryService.update(body.id, body);
   }
 
   @Post('get-list')

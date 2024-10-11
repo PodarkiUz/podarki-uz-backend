@@ -5,3 +5,5 @@ export interface ICreateCategoryParam {
   image: string;
   avif_image: string;
 }
+
+export type IUpdateCategoryParam = Partial<ICreateCategoryParam>;

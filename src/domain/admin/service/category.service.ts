@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { ICreateCategoryParam } from '../interface/category.interface';
+import {
+  ICreateCategoryParam,
+  IUpdateCategoryParam,
+} from '../interface/category.interface';
 import { CategoryRepo } from '../repo/category.repo';
 
 @Injectable()
@@ -15,6 +18,10 @@ export class CategoryService {
   async delete(id: string) {
     await this.categoryRepo.updateById(id, { is_deleted: true });
     return { success: true };
+  }
+
+  async update(id: string, params: IUpdateCategoryParam) {
+    return this.categoryRepo.updateById(id, params);
   }
 
   async getAllList() {
