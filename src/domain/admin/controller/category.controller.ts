@@ -1,5 +1,9 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { CreateCategoryDto, DeleteCategoryDto, UpdateCategoryDto } from '../dto/category.dto';
+import {
+  CreateCategoryDto,
+  DeleteCategoryDto,
+  UpdateCategoryDto,
+} from '../dto/category.dto';
 import { CategoryService } from '../service/category.service';
 import { ApiTags } from '@nestjs/swagger';
 
