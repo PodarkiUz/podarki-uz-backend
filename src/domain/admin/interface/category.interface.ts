@@ -4,6 +4,8 @@ export interface ICreateCategoryParam {
   description: string;
   image: string;
   avif_image: string;
+  parent_id?: string;
+  group_id?: string;
 }
 
 export type IUpdateCategoryParam = Partial<ICreateCategoryParam>;

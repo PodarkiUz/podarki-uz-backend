@@ -27,6 +27,16 @@ export class CreateCategoryDto implements ICreateCategoryParam {
   @IsString()
   @IsNotEmpty()
   avif_image: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  group_id?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  parent_id?: string;
 }
 
 export class DeleteCategoryDto {
@@ -66,4 +76,14 @@ export class UpdateCategoryDto {
   @IsOptional()
   @IsString()
   avif_image?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  group_id?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  parent_id?: string;
 }
