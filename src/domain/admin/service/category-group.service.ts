@@ -7,7 +7,7 @@ import {
 
 @Injectable()
 export class CategoryGroupService {
-  constructor(private readonly categoryGroupRepo: CategoryGroupRepo) { }
+  constructor(private readonly categoryGroupRepo: CategoryGroupRepo) {}
 
   async create(params: ICreateCategoryGroupParam) {
     const categoryGroup = await this.categoryGroupRepo.insert(params);

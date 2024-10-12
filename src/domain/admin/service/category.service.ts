@@ -16,7 +16,7 @@ export class CategoryService {
   constructor(
     private readonly categoryRepo: CategoryRepo,
     private readonly categoryGroupRepo: CategoryGroupRepo,
-  ) { }
+  ) {}
 
   async create(params: ICreateCategoryParam) {
     const categoryId = this.categoryRepo.generateRecordId();

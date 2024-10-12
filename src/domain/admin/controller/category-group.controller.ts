@@ -10,7 +10,7 @@ import {
 @ApiTags('ADMIN -> CATEGORY-GROUP')
 @Controller('admin/category-group')
 export class CategoryGroupController {
-  constructor(private readonly categoryGroupService: CategoryGroupService) { }
+  constructor(private readonly categoryGroupService: CategoryGroupService) {}
 
   @Post('create')
   create(@Body() body: CreateCategoryGroupDto) {
