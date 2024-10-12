@@ -19,37 +19,41 @@ export class CategoryService {
   ) {}
 
   async create(params: ICreateCategoryParam) {
-    const categoryId = this.categoryRepo.generateRecordId();
-    let categoryParentHierarchy = null;
+    const categoryId = this.categoryRepo.generateRecordId(); // Generate a new category ID
+    let categoryParentHierarchy: string | null = null;
 
-    if (params?.group_id && params?.parent_id) {
+    // Validation: Prevent group_id and parent_id in the same request
+    if (params.group_id && params.parent_id) {
       throw new BadRequestException(
         'GROUP CANNOT BE ADDED ON CHILD CATEGORIES!',
       );
     }
 
+    // If parent_id is provided, validate and build the hierarchy
     if (params?.parent_id) {
       const parentCategory = await this.categoryRepo.getById(params.parent_id);
 
-      if (isEmpty(parentCategory)) {
+      if (!parentCategory) {
         throw new NotFoundException('PARENT CATEGORY NOT FOUND');
       }
 
-      categoryParentHierarchy = `${parentCategory.id}.${categoryId}`;
+      // Construct the new hierarchy as parentHierarchy.childId
+      categoryParentHierarchy = `${parentCategory.parent_hierarchy}.${categoryId}`;
     }
 
     if (params?.group_id) {
       const hasGroup = await this.categoryGroupRepo.getById(params.group_id);
 
-      if (isEmpty(hasGroup)) {
+      if (!hasGroup) {
         throw new NotFoundException('CATEGORY GROUP NOT FOUND');
       }
     }
 
+    // Insert the new category with the constructed or null hierarchy
     const category = await this.categoryRepo.insert({
       ...params,
       id: categoryId,
-      parent_hierarchy: categoryParentHierarchy,
+      parent_hierarchy: categoryParentHierarchy || `${categoryId}`, // Use categoryId as root hierarchy if no parent
     });
 
     return { success: true, data: category };
