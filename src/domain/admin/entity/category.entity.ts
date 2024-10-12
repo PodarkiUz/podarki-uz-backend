@@ -5,6 +5,9 @@ export interface CategoryEntity {
   description: string;
   image: string;
   avif_image: string;
+  parent_id?: string;
+  group_id?: string;
+  parent_hierarchy?: string;
   created_at?: Date;
   is_deleted?: boolean;
 }
