@@ -20,7 +20,7 @@ export class CategoryService {
 
   async create(params: ICreateCategoryParam) {
     const categoryId = this.categoryRepo.generateRecordId();
-    let categoryParentHierarchy = categoryId;
+    let categoryParentHierarchy = null;
 
     if (params?.group_id && params?.parent_id) {
       throw new BadRequestException(
@@ -35,7 +35,7 @@ export class CategoryService {
         throw new NotFoundException('PARENT CATEGORY NOT FOUND');
       }
 
-      categoryParentHierarchy = `${parentCategory.parent_hierarchy}.${categoryId}`;
+      categoryParentHierarchy = `${parentCategory.id}.${categoryId}`;
     }
 
     if (params?.group_id) {
@@ -66,6 +66,16 @@ export class CategoryService {
 
   async getAllList() {
     const data = await this.categoryRepo.getAllCategoryList();
+    return { success: true, data };
+  }
+
+  async getChildCategoriesList(category_id: string) {
+    const data = await this.categoryRepo.getChildCategories(category_id);
+    return { success: true, data };
+  }
+
+  async getParentCategories() {
+    const data = await this.categoryRepo.getParentCategories();
     return { success: true, data };
   }
 }

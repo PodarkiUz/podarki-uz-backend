@@ -31,4 +31,14 @@ export class CategoryController {
   getAll() {
     return this.categoryService.getAllList();
   }
+
+  @Post('get-parents')
+  getParentCategories() {
+    return this.categoryService.getParentCategories();
+  }
+
+  @Post('get-children')
+  getChildCategories(@Body() body: DeleteCategoryDto) {
+    return this.categoryService.getChildCategoriesList(body.id);
+  }
 }
