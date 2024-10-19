@@ -6,6 +6,7 @@ import {
 } from '../dto/category.dto';
 import { CategoryService } from '../service/category.service';
 import { ApiTags } from '@nestjs/swagger';
+import { ListPageDto } from '@shared/dto/list.dto';
 
 @ApiTags('ADMIN -> CATEGORY')
 @Controller('admin/category')

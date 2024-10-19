@@ -10,7 +10,7 @@ export class ListPageDto {
   @ApiPropertyOptional()
   @IsNumber()
   @IsOptional()
-  per_page?: number;
+  page_size?: number;
 
   @ApiPropertyOptional()
   @IsString()

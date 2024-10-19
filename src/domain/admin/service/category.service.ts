@@ -10,6 +10,7 @@ import {
 import { CategoryRepo } from '../repo/category.repo';
 import { isEmpty } from 'lodash';
 import { CategoryGroupRepo } from '../repo/category-group.repo';
+import { ListPageDto } from '@shared/dto/list.dto';
 
 @Injectable()
 export class CategoryService {
@@ -70,7 +71,7 @@ export class CategoryService {
 
   async getAllList() {
     const data = await this.categoryRepo.getAllCategoryList();
-    return { success: true, data };
+    return data;
   }
 
   async getChildCategoriesList(category_id: string) {
