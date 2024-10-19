@@ -9,3 +9,7 @@ export interface ICreateCategoryParam {
 }
 
 export type IUpdateCategoryParam = Partial<ICreateCategoryParam>;
+
+export interface IGetAllCategoryListResponse {
+  category: ICreateCategoryParam;
+}
