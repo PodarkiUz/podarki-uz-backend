@@ -1,19 +1,27 @@
 import {
+  Body,
   Controller,
   Injectable,
   Post,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileRouterService } from './file-router.service';
+import { MinioService } from './minio-file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiProperty, ApiTags } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
+
+class FileDeleteDto {
+  @ApiProperty()
+  @IsString()
+  filename: string;
+}
 
 @Injectable()
 @Controller('file-router')
 @ApiTags('File Router')
 export class FileRouterController {
-  constructor(private readonly fileRouterService: FileRouterService) {}
+  constructor(private readonly minioService: MinioService) {}
 
   @Post('upload')
   @ApiConsumes('multipart/form-data')
@@ -33,11 +41,12 @@ export class FileRouterController {
   // @UseInterceptors(FileExtender)
   @UseInterceptors(FileInterceptor('file'))
   async upload(@UploadedFile() file: Express.Multer.File) {
-    return await this.fileRouterService.upload(file);
+    return await this.minioService.uploadFile(file);
   }
 
-  // @Get('download/:file_id')
-  // async download(@Param('file_id') file_id: string) {
-  //   return this.fileRouterService.download(file_id);
-  // }
+  @Post('delete')
+  async deleteBookCover(@Body() body: FileDeleteDto) {
+    await this.minioService.deleteFile(body.filename);
+    return body.filename;
+  }
 }
