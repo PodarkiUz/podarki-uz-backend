@@ -1,6 +1,13 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { ICreateCategoryParam } from '../interface/category.interface';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { FilesDto } from './product.dto';
+import { Type } from 'class-transformer';
 
 export class CreateCategoryDto implements ICreateCategoryParam {
   @ApiProperty()
@@ -18,10 +25,10 @@ export class CreateCategoryDto implements ICreateCategoryParam {
   @IsNotEmpty()
   description: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  image: string;
+  @ApiProperty({ type: FilesDto })
+  @ValidateNested()
+  @Type(() => FilesDto)
+  image: FilesDto;
 
   @ApiProperty()
   @IsString()
@@ -41,44 +48,9 @@ export class DeleteCategoryDto {
   id: string;
 }
 
-export class UpdateCategoryDto {
+export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
   id: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  name_ru?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  name_uz?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  description?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  image?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  avif_image?: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsOptional()
-  group_id?: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsOptional()
-  parent_id?: string;
 }
