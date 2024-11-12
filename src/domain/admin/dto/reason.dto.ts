@@ -1,8 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { ICreateCategoryParam } from '../interface/category.interface';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ICreateReasonParam } from '../interface/reason.interface';
 
-export class CreateCategoryDto implements ICreateCategoryParam {
+export class CreateReasonDto implements ICreateReasonParam {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
@@ -13,35 +13,25 @@ export class CreateCategoryDto implements ICreateCategoryParam {
   @IsNotEmpty()
   name_uz: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  description: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  image: string;
-
-  @ApiProperty()
-  @IsString()
+  @ApiPropertyOptional()
   @IsOptional()
-  group_id?: string;
-
-  @ApiProperty()
   @IsString()
+  description_uz?: string;
+
+  @ApiPropertyOptional()
   @IsOptional()
-  parent_id?: string;
+  @IsString()
+  description_ru?: string;
 }
 
-export class DeleteCategoryDto {
+export class DeleteReasonDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
   id: string;
 }
 
-export class UpdateCategoryDto {
+export class UpdateReasonDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
@@ -60,25 +50,10 @@ export class UpdateCategoryDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
-  description?: string;
+  description_uz?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
-  image?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  avif_image?: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsOptional()
-  group_id?: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsOptional()
-  parent_id?: string;
+  description_ru?: string;
 }

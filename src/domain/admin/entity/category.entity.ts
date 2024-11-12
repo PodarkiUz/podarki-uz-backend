@@ -4,7 +4,6 @@ export interface CategoryEntity {
   name_uz: string;
   description: string;
   image: string;
-  avif_image: string;
   parent_id?: string;
   group_id?: string;
   parent_hierarchy?: string;

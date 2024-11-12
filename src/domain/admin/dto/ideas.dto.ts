@@ -1,8 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { ICreateCategoryParam } from '../interface/category.interface';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ICreateIdeasParam } from '../interface/ideas.interface';
 
-export class CreateCategoryDto implements ICreateCategoryParam {
+export class CreateIdeasDto implements ICreateIdeasParam {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
@@ -13,35 +13,30 @@ export class CreateCategoryDto implements ICreateCategoryParam {
   @IsNotEmpty()
   name_uz: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  description: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  image: string;
-
-  @ApiProperty()
-  @IsString()
+  @ApiPropertyOptional()
   @IsOptional()
+  @IsString()
+  description_uz?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  description_ru?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
   group_id?: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsOptional()
-  parent_id?: string;
 }
 
-export class DeleteCategoryDto {
+export class DeleteIdeasDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
   id: string;
 }
 
-export class UpdateCategoryDto {
+export class UpdateIdeasDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
@@ -60,25 +55,25 @@ export class UpdateCategoryDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
-  description?: string;
+  description_uz?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
-  image?: string;
+  description_ru?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
-  avif_image?: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsOptional()
   group_id?: string;
+}
+
+export class CreateIdeasFilterDto {
+  @ApiProperty()
+  @IsString()
+  idea_id: string;
 
   @ApiProperty()
   @IsString()
-  @IsOptional()
-  parent_id?: string;
+  filter_value_id: string;
 }

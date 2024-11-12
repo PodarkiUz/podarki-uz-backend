@@ -118,6 +118,26 @@ export class BaseRepo<T extends Partial<IdClass>> implements IBaseQuery<T> {
     return data;
   }
 
+  async bulkInsertWithTransaction(
+    trx: Knex.Transaction,
+    values: T[],
+    returning = ['*'],
+    disableId?,
+  ): Promise<T[]> {
+    const items = values.map((value) => {
+      return value.id || disableId
+        ? value
+        : { ...value, id: this.generateRecordId() };
+    });
+
+    const data = await trx
+      .insert(items)
+      .into(this._tableName)
+      .returning(returning);
+
+    return data;
+  }
+
   async insertWithTransaction(
     trx: Knex.Transaction,
     value: T,

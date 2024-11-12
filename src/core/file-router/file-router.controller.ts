@@ -1,7 +1,10 @@
 import {
   Body,
   Controller,
+  FileTypeValidator,
   Injectable,
+  MaxFileSizeValidator,
+  ParseFilePipe,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -40,8 +43,40 @@ export class FileRouterController {
   })
   // @UseInterceptors(FileExtender)
   @UseInterceptors(FileInterceptor('file'))
-  async upload(@UploadedFile() file: Express.Multer.File) {
+  async upload(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new MaxFileSizeValidator({ maxSize: 5242880 })], // 5 MB
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
     return await this.minioService.uploadFile(file);
+  }
+
+  @Post('upload-category-image')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadCategoryImage(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new MaxFileSizeValidator({ maxSize: 5242880 })], // 5MB
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    return await this.minioService.categoryImageUpload(file);
   }
 
   @Post('delete')
