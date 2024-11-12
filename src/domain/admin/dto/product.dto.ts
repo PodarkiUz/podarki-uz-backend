@@ -99,3 +99,9 @@ export class GetProductsByIdeaDto {
   @IsString()
   idea_id: string;
 }
+
+export class GetProductsByCategoryDto {
+  @ApiProperty()
+  @IsString()
+  category_id: string;
+}

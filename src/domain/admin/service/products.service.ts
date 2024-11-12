@@ -45,4 +45,8 @@ export class ProductsService {
   async getProductsByIdea(idea_id: string) {
     return this.productRepo.getProductsByIdea(idea_id);
   }
+
+  async getProductsByCategory(category_id: string) {
+    return this.getProductsByCategory(category_id);
+  }
 }

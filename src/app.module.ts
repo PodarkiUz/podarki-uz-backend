@@ -7,8 +7,7 @@ import config from '../knexfile';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '@auth/auth.module';
 import { AdminModule } from '@domain/admin/admin.module';
-
-console.log(config);
+import { ClientModule } from '@domain/client/client.module';
 
 @Module({
   imports: [
@@ -20,6 +19,7 @@ console.log(config);
     FileRouterModule,
     AuthModule,
     AdminModule,
+    ClientModule,
   ],
   controllers: [AppController],
   providers: [AppService],

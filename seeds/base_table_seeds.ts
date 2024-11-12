@@ -35,8 +35,6 @@ exports.seed = async function (knex) {
     },
   ];
 
-  console.log('data', data);
-
   // Insert seed entries for reasons
   const reasonIds = await knex('reasons').insert(data).returning('id');
 

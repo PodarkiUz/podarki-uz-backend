@@ -5,6 +5,7 @@ import {
   CreateProductDto,
   CreateProductFilterDto,
   DeleteProductDto,
+  GetProductsByCategoryDto,
   GetProductsByIdeaDto,
   UpdateProductDto,
 } from '../dto/product.dto';
@@ -37,6 +38,11 @@ export class ProductsController {
   @Post('get-by-idea')
   getProductsByIdea(@Body() body: GetProductsByIdeaDto) {
     return this.productService.getProductsByIdea(body.idea_id);
+  }
+
+  @Post('get-by-category')
+  getProductsByCategory(@Body() body: GetProductsByCategoryDto) {
+    return this.productService.getProductsByCategory(body.category_id);
   }
 
   @Post('add-filter')

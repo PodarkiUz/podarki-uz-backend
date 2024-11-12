@@ -21,4 +21,17 @@ export class ProductRepo extends BaseRepo<ProductEntity> {
 
     return products;
   }
+
+  async getProductsByCategory(category_id: string) {
+    const subquery = this.knex('category')
+      .select('parent_hierarchy')
+      .where('id', category_id);
+
+    const query = this.knex('product as p')
+      .select('p.*')
+      .join('category as c', 'p.category_id', 'c.id')
+      .whereRaw('c.parent_hierarchy @> (?)', [subquery]);
+
+    return query;
+  }
 }
