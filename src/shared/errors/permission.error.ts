@@ -79,3 +79,12 @@ export class ShopPasswordIncorrectException extends NotFoundException {
     });
   }
 }
+
+export class CategoryGroupHasCategoriesException extends BadRequestException {
+  constructor() {
+    super({
+      code: ErrorCodes.CATEGORY_GROUP_HAS_CATEGORIES,
+      message: 'Category group has its categories',
+    });
+  }
+}

@@ -35,4 +35,14 @@ export class CategoryRepo extends BaseRepo<CategoryEntity> {
   getParentCategories() {
     return this.getAll({ parent_id: null, is_deleted: false });
   }
+
+  getCategoryGroupCategories(category_group_id: string) {
+    const knex: Knex = this.knex;
+
+    return knex
+      .select(['id'])
+      .from(this.tableName)
+      .where('group_id', category_group_id)
+      .where('is_deleted', false);
+  }
 }

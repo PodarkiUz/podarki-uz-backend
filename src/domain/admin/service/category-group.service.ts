@@ -4,10 +4,16 @@ import {
   ICreateCategoryGroupParam,
   IUpdateCategoryGroupParam,
 } from '../interface/category-group.interface';
+import { CategoryRepo } from '../repo/category.repo';
+import { isEmpty } from 'lodash';
+import { CategoryGroupHasCategoriesException } from '@shared/errors/permission.error';
 
 @Injectable()
 export class CategoryGroupService {
-  constructor(private readonly categoryGroupRepo: CategoryGroupRepo) {}
+  constructor(
+    private readonly categoryGroupRepo: CategoryGroupRepo,
+    private readonly categoryRepo: CategoryRepo,
+  ) {}
 
   async create(params: ICreateCategoryGroupParam) {
     const categoryGroup = await this.categoryGroupRepo.insert(params);
@@ -16,6 +22,14 @@ export class CategoryGroupService {
   }
 
   async delete(id: string) {
+    const childCategories = await this.categoryRepo.getCategoryGroupCategories(
+      id,
+    );
+
+    if (!isEmpty(childCategories)) {
+      throw new CategoryGroupHasCategoriesException();
+    }
+
     await this.categoryGroupRepo.updateById(id, { is_deleted: true });
     return { success: true };
   }
