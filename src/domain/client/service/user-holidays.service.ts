@@ -12,7 +12,10 @@ export class UserHolidaysService {
   constructor(private readonly userHolidaysRepo: UserHolidaysRepo) {}
 
   async create(params: ICreateUserHolidaysParam, currentUser: ICurrentUser) {
-    const reason = await this.userHolidaysRepo.insert(params);
+    const reason = await this.userHolidaysRepo.insert({
+      ...params,
+      user_id: currentUser.id,
+    });
 
     return { success: true, data: reason };
   }

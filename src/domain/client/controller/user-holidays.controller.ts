@@ -19,7 +19,10 @@ export class UserHolidaysController {
   constructor(private readonly userHolidaysService: UserHolidaysService) {}
 
   @Post('create')
-  create(@Body() body: CreateUserHolidayDto, @CurrentUser() currentUser: ICurrentUser) {
+  create(
+    @Body() body: CreateUserHolidayDto,
+    @CurrentUser() currentUser: ICurrentUser,
+  ) {
     return this.userHolidaysService.create(body, currentUser);
   }
 
