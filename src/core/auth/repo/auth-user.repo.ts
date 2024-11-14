@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BaseRepo } from '@shared/providers/base-dao';
+import { IAuthGetUserInfo } from '../interface/user.interface';
 
 @Injectable()
 export class AuthUserRepo extends BaseRepo<any> {
@@ -7,7 +8,7 @@ export class AuthUserRepo extends BaseRepo<any> {
     super('users');
   }
 
-  async getUserInfo(user_id: any, trx?) {
+  async getUserInfo(user_id: any, trx?): Promise<IAuthGetUserInfo> {
     const knex = trx || this.knex;
     const query = knex
       .select([

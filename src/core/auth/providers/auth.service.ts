@@ -13,13 +13,23 @@ import getFiveDigitNumberOTP from '@shared/utils/otp-generator';
 import { UserNotFoundException } from '@shared/errors/permission.error';
 import { UsersRepo } from '@shared/repos/users.repo';
 import { UserStatus } from '../role.enum';
+import { ShopRepo } from '@domain/shop/repo/shop.repo';
+import { ShopStatus } from '@domain/shop/shop.enum';
+import { IAuthGetUserInfo } from '../interface/user.interface';
+import { AuthUserRepo } from '../repo/auth-user.repo';
+import { ShopEntity } from '@domain/shop/entity/shop.entity';
+import { isEmpty } from 'lodash';
+import { IShopUserInfoForJwtPayload } from '@domain/shop/interface/shop.interface';
 
 @Injectable()
 export class AuthService {
   @Inject() private readonly authUserDao: AuthUserDao;
   @Inject() private readonly userRepo: UsersRepo;
+  @Inject() private readonly authUserRepo: AuthUserRepo;
+  @Inject() private readonly shopRepo: ShopRepo;
   @Inject() readonly jwtService: JwtService;
-  async createToken(user) {
+
+  async createUserToken(user: IAuthGetUserInfo) {
     const accessToken = await this.jwtService.signAsync(
       { ...user },
       {
@@ -39,6 +49,33 @@ export class AuthService {
     const decodedToken = this.jwtService.decode(accessToken, { json: true });
     await this.authUserDao.createToken(
       user.id,
+      decodedToken,
+      accessToken,
+      refreshToken,
+    );
+    return { accessToken, refreshToken, success: true };
+  }
+
+  async createShopToken(shop: IShopUserInfoForJwtPayload) {
+    const accessToken = await this.jwtService.signAsync(
+      { ...shop },
+      {
+        expiresIn: '23h',
+        secret: 'NO_SHOP_SECRET_JWT',
+      },
+    );
+
+    const refreshToken = await this.jwtService.signAsync(
+      { id: shop.shop_id },
+      {
+        expiresIn: '14d',
+        secret: 'NO_SHOP_SECRET_JWT',
+      },
+    );
+
+    const decodedToken = this.jwtService.decode(accessToken, { json: true });
+    await this.authUserDao.createToken(
+      shop.owner_user_id,
       decodedToken,
       accessToken,
       refreshToken,
@@ -106,7 +143,7 @@ export class AuthService {
         trx,
       );
 
-      return this.createToken(user);
+      return this.createUserToken(user);
     });
   }
 
@@ -142,6 +179,12 @@ export class AuthService {
     return user;
   }
 
+  async checkShopByOwnerPhone(phone: string): Promise<ShopEntity> {
+    const shop = await this.shopRepo.getShopByOwnerPhone(phone);
+    if (!shop) return null;
+    return shop;
+  }
+
   async confirmOtp(
     phone: string,
     otpCode: string,
@@ -165,8 +208,46 @@ export class AuthService {
         status: UserStatus.Registered,
         otp: null,
       });
+      const payload = await this.authUserRepo.getUserInfo(user.id, trx);
+      return await this.createUserToken(payload);
+    });
+  }
 
-      return await this.createToken(user);
+  async confirmShopOtp(
+    phone: string,
+    otpCode: string,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    const user = await this.authUserDao.getUserByPhone(phone);
+
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+
+    const shop = await this.shopRepo.getShopForJwtPayloadById(user.id);
+
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+
+    if (!user.otp) {
+      throw new BadRequestException();
+    }
+
+    if (!bcrypt.compareSync(otpCode, user.otp)) {
+      throw new BadRequestException('INCORRECT CODE');
+    }
+
+    return this.authUserDao.knex.transaction(async (trx) => {
+      await this.userRepo.updateByIdWithTransaction(trx, shop.owner_user_id, {
+        status: UserStatus.Registered,
+        otp: null,
+      });
+
+      await this.shopRepo.updateByIdWithTransaction(trx, shop.shop_id, {
+        status: ShopStatus.Registered,
+      });
+      // const payload = await this.authUserRepo.getUserInfo
+      return await this.createShopToken(shop);
     });
   }
 
@@ -174,19 +255,24 @@ export class AuthService {
     params: ClientAuthorizeDto,
   ): Promise<{ success: boolean; otp: string }> {
     return this.authUserDao.knex.transaction(async (trx) => {
-      const user = await this.checkUserByPhone(params.phone);
+      const shop = await this.checkShopByOwnerPhone(params.phone);
       const otp = getFiveDigitNumberOTP().toString();
       const hashedOtp = bcrypt.hashSync(otp, 10);
 
-      if (user) {
-        await this.userRepo.updateByIdWithTransaction(trx, user.id, {
+      if (!isEmpty(shop)) {
+        await this.userRepo.updateByIdWithTransaction(trx, shop.owner_user_id, {
           otp: hashedOtp,
         });
       } else {
-        await this.userRepo.insertWithTransaction(trx, {
+        const shop_owner = await this.userRepo.insertWithTransaction(trx, {
           phone: params.phone,
           otp: hashedOtp,
           status: UserStatus.New,
+        });
+
+        await this.shopRepo.insertWithTransaction(trx, {
+          owner_user_id: shop_owner.id,
+          status: ShopStatus.New,
         });
       }
 

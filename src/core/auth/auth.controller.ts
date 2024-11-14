@@ -3,22 +3,11 @@ import {
   LoginResponseDto,
   MeResponseDto,
 } from '@auth/swagger';
-import {
-  Body,
-  Controller,
-  HttpException,
-  HttpStatus,
-  Inject,
-  Ip,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
-
+import { Body, Controller, Inject, Ip, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './providers/auth.service';
 import {
-  AuthorizeDto,
   ClientAuthorizeDto,
   ClientConfirmOTPDto,
   RefreshTokenDto,
@@ -33,36 +22,6 @@ import { CurrentUser } from '@decorator/current-user.decorator';
 export class AuthController {
   @Inject() authService: AuthService;
   @Inject() usersRepo: AuthUserRepo;
-
-  @ApiBody({
-    type: AuthorizeDto,
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Example response',
-    type: () => LoginResponseDto, // Define your DTO (Data Transfer Object) for the response
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Example error response',
-    type: () => ErrorResponseDto, // Define your DTO (Data Transfer Object) for the response
-  })
-  @Post('login')
-  async login(@Ip() ip: string, @Body() body: AuthorizeDto) {
-    const user = await this.authService.checkUser(body.username, body.password);
-    if (!user) {
-      throw new HttpException('ERROR_USER_DOESNT_EXISTS', 400);
-    }
-
-    const token = await this.authService.createToken(user);
-    if (!token) {
-      throw new HttpException(
-        'ERROR_WHILE_CREATING_TOKEN',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    return token;
-  }
 
   @ApiBody({
     type: RefreshTokenDto,
@@ -160,7 +119,24 @@ export class AuthController {
   })
   @Post('shop/login')
   async shopLogin(@Ip() ip: string, @Body() body: ClientAuthorizeDto) {
-    // throw new Error();
-    return await this.authService.clientAuthorize(body);
+    return await this.authService.shopAuthorize(body);
+  }
+
+  @ApiBody({
+    type: ClientConfirmOTPDto,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Example response',
+    type: () => LoginResponseDto, // Define your DTO (Data Transfer Object) for the response
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Example error response',
+    type: () => ErrorResponseDto, // Define your DTO (Data Transfer Object) for the response
+  })
+  @Post('shop/confirm-otp')
+  async confirmShopOtp(@Body() body: ClientConfirmOTPDto) {
+    return await this.authService.confirmShopOtp(body.phone, body.otpCode);
   }
 }

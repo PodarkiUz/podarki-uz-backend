@@ -115,7 +115,7 @@ export class BaseRepo<T extends Partial<IdClass>> implements IBaseQuery<T> {
       .insert(values)
       .into(this._tableName)
       .returning(returning);
-    return data;
+    return data[0];
   }
 
   async bulkInsertWithTransaction(
@@ -153,7 +153,8 @@ export class BaseRepo<T extends Partial<IdClass>> implements IBaseQuery<T> {
       .insert(values)
       .into(this._tableName)
       .returning(returning);
-    return data?.length > 1 ? data : data[0];
+
+    return data?.length > 1 ? data[0] : data;
   }
 
   async insertWithTransactionWithoutId(
@@ -171,7 +172,7 @@ export class BaseRepo<T extends Partial<IdClass>> implements IBaseQuery<T> {
   async updateByIdWithTransaction(
     trx: Knex.Transaction,
     id: string,
-    value: T,
+    value: Partial<T>,
     returning = ['*'],
   ) {
     const [data] = await trx
