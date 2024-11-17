@@ -8,6 +8,7 @@ export interface ProductEntity {
   sale_price?: number;
   category_id?: string;
   files: Array<FilesEntity> | string;
+  shop_id: string;
   created_at?: Date;
   is_deleted?: boolean;
 }

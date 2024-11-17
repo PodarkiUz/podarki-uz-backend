@@ -11,6 +11,15 @@ import { ICreateProductParam } from '../interface/product.interface';
 import { FilesEntity } from '../entity/product.entity';
 import { Type } from 'class-transformer';
 
+export class CreateProductFilterDto {
+  @ApiProperty()
+  @IsString()
+  product_id: string;
+
+  @ApiProperty()
+  @IsString()
+  filter_value_id: string;
+}
 export class FilesDto implements FilesEntity {
   @ApiProperty()
   @IsString()
@@ -68,6 +77,12 @@ export class CreateProductDto implements ICreateProductParam {
   @ValidateNested()
   @Type(() => Array<FilesDto>)
   files: FilesDto[];
+
+  @ApiProperty()
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  filters: string[];
 }
 
 export class DeleteProductDto {
@@ -82,16 +97,6 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
   @IsString()
   @IsNotEmpty()
   id: string;
-}
-
-export class CreateProductFilterDto {
-  @ApiProperty()
-  @IsString()
-  product_id: string;
-
-  @ApiProperty()
-  @IsString()
-  filter_value_id: string;
 }
 
 export class GetProductsByIdeaDto {

@@ -115,7 +115,7 @@ export class BaseRepo<T extends Partial<IdClass>> implements IBaseQuery<T> {
       .insert(values)
       .into(this._tableName)
       .returning(returning);
-    return data[0];
+    return data;
   }
 
   async bulkInsertWithTransaction(

@@ -9,6 +9,7 @@ export interface ICreateProductParam {
   sale_price?: number;
   category_id?: string;
   files: Array<FilesEntity>;
+  filters?: string[];
 }
 
 export type IUpdateProductParam = Partial<ICreateProductParam>;

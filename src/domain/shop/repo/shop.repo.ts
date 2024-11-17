@@ -27,7 +27,7 @@ export class ShopRepo extends BaseRepo<ShopEntity> {
   getShopByOwnerPhone(phone): Promise<ShopEntity> {
     const knex = this.knex;
     const query = knex
-      .select(['shop.id'])
+      .select(['shop.*'])
       .from(`${this.tableName} as shop`)
       .join('users as user', function () {
         this.on('shop.owner_user_id', 'user.id').andOn(

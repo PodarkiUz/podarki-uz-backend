@@ -61,7 +61,7 @@ export class MinioService {
 
     const fileName = ObjectID().toHexString();
     const bufferOriginalWebp = await this.compressToOriginalWebp(file.buffer);
-    const buffer64x64 = await this.compressTo64x64(file.buffer);
+    const buffer190x190 = await this.compressTo190x190(file.buffer);
     const buffer256x256 = await this.compressTo256x256(file.buffer);
 
     const originalFileName = `${fileName}.webp`;
@@ -72,12 +72,12 @@ export class MinioService {
       bufferOriginalWebp.length,
     );
 
-    const file64x64Name = `${fileName}-64x64.webp`;
-    const file64x64 = this.minioClient.putObject(
+    const file190x190Name = `${fileName}-190x190.webp`;
+    const file190x190 = this.minioClient.putObject(
       this.bucketName,
-      file64x64Name,
-      buffer64x64,
-      buffer64x64.length,
+      file190x190Name,
+      buffer190x190,
+      buffer190x190.length,
     );
 
     const file256x256Name = `${fileName}-256x256.webp`;
@@ -88,13 +88,13 @@ export class MinioService {
       buffer256x256.length,
     );
 
-    await Promise.all([originalFile, file64x64, file256x256]);
+    await Promise.all([originalFile, file190x190, file256x256]);
     // `http://37.60.231.13:9000/${this.bucketName}/${originalFileName}`
     const imageOriginal = originalFileName;
-    const image64x64 = file64x64Name;
+    const image190x190 = file190x190Name;
     const image256x256 = file256x256Name;
 
-    return { imageOriginal, image256x256, image64x64 };
+    return { imageOriginal, image256x256, image190x190 };
   }
 
   async deleteFile(fileName: string) {
@@ -103,7 +103,9 @@ export class MinioService {
 
   private async compressToOriginalWebp(imageBuffer: Buffer) {
     try {
-      const avifBuffer = await sharp(imageBuffer).webp().toBuffer();
+      const avifBuffer = await sharp(imageBuffer)
+        .webp({ quality: 80 })
+        .toBuffer();
       return avifBuffer;
     } catch (error) {
       console.error('Error compressing and converting image:', error);
@@ -125,11 +127,11 @@ export class MinioService {
     }
   }
 
-  private async compressTo64x64(imageBuffer: Buffer) {
+  private async compressTo256x256(imageBuffer: Buffer) {
     try {
       const avifBuffer = await sharp(imageBuffer)
-        .webp({ quality: 50 })
-        .resize({ width: 64, height: 64 })
+        .webp({ quality: 80 })
+        .resize({ height: 256, width: 256, fit: 'cover' }) // Adjust quality as needed
         .toBuffer();
       return avifBuffer;
     } catch (error) {
@@ -138,15 +140,28 @@ export class MinioService {
     }
   }
 
-  private async compressTo256x256(imageBuffer: Buffer) {
+  private async compressTo190x190(imageBuffer: Buffer) {
     try {
       const avifBuffer = await sharp(imageBuffer)
-        .webp()
-        .resize({ height: 256, width: 256 }) // Adjust quality as needed
+        .webp({ quality: 80 })
+        .resize({ height: 190, width: 190, fit: 'cover' }) // Adjust quality as needed
         .toBuffer();
       return avifBuffer;
     } catch (error) {
       console.error('Error compressing and converting image:', error);
+      throw error;
+    }
+  }
+
+  private async removeBackground(imageBuffer: Buffer) {
+    try {
+      const buffer = await sharp(imageBuffer)
+        .removeAlpha()
+        .flatten({ background: { r: 0, g: 0, b: 0, alpha: 0 } })
+        .toBuffer();
+      return buffer;
+    } catch (error) {
+      console.error('Error removing background and converting image:', error);
       throw error;
     }
   }

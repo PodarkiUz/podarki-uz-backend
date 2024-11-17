@@ -6,6 +6,8 @@ import {
   IUpdateProductParam,
 } from '../interface/product.interface';
 import { ProductFiltersRepo } from '../repo/filters.repo';
+import { IShopUserInfoForJwtPayload } from '@domain/shop/interface/shop.interface';
+import { isEmpty } from 'lodash';
 
 @Injectable()
 export class ProductsService {
@@ -14,13 +16,35 @@ export class ProductsService {
     private readonly productFilterRepo: ProductFiltersRepo,
   ) {}
 
-  async create(params: ICreateProductParam) {
-    const product = await this.productRepo.insert({
-      ...params,
-      files: JSON.stringify(params.files),
-    });
+  async create(
+    params: ICreateProductParam,
+    currentUser: IShopUserInfoForJwtPayload,
+  ) {
+    return this.productRepo.knex.transaction(async (trx) => {
+      const product = await this.productRepo.insertWithTransaction(trx, {
+        name_ru: params.name_ru,
+        name_uz: params.name_uz,
+        price: params.price,
+        sale_price: params?.sale_price,
+        category_id: params?.category_id,
+        description_ru: params?.description_ru,
+        description_uz: params?.description_uz,
+        shop_id: currentUser.shop_id,
+        files: JSON.stringify(params.files),
+      });
 
-    return { success: true, data: product };
+      if (!isEmpty(params?.filters)) {
+        await this.productFilterRepo.bulkInsertWithTransaction(
+          trx,
+          params.filters.map((f) => ({
+            filter_value_id: f,
+            product_id: product.id,
+          })),
+        );
+      }
+
+      return { success: true, data: product };
+    });
   }
 
   async delete(id: string) {

@@ -1,5 +1,5 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ProductsService } from '../service/products.service';
 import {
   CreateProductDto,
@@ -9,15 +9,23 @@ import {
   GetProductsByIdeaDto,
   UpdateProductDto,
 } from '../dto/product.dto';
+import { AuthorizationJwtShopGuard } from '@core/auth/guards/authorization.shop.guard';
+import { CurrentUser } from '@shared/decorator/current-user.decorator';
+import { IShopUserInfoForJwtPayload } from '@domain/shop/interface/shop.interface';
 
 @ApiTags('ADMIN -> PRODUCTS')
+@ApiBearerAuth('authorization')
+@UseGuards(AuthorizationJwtShopGuard)
 @Controller('admin/products')
 export class ProductsController {
   constructor(private readonly productService: ProductsService) {}
 
   @Post('create')
-  create(@Body() body: CreateProductDto) {
-    return this.productService.create(body);
+  create(
+    @Body() body: CreateProductDto,
+    @CurrentUser() user: IShopUserInfoForJwtPayload,
+  ) {
+    return this.productService.create(body, user);
   }
 
   @Post('delete')
