@@ -32,7 +32,7 @@ export class MinioService {
     await this.createBucketIfNotExists();
 
     if (file.mimetype === 'image/heic') {
-      file.buffer = await this.convertHeicToJpeg(file.buffer);
+      file.buffer = await this.convertToJpeg(file.buffer);
       file.mimetype = 'image/jpeg';
     }
 
@@ -54,17 +54,21 @@ export class MinioService {
   async uploadFile(file: Express.Multer.File) {
     await this.createBucketIfNotExists();
 
+    let bufferJpeg;
     if (file.mimetype === 'image/heic') {
-      file.buffer = await this.convertHeicToJpeg(file.buffer);
+      bufferJpeg = await this.convertToJpeg(file.buffer);
+      file.buffer = bufferJpeg;
       file.mimetype = 'image/jpeg';
     }
 
     const fileName = ObjectID().toHexString();
-    const bufferOriginalWebp = await this.compressToOriginalWebp(file.buffer);
-    const buffer190x190 = await this.compressTo190x190(file.buffer);
-    const buffer256x256 = await this.compressTo256x256(file.buffer);
+    // const bufferOriginalWebp = await this.compressToOriginalWebp(file.buffer);
+    const bufferOriginalWebp = file.buffer;
+    const buffer360 = await this.compressTo360(file.buffer);
+    const buffer768 = await this.compressTo768(file.buffer);
+    const buffer1920 = await this.compressTo1920(file.buffer);
 
-    const originalFileName = `${fileName}.webp`;
+    const originalFileName = `${fileName}-original.jpeg`;
     const originalFile = this.minioClient.putObject(
       this.bucketName,
       originalFileName,
@@ -72,29 +76,38 @@ export class MinioService {
       bufferOriginalWebp.length,
     );
 
-    const file190x190Name = `${fileName}-190x190.webp`;
-    const file190x190 = this.minioClient.putObject(
+    const file360Name = `${fileName}-360w.webp`;
+    const file360 = this.minioClient.putObject(
       this.bucketName,
-      file190x190Name,
-      buffer190x190,
-      buffer190x190.length,
+      file360Name,
+      buffer360,
+      buffer360.length,
     );
 
-    const file256x256Name = `${fileName}-256x256.webp`;
-    const file256x256 = this.minioClient.putObject(
+    const file768Name = `${fileName}-768w.webp`;
+    const file768 = this.minioClient.putObject(
       this.bucketName,
-      file256x256Name,
-      buffer256x256,
-      buffer256x256.length,
+      file768Name,
+      buffer768,
+      buffer768.length,
     );
 
-    await Promise.all([originalFile, file190x190, file256x256]);
+    const file1920Name = `${fileName}-1920w.webp`;
+    const file1920 = this.minioClient.putObject(
+      this.bucketName,
+      file1920Name,
+      buffer1920,
+      buffer1920.length,
+    );
+
+    await Promise.all([originalFile, file360, file768, file1920]);
     // `http://37.60.231.13:9000/${this.bucketName}/${originalFileName}`
     const imageOriginal = originalFileName;
-    const image190x190 = file190x190Name;
-    const image256x256 = file256x256Name;
+    const image360 = file360Name;
+    const image768 = file768Name;
+    const image1920 = file1920Name;
 
-    return { imageOriginal, image256x256, image190x190 };
+    return { imageOriginal, image360, image768, image1920 };
   }
 
   async deleteFile(fileName: string) {
@@ -113,7 +126,7 @@ export class MinioService {
     }
   }
 
-  private async convertHeicToJpeg(imageBuffer: Buffer) {
+  private async convertToJpeg(imageBuffer: Buffer) {
     try {
       const jpegBuffer = await convert({
         buffer: imageBuffer, // the HEIC file buffer
@@ -127,24 +140,88 @@ export class MinioService {
     }
   }
 
-  private async compressTo256x256(imageBuffer: Buffer) {
+  private async compressTo768(imageBuffer: Buffer) {
     try {
-      const avifBuffer = await sharp(imageBuffer)
-        .webp({ quality: 80 })
-        .resize({ height: 256, width: 256, fit: 'cover' }) // Adjust quality as needed
+      const image = sharp(imageBuffer);
+      const metadata = await image.metadata();
+
+      // Calculate new dimensions based on aspect ratio
+      const targetWidth = 768;
+      const aspectRatio = metadata.width / metadata.height;
+      const targetHeight = Math.round(targetWidth / aspectRatio);
+
+      const resizedBuffer = await image
+        .resize({
+          width: targetWidth,
+          height: targetHeight, // Maintain aspect ratio
+          fit: 'inside', // Ensures the image fits within the box
+        })
+        .webp({ quality: 100, effort: 6 })
         .toBuffer();
-      return avifBuffer;
+
+      return resizedBuffer;
     } catch (error) {
       console.error('Error compressing and converting image:', error);
       throw error;
     }
   }
 
-  private async compressTo190x190(imageBuffer: Buffer) {
+  private async compressTo360(imageBuffer: Buffer) {
+    try {
+      const image = sharp(imageBuffer);
+      const metadata = await image.metadata();
+
+      // Calculate new dimensions based on aspect ratio
+      const targetWidth = 360;
+      const aspectRatio = metadata.width / metadata.height;
+      const targetHeight = Math.round(targetWidth / aspectRatio);
+
+      const resizedBuffer = await image
+        .resize({
+          width: targetWidth,
+          height: targetHeight, // Maintain aspect ratio
+          fit: 'inside', // Ensures the image fits within the box
+        })
+        .webp({ quality: 100, effort: 6 })
+        .toBuffer();
+
+      return resizedBuffer;
+    } catch (error) {
+      console.error('Error compressing and converting image:', error);
+      throw error;
+    }
+  }
+
+  private async compressTo1920(imageBuffer: Buffer) {
+    try {
+      const image = sharp(imageBuffer);
+      const metadata = await image.metadata();
+
+      // Calculate new dimensions based on aspect ratio
+      const targetWidth = 1920;
+      const aspectRatio = metadata.width / metadata.height;
+      const targetHeight = Math.round(targetWidth / aspectRatio);
+
+      const resizedBuffer = await image
+        .resize({
+          width: targetWidth,
+          height: targetHeight, // Maintain aspect ratio
+          fit: 'inside', // Ensures the image fits within the box
+        })
+        .webp({ quality: 100, effort: 6 })
+        .toBuffer();
+
+      return resizedBuffer;
+    } catch (error) {
+      console.error('Error compressing and converting image:', error);
+      throw error;
+    }
+  }
+
+  private async compressToJpeg(imageBuffer: Buffer) {
     try {
       const avifBuffer = await sharp(imageBuffer)
-        .webp({ quality: 80 })
-        .resize({ height: 190, width: 190, fit: 'cover' }) // Adjust quality as needed
+        .jpeg({ quality: 80 })
         .toBuffer();
       return avifBuffer;
     } catch (error) {
