@@ -29,12 +29,17 @@ export class FilesDto implements FilesEntity {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  image256x256: string;
+  image360: string;
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  image190x190: string;
+  image768: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  image1920: string;
 }
 
 export class CreateProductDto implements ICreateProductParam {
