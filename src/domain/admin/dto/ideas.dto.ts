@@ -1,6 +1,35 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { ICreateIdeasParam } from '../interface/ideas.interface';
+import { FilesDto } from './product.dto';
+import { Type } from 'class-transformer';
+
+export class CreateIdeasFilterDto {
+  @ApiProperty()
+  @IsString()
+  idea_id: string;
+
+  @ApiProperty()
+  @IsString()
+  filter_value_id: string;
+}
+
+export class CreateIdeasFilterPropDto {
+  @ApiProperty()
+  @IsString()
+  filter_id: string;
+
+  @ApiProperty()
+  @IsString({ each: true })
+  @IsArray()
+  values: string[];
+}
 
 export class CreateIdeasDto implements ICreateIdeasParam {
   @ApiProperty()
@@ -27,6 +56,17 @@ export class CreateIdeasDto implements ICreateIdeasParam {
   @IsOptional()
   @IsString()
   group_id?: string;
+
+  @ApiProperty({ type: FilesDto })
+  @ValidateNested()
+  @Type(() => FilesDto)
+  image: FilesDto;
+
+  @ApiProperty({ type: CreateIdeasFilterPropDto, isArray: true })
+  @IsArray()
+  @ValidateNested()
+  @Type(() => Array<CreateIdeasFilterPropDto>)
+  filters: CreateIdeasFilterPropDto[];
 }
 
 export class DeleteIdeasDto {
@@ -66,14 +106,4 @@ export class UpdateIdeasDto {
   @IsOptional()
   @IsString()
   group_id?: string;
-}
-
-export class CreateIdeasFilterDto {
-  @ApiProperty()
-  @IsString()
-  idea_id: string;
-
-  @ApiProperty()
-  @IsString()
-  filter_value_id: string;
 }

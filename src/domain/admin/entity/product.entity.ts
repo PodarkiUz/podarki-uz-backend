@@ -16,7 +16,7 @@ export interface ProductEntity {
 export interface FilesEntity {
   imageOriginal: string;
   image256x256: string;
-  image64x64: string;
+  image190x190: string;
 }
 
 export interface ProductFiltersEntity {
