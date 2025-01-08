@@ -1,6 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { ICreateReasonParam } from '../interface/reason.interface';
+import { FilesDto } from './product.dto';
+import { Type } from 'class-transformer';
 
 export class CreateReasonDto implements ICreateReasonParam {
   @ApiProperty()
@@ -22,6 +24,11 @@ export class CreateReasonDto implements ICreateReasonParam {
   @IsOptional()
   @IsString()
   description_ru?: string;
+
+  @ApiProperty({ type: FilesDto })
+  @ValidateNested()
+  @Type(() => FilesDto)
+  image: FilesDto;
 }
 
 export class DeleteReasonDto {

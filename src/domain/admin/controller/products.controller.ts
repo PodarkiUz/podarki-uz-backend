@@ -45,8 +45,6 @@ export class ProductsController {
 
   @Post('get-by-idea')
   getProductsByIdea(@Body() body: GetProductsByIdeaDto) {
-    console.log(11111);
-    
     return this.productService.getProductsByIdea(body.idea_id);
   }
 
