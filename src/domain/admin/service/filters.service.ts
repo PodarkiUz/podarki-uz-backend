@@ -14,9 +14,25 @@ export class FiltersService {
   ) {}
 
   async create(params: ICreateFilterParam) {
-    const filter = await this.filterRepo.insert(params);
+    return this.filterRepo.knex.transaction(async (trc) => {
+      const filter = await this.filterRepo.insert({
+        name_ru: params.name_ru,
+        name_uz: params.name_uz,
+      });
 
-    return { success: true, data: filter };
+      await this.filterValuesRepo.bulkInsertWithTransaction(
+        trc,
+        params.values.map((value) => {
+          return {
+            filter_id: filter.id,
+            value_ru: value.name_ru,
+            value_uz: value.name_uz,
+          };
+        }),
+      );
+
+      return { success: true };
+    });
   }
 
   async createFilterValue(params: ICreateFilterValueParam) {

@@ -3,7 +3,6 @@ import { ApiTags } from '@nestjs/swagger';
 import { FiltersService } from '../service/filters.service';
 import {
   CreateFilterDto,
-  CreateFilterValueDto,
   DeleteFilterDto,
   UpdateFilterDto,
 } from '../dto/filters.dto';
@@ -18,10 +17,10 @@ export class FiltersController {
     return this.filterService.create(body);
   }
 
-  @Post('create-filter-value')
-  createFilterValue(@Body() body: CreateFilterValueDto) {
-    return this.filterService.createFilterValue(body);
-  }
+  // @Post('create-filter-value')
+  // createFilterValue(@Body() body: CreateFilterValueDto) {
+  //   return this.filterService.createFilterValue(body);
+  // }
 
   @Post('delete')
   delete(@Body() body: DeleteFilterDto) {

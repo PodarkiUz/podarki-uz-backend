@@ -1,6 +1,7 @@
 export interface ICreateFilterParam {
   name_ru: string;
   name_uz: string;
+  values: IFilterValues[];
 }
 
 export type IUpdateFilterParam = Partial<ICreateFilterParam>;
