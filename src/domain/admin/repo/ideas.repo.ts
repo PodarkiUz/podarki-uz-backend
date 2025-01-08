@@ -9,6 +9,24 @@ export class IdeasRepo extends BaseRepo<IdeasEntity> {
   }
 
   getAllIdeas() {
-    return this.getAll({ is_deleted: false });
+    const knex = this.knex;
+    return this.knex
+      .select([
+        'idea.*',
+        knex.raw(`
+          json_build_object(
+            'id', ig.id,
+            'name_uz', ig.name_uz,
+            'name_ru', ig.name_ru
+          ) as idea_group
+        `),
+      ])
+      .from(`${this.tableName} as idea`)
+      .leftJoin('idea_group as ig', function () {
+        this.on('ig.id', 'idea.group_id').andOn(
+          knex.raw('ig.is_deleted = false'),
+        );
+      })
+      .where('idea.is_deleted', false);
   }
 }

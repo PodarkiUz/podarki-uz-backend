@@ -12,6 +12,16 @@ import {
 } from '../interface/filters.interface';
 import { Type } from 'class-transformer';
 
+export class FilterValueDto {
+  @ApiProperty()
+  @IsString()
+  name_uz: string;
+
+  @ApiProperty()
+  @IsString()
+  name_ru: string;
+}
+
 export class CreateFilterDto implements ICreateFilterParam {
   @ApiProperty()
   @IsString()
@@ -22,6 +32,12 @@ export class CreateFilterDto implements ICreateFilterParam {
   @IsString()
   @IsNotEmpty()
   name_uz: string;
+
+  @ApiProperty({ type: FilterValueDto, isArray: true })
+  @IsArray()
+  @ValidateNested()
+  @Type(() => Array<FilterValueDto>)
+  values: Array<FilterValueDto>;
 }
 
 export class DeleteFilterDto {
@@ -46,16 +62,6 @@ export class UpdateFilterDto {
   @IsOptional()
   @IsString()
   name_uz?: string;
-}
-
-export class FilterValueDto {
-  @ApiProperty()
-  @IsString()
-  name_uz: string;
-
-  @ApiProperty()
-  @IsString()
-  name_ru: string;
 }
 
 export class CreateFilterValueDto implements ICreateFilterValueParam {

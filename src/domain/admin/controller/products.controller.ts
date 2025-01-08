@@ -14,8 +14,8 @@ import { CurrentUser } from '@shared/decorator/current-user.decorator';
 import { IShopUserInfoForJwtPayload } from '@domain/shop/interface/shop.interface';
 
 @ApiTags('ADMIN -> PRODUCTS')
-@ApiBearerAuth('authorization')
-@UseGuards(AuthorizationJwtShopGuard)
+// @ApiBearerAuth('authorization')
+// @UseGuards(AuthorizationJwtShopGuard)
 @Controller('admin/products')
 export class ProductsController {
   constructor(private readonly productService: ProductsService) {}
@@ -45,6 +45,8 @@ export class ProductsController {
 
   @Post('get-by-idea')
   getProductsByIdea(@Body() body: GetProductsByIdeaDto) {
+    console.log(11111);
+    
     return this.productService.getProductsByIdea(body.idea_id);
   }
 

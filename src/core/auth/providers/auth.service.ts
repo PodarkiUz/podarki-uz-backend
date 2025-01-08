@@ -208,8 +208,8 @@ export class AuthService {
         status: UserStatus.Registered,
         otp: null,
       });
-      const payload = await this.authUserRepo.getUserInfo(user.id, trx);
-      return await this.createUserToken(payload);
+
+      return await this.createUserToken(user);
     });
   }
 
