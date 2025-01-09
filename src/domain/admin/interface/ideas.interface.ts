@@ -8,6 +8,7 @@ export interface ICreateIdeasParam {
   group_id?: string;
   image?: FilesEntity;
   filters?: ICreateIdeasFilterProp[];
+  category_ids: string[];
 }
 
 export interface ICreateIdeasFilterProp {

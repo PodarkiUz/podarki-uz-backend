@@ -26,6 +26,7 @@ import {
   ProductFiltersRepo,
 } from './repo/filters.repo';
 import { AuthModule } from '@core/auth/auth.module';
+import { IdeaCategoriesRepo } from './repo/idea-categories.repo';
 
 @Module({
   imports: [AuthModule],
@@ -55,6 +56,7 @@ import { AuthModule } from '@core/auth/auth.module';
 
     IdeasService,
     IdeasRepo,
+    IdeaCategoriesRepo,
 
     ProductsService,
     ProductRepo,
