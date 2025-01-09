@@ -11,8 +11,8 @@ export interface IGetAllFiltersListResponse {
 }
 
 export interface IFilterValues {
-  name_ru: string;
-  name_uz: string;
+  value_uz: string;
+  value_ru: string;
 }
 
 export interface ICreateFilterValueParam {

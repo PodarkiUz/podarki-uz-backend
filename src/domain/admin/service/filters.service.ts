@@ -25,8 +25,8 @@ export class FiltersService {
         params.values.map((value) => {
           return {
             filter_id: filter.id,
-            value_ru: value.name_ru,
-            value_uz: value.name_uz,
+            value_ru: value.value_ru,
+            value_uz: value.value_uz,
           };
         }),
       );
@@ -41,8 +41,8 @@ export class FiltersService {
       params.values.map((value) => {
         return {
           filter_id: params.filter_id,
-          value_ru: value.name_ru,
-          value_uz: value.name_uz,
+          value_ru: value.value_ru,
+          value_uz: value.value_uz,
         };
       }),
     );

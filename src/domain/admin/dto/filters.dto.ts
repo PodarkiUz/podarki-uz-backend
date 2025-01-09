@@ -15,11 +15,11 @@ import { Type } from 'class-transformer';
 export class FilterValueDto {
   @ApiProperty()
   @IsString()
-  name_uz: string;
+  value_uz: string;
 
   @ApiProperty()
   @IsString()
-  name_ru: string;
+  value_ru: string;
 }
 
 export class CreateFilterDto implements ICreateFilterParam {
