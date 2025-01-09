@@ -42,6 +42,16 @@ export class FilesDto implements FilesEntity {
   image1920: string;
 }
 
+export class CreateProductFilterPropDto {
+  @ApiProperty()
+  @IsString()
+  filter_id: string;
+
+  @ApiProperty()
+  @IsString({ each: true })
+  @IsArray()
+  values: string[];
+}
 export class CreateProductDto implements ICreateProductParam {
   @ApiProperty()
   @IsString()
@@ -83,11 +93,12 @@ export class CreateProductDto implements ICreateProductParam {
   @Type(() => Array<FilesDto>)
   files: FilesDto[];
 
-  @ApiProperty()
-  @IsArray()
-  @IsString({ each: true })
+  @ApiProperty({ type: CreateProductFilterPropDto, isArray: true })
   @IsOptional()
-  filters: string[];
+  @IsArray()
+  @ValidateNested()
+  @Type(() => Array<CreateProductFilterPropDto>)
+  filters?: CreateProductFilterPropDto[];
 }
 
 export class DeleteProductDto {

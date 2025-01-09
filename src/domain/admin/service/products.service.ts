@@ -34,13 +34,15 @@ export class ProductsService {
       });
 
       if (!isEmpty(params?.filters)) {
-        await this.productFilterRepo.bulkInsertWithTransaction(
-          trx,
-          params.filters.map((f) => ({
-            filter_value_id: f,
-            product_id: product.id,
-          })),
-        );
+        const filters: ICreateProductFilterParam[] = [];
+
+        for (const f of params.filters) {
+          for (const v of f.values) {
+            filters.push({ filter_value_id: v, product_id: product.id });
+          }
+        }
+
+        await this.productFilterRepo.bulkInsertWithTransaction(trx, filters);
       }
 
       return { success: true, data: product };
