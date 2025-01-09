@@ -7,7 +7,7 @@ export interface ICreateIdeasParam {
   description_uz?: string;
   group_id?: string;
   image?: FilesEntity;
-  filters: ICreateIdeasFilterProp[];
+  filters?: ICreateIdeasFilterProp[];
 }
 
 export interface ICreateIdeasFilterProp {
