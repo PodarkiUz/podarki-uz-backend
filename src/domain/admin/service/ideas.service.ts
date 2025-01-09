@@ -6,6 +6,7 @@ import {
   ICreateIdeasParam,
   IUpdateIdeasParam,
 } from '../interface/ideas.interface';
+import { isEmpty } from 'lodash';
 
 @Injectable()
 export class IdeasService {
@@ -25,15 +26,17 @@ export class IdeasService {
         image: params?.image,
       });
 
-      const filters: ICreateIdeasFilterParam[] = [];
+      if (!isEmpty(params?.filters)) {
+        const filters: ICreateIdeasFilterParam[] = [];
 
-      for (const f of params.filters) {
-        for (const v of f.values) {
-          filters.push({ filter_value_id: v, idea_id: idea.id });
+        for (const f of params.filters) {
+          for (const v of f.values) {
+            filters.push({ filter_value_id: v, idea_id: idea.id });
+          }
         }
-      }
 
-      await this.ideasFiltersRepo.bulkInsertWithTransaction(trx, filters);
+        await this.ideasFiltersRepo.bulkInsertWithTransaction(trx, filters);
+      }
 
       return { success: true, data: idea };
     });

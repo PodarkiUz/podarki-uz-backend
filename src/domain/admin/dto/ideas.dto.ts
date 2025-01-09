@@ -63,10 +63,11 @@ export class CreateIdeasDto implements ICreateIdeasParam {
   image: FilesDto;
 
   @ApiProperty({ type: CreateIdeasFilterPropDto, isArray: true })
+  @IsOptional()
   @IsArray()
   @ValidateNested()
   @Type(() => Array<CreateIdeasFilterPropDto>)
-  filters: CreateIdeasFilterPropDto[];
+  filters?: CreateIdeasFilterPropDto[];
 }
 
 export class DeleteIdeasDto {
