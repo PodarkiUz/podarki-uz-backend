@@ -9,7 +9,7 @@ export interface ICreateProductParam {
   sale_price?: number;
   category_id?: string;
   files: Array<FilesEntity>;
-  filters?: string[];
+  filters?: ICreateProductFilterProp[];
 }
 
 export type IUpdateProductParam = Partial<ICreateProductParam>;
@@ -21,4 +21,9 @@ export interface IGetAllProductListResponse {
 export interface ICreateProductFilterParam {
   filter_value_id: string;
   product_id: string;
+}
+
+export interface ICreateProductFilterProp {
+  filter_id: string;
+  values: string[];
 }
