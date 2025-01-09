@@ -68,6 +68,11 @@ export class CreateIdeasDto implements ICreateIdeasParam {
   @ValidateNested()
   @Type(() => Array<CreateIdeasFilterPropDto>)
   filters?: CreateIdeasFilterPropDto[];
+
+  @ApiProperty()
+  @IsArray()
+  @IsString()
+  category_ids: string[];
 }
 
 export class DeleteIdeasDto {
