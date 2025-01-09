@@ -10,6 +10,7 @@ import {
 import { ICreateProductParam } from '../interface/product.interface';
 import { FilesEntity } from '../entity/product.entity';
 import { Type } from 'class-transformer';
+import { ShopBannerFilesEntity } from '@domain/shop/entity/shop.entity';
 
 export class CreateProductFilterDto {
   @ApiProperty()
@@ -40,6 +41,18 @@ export class FilesDto implements FilesEntity {
   @IsString()
   @IsNotEmpty()
   image1920: string;
+}
+
+export class ShopBannerFilesDto implements ShopBannerFilesEntity {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  imageOriginal: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  imageWebp: string;
 }
 
 export class CreateProductFilterPropDto {
