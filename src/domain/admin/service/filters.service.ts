@@ -56,7 +56,10 @@ export class FiltersService {
   }
 
   async update(id: string, params: IUpdateFilterParam) {
-    return this.filterRepo.updateById(id, params);
+    return this.filterRepo.updateById(id, {
+      name_ru: params?.name_ru,
+      name_uz: params?.name_uz,
+    });
   }
 
   async getAllList() {
