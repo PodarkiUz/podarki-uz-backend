@@ -1,14 +1,10 @@
 export interface IAuthGetUserInfo {
   id: string;
-  username: string;
-  is_active: boolean;
+  phone: string;
   first_name: string;
   last_name: string;
-  middle_name: string;
-  is_verified: boolean;
-  roles: string[];
-  permissions: string[];
-  region: IRegionJson;
+  status: number;
+  created_at: Date;
 }
 
 export interface IRegionJson {
