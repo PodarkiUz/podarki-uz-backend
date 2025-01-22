@@ -18,3 +18,13 @@ export interface TourEntity {
   is_deleted?: boolean;
   search_vector: string;
 }
+
+export interface CityEntity {
+  id?: string;
+  name_uz: string;
+  name_ru: string;
+  name_en: string;
+  country_uz: string;
+  country_ru: string;
+  country_en: string;
+}

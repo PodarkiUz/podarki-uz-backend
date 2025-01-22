@@ -30,6 +30,11 @@ export class TourController {
     return this.service.getAllList();
   }
 
+  @Post('cities-list')
+  citiesList() {
+    return this.service.getCitiesList();
+  }
+
   @Post('search')
   searchByTour(@Body() params: SearchTourByNameDto) {
     return this.service.searchTour(params);
