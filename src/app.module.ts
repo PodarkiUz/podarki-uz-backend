@@ -9,6 +9,7 @@ import { AuthModule } from '@auth/auth.module';
 import { AdminModule } from '@domain/admin/admin.module';
 import { ClientModule } from '@domain/client/client.module';
 import { ShopModule } from '@domain/shop/shop.module';
+import { TravelModule } from './travel/travel.module';
 
 @Module({
   imports: [
@@ -22,6 +23,8 @@ import { ShopModule } from '@domain/shop/shop.module';
     AdminModule,
     ClientModule,
     ShopModule,
+
+    TravelModule,
   ],
   controllers: [AppController],
   providers: [AppService],
