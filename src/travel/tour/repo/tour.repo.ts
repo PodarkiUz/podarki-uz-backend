@@ -36,11 +36,15 @@ export class TourRepo extends BaseRepo<TourEntity> {
     }
 
     if (params?.from_price) {
-      query.where('price', '>=', params.from_price);
+      query.whereRaw('COALESCE(sale_price, price) >= :price', {
+        price: params.from_price,
+      });
     }
 
     if (params?.to_price) {
-      query.where('price', '<=', params.to_price);
+      query.whereRaw('COALESCE(sale_price, price) <= :price', {
+        price: params.to_price,
+      });
     }
 
     return query;

@@ -21,7 +21,7 @@ export class TourService {
       organizer_id: params.organizer_id,
       price: params.price,
       status: OrganizerStatus.New,
-      sale_price: params?.sale_price,
+      sale_price: params?.sale_price > 0 ? params.sale_price : null,
       seats: params.seats,
       start_date: params.start_date,
       duration: params?.duration,
