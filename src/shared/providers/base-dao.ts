@@ -57,7 +57,7 @@ export class BaseRepo<T extends Partial<IdClass>> implements IBaseQuery<T> {
     return new ObjectID().toString();
   }
 
-  getAll(where, columns = ['*'], sort?, order = 'asc') {
+  getAll(where?, columns = ['*'], sort?, order = 'asc') {
     const query = this.knex.select(columns).from(this._tableName);
 
     if (where) {

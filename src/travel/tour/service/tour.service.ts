@@ -6,10 +6,14 @@ import {
   ITourUpdateParam,
 } from '../interface/tour.interface';
 import { OrganizerStatus } from '../admin.enum';
+import { CityRepo } from '../repo/cities.repo';
 
 @Injectable()
 export class TourService {
-  constructor(private readonly repo: TourRepo) { }
+  constructor(
+    private readonly repo: TourRepo,
+    private readonly cityRepo: CityRepo,
+  ) {}
 
   async create(params: ITourCreateParam) {
     const tour = await this.repo.insert({
@@ -44,6 +48,11 @@ export class TourService {
 
   async getAllList() {
     const data = await this.repo.getAllTours();
+    return data;
+  }
+
+  async getCitiesList() {
+    const data = await this.cityRepo.getAllCities();
     return data;
   }
 
