@@ -31,7 +31,7 @@ export class TourController {
   }
 
   @Post('search')
-  searchByTourName(@Body() params: SearchTourByNameDto) {
-    return this.service.searchTourByName(params);
+  searchByTour(@Body() params: SearchTourByNameDto) {
+    return this.service.searchTour(params);
   }
 }

@@ -47,7 +47,7 @@ export class TourService {
     return data;
   }
 
-  async searchTourByName(params: ITourSeachByName) {
-    return this.repo.searchByTourName(params);
+  async searchTour(params: ITourSeachByName) {
+    return this.repo.searchTour(params);
   }
 }

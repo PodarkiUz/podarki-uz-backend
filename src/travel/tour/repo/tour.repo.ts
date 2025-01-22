@@ -13,11 +13,14 @@ export class TourRepo extends BaseRepo<TourEntity> {
     return this.getAll({ is_deleted: false });
   }
 
-  searchByTourName(params: ITourSeachByName) {
+  searchTour(params: ITourSeachByName) {
     const query = this.knex
       .select('*')
       .from(this.tableName)
-      .where((q) => {
+      .where('is_deleted', false);
+
+    if (params?.keyword) {
+      query.where((q) => {
         q.whereRaw(
           `search_vector @@ to_tsquery('russian', ?)`,
           params.keyword,
@@ -26,9 +29,18 @@ export class TourRepo extends BaseRepo<TourEntity> {
           params.keyword,
         );
       });
+    }
 
     if (params?.location) {
       query.where('location', params.location);
+    }
+
+    if (params?.from_price) {
+      query.where('price', '>=', params.from_price);
+    }
+
+    if (params?.to_price) {
+      query.where('price', '<=', params.to_price);
     }
 
     return query;

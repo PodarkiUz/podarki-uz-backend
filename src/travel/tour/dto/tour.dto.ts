@@ -86,13 +86,24 @@ export class UpdateTourDto extends PartialType(CreateTourDto) {
 }
 
 export class SearchTourByNameDto implements ITourSeachByName {
-  @ApiProperty()
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsString()
   @IsNotEmpty()
-  keyword: string;
+  keyword?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsNumber()
   location?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber()
+  from_price?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber()
+  to_price?: number;
 }

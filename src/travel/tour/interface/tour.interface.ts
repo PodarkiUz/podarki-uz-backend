@@ -31,6 +31,8 @@ export interface ITourUpdateParam {
 }
 
 export interface ITourSeachByName {
-  keyword: string;
+  keyword?: string;
   location?: number;
+  from_price?: number;
+  to_price?: number;
 }
