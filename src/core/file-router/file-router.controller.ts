@@ -79,6 +79,31 @@ export class FileRouterController {
     return await this.minioService.categoryImageUpload(file);
   }
 
+  @Post('simple-upload')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  async simpleUpload(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new MaxFileSizeValidator({ maxSize: 5242880 })], // 5MB
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    return await this.minioService.simpleUpload(file);
+  }
+
   @Post('delete')
   async deleteBookCover(@Body() body: FileDeleteDto) {
     await this.minioService.deleteFile(body.filename);
