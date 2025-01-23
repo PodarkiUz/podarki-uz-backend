@@ -21,15 +21,15 @@ export class MinioService {
     this.bucketName = 'files';
   }
 
-  async createBucketIfNotExists() {
-    const bucketExists = await this.minioClient.bucketExists(this.bucketName);
+  async createBucketIfNotExists(bucketName: string) {
+    const bucketExists = await this.minioClient.bucketExists(bucketName);
     if (!bucketExists) {
-      await this.minioClient.makeBucket(this.bucketName, 'eu-west-1');
+      await this.minioClient.makeBucket(bucketName, 'eu-west-1');
     }
   }
 
   async categoryImageUpload(file: Express.Multer.File) {
-    await this.createBucketIfNotExists();
+    await this.createBucketIfNotExists(this.bucketName);
 
     if (file.mimetype === 'image/heic') {
       file.buffer = await this.convertToJpeg(file.buffer);
@@ -51,8 +51,23 @@ export class MinioService {
     return { url: originalFileName };
   }
 
+  async simpleUpload(file: Express.Multer.File) {
+    await this.createBucketIfNotExists('travelapp');
+
+    const fileName = ObjectID().toHexString();
+
+    await this.minioClient.putObject(
+      'travelapp',
+      fileName,
+      file.buffer,
+      file.size,
+    );
+
+    return { url: fileName };
+  }
+
   async uploadFile(file: Express.Multer.File) {
-    await this.createBucketIfNotExists();
+    await this.createBucketIfNotExists(this.bucketName);
 
     let bufferJpeg;
     if (file.mimetype === 'image/heic') {
