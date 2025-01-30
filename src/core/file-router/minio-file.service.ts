@@ -125,8 +125,11 @@ export class MinioService {
     return { imageOriginal, image360, image768, image1920 };
   }
 
-  async deleteFile(fileName: string) {
-    await this.minioClient.removeObject(this.bucketName, fileName);
+  async deleteFile(fileName: string, bucketName?: string) {
+    await this.minioClient.removeObject(
+      bucketName || this.bucketName,
+      fileName,
+    );
   }
 
   private async compressToOriginalWebp(imageBuffer: Buffer) {
