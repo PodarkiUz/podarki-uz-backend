@@ -105,8 +105,14 @@ export class FileRouterController {
   }
 
   @Post('delete')
-  async deleteBookCover(@Body() body: FileDeleteDto) {
+  async deleteFile(@Body() body: FileDeleteDto) {
     await this.minioService.deleteFile(body.filename);
+    return body.filename;
+  }
+
+  @Post('delete-travel')
+  async deleteTravelFile(@Body() body: FileDeleteDto) {
+    await this.minioService.deleteFile(body.filename, 'travelapp');
     return body.filename;
   }
 }
