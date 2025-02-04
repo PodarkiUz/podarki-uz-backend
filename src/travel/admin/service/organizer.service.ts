@@ -92,6 +92,8 @@ export class OrganizerService {
           );
         }
       }
+
+      return { success: true };
     });
   }
 
