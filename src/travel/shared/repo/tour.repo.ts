@@ -1,7 +1,7 @@
 import { BaseRepo } from '@shared/providers/base-dao';
 import { Injectable } from '@nestjs/common';
-import { TourEntity } from '../entity/tour.entity';
-import { ITourSeachByName } from '../interface/tour.interface';
+import { TourEntity } from 'src/travel/shared/repo/entity';
+import { ITourSeachByName } from 'src/travel/tour/interface/tour.interface';
 
 @Injectable()
 export class TourRepo extends BaseRepo<TourEntity> {

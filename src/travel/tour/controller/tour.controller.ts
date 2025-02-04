@@ -1,14 +1,18 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { TourService } from '../service/tour.service';
-import { CreateTourDto, SearchTourByNameDto, UpdateTourDto } from '../dto/tour.dto';
+import {
+  CreateTourDto,
+  SearchTourByNameDto,
+  UpdateTourDto,
+} from '../dto/tour.dto';
 
 @ApiTags('TOUR')
 // @ApiBearerAuth('authorization')
 // @UseGuards(AuthorizationJwtGuard)
 @Controller('tour')
 export class TourController {
-  constructor(private readonly service: TourService) { }
+  constructor(private readonly service: TourService) {}
 
   @Post('create')
   create(@Body() body: CreateTourDto) {
@@ -25,7 +29,7 @@ export class TourController {
     return this.service.update(body.id, body);
   }
 
-  @Post('get-list')
+  @Post('list')
   getAll() {
     return this.service.getAllList();
   }
