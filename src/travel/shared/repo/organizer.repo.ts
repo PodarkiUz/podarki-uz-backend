@@ -1,7 +1,8 @@
 import { BaseRepo } from '@shared/providers/base-dao';
 import { Injectable } from '@nestjs/common';
-import { OrganizerEntity } from '../entity/admin.entity';
-import { IShopUserInfoForJwtPayload } from '../interface/admin.interface';
+import { IShopUserInfoForJwtPayload } from '../../admin/interface/admin.interface';
+import { OrganizerEntity } from './entity';
+import { FileDependentType } from '../enums';
 
 @Injectable()
 export class OrganizerRepo extends BaseRepo<OrganizerEntity> {
@@ -10,7 +11,29 @@ export class OrganizerRepo extends BaseRepo<OrganizerEntity> {
   }
 
   getAllOrganizers() {
-    return this.getAll({ is_deleted: false });
+    const knex = this.knex;
+    const query = knex
+      .select([
+        'org.*',
+        knex.raw(
+          `jsonb_agg(
+              jsonb_build_object(
+                'url', file.url,
+                'type', file.type
+              )
+            ) FILTER (WHERE file.id is not null) AS files`,
+        ),
+      ])
+      .from(`${this.tableName} as org`)
+      .leftJoin('files as file', function () {
+        this.on('file.dependent_id', 'org.id').andOn(
+          knex.raw('file.depend = ?', FileDependentType.organizer),
+        );
+      })
+      .where('org.is_deleted', false)
+      .groupBy('org.id');
+
+    return query;
   }
 
   getOrganizerByName(name: string) {

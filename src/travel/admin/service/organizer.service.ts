@@ -1,27 +1,45 @@
 import { Injectable } from '@nestjs/common';
-import { OrganizerRepo } from '../repo/organizer.repo';
+import { OrganizerRepo } from '../../shared/repo/organizer.repo';
 import {
   IOrganizerCreateParam,
   IOrganizerUpdateParam,
 } from '../interface/admin.interface';
 import { OrganizerStatus } from '../admin.enum';
+import { isEmpty } from 'lodash';
+import { FilesRepo } from 'src/travel/shared/repo/files.repo';
 
 @Injectable()
 export class OrganizerService {
-  constructor(private readonly repo: OrganizerRepo) {}
+  constructor(
+    private readonly repo: OrganizerRepo,
+    private readonly filesRepo: FilesRepo,
+  ) {}
 
   async create(params: IOrganizerCreateParam) {
-    const shop = await this.repo.insert({
-      status: OrganizerStatus.Registered,
-      description_ru: params?.description_ru,
-      description_uz: params?.description_uz,
-      name: params.name,
-      banner_image: params?.banner_image,
-      image: params.image,
-      phone: params.phone,
-    });
+    return this.repo.knex.transaction(async (trc) => {
+      const organizer = await this.repo.insertWithTransaction(trc, {
+        status: OrganizerStatus.Registered,
+        description: params?.description,
+        title: params.title,
+        phone: params.phone,
+      });
 
-    return { success: true, data: shop };
+      if (!isEmpty(params?.files)) {
+        await this.filesRepo.bulkInsertWithTransaction(
+          trc,
+          params.files.map((file) => ({
+            depend: 'organizer',
+            dependent_id: organizer.id,
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            url: file.url,
+          })),
+        );
+      }
+
+      return { success: true, data: organizer };
+    });
   }
 
   async delete(id: string) {

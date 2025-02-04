@@ -1,4 +1,6 @@
-import { OrganizerStatus } from '../admin.enum';
+import { OrganizerStatus } from '../../tour/admin.enum';
+import { FileType } from '../enums';
+import { ILanguage } from '../interfaces';
 
 export interface TourEntity {
   id?: string;
@@ -27,4 +29,25 @@ export interface CityEntity {
   country_uz: string;
   country_ru: string;
   country_en: string;
+}
+
+export interface OrganizerEntity {
+  id?: string;
+  title: ILanguage;
+  description?: ILanguage;
+  status: OrganizerStatus;
+  phone: string;
+  created_at?: Date;
+  is_deleted?: boolean;
+}
+
+export interface FilesEntity {
+  id?: string;
+  name: string;
+  size?: number;
+  depend: string;
+  dependent_id: string;
+  type: FileType;
+  created_at?: Date;
+  is_deleted?: boolean;
 }

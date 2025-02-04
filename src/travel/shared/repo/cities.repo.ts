@@ -1,9 +1,9 @@
 import { BaseRepo } from '@shared/providers/base-dao';
 import { Injectable } from '@nestjs/common';
-import { CityEntity } from '../entity/tour.entity';
+import { FilesEntity } from './entity';
 
 @Injectable()
-export class CityRepo extends BaseRepo<CityEntity> {
+export class CityRepo extends BaseRepo<FilesEntity> {
   constructor() {
     super('cities');
   }

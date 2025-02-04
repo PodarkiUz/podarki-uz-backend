@@ -1,4 +1,3 @@
-import { FilesDto, ShopBannerFilesDto } from '@domain/admin/dto/product.dto';
 import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
@@ -6,14 +5,16 @@ import {
   IsNotEmpty,
   IsOptional,
   ValidateNested,
+  IsArray,
 } from 'class-validator';
 import { IOrganizerCreateParam } from '../interface/admin.interface';
+import { FileDto, LanguageDto } from 'src/travel/shared/dtos';
 
 export class CreateOrganizerDto implements IOrganizerCreateParam {
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  name: string;
+  @ApiProperty({ type: LanguageDto })
+  @ValidateNested()
+  @Type(() => LanguageDto)
+  title: LanguageDto;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -25,17 +26,12 @@ export class CreateOrganizerDto implements IOrganizerCreateParam {
   @IsString()
   description_ru?: string;
 
-  @ApiPropertyOptional({ type: FilesDto })
-  @ValidateNested()
+  @ApiPropertyOptional({ type: [FileDto] })
   @IsOptional()
-  @Type(() => FilesDto)
-  image?: FilesDto;
-
-  @ApiPropertyOptional({ type: ShopBannerFilesDto })
-  @ValidateNested()
-  @Type(() => ShopBannerFilesDto)
-  @IsOptional()
-  banner_image?: ShopBannerFilesDto;
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => FileDto)
+  files?: FileDto[];
 
   @ApiProperty()
   @IsString()

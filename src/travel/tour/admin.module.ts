@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { AuthModule } from '@core/auth/auth.module';
 import { TourController } from './controller/tour.controller';
 import { TourService } from './service/tour.service';
-import { TourRepo } from './repo/tour.repo';
-import { CityRepo } from './repo/cities.repo';
+import { CityRepo } from '../shared/repo/cities.repo';
+import { TourRepo } from '../shared/repo/tour.repo';
 
 @Module({
   imports: [AuthModule],

@@ -1,6 +1,6 @@
-import { FilesEntity } from '@domain/admin/entity/product.entity';
+import { FileDto } from 'src/travel/shared/dtos';
 import { OrganizerStatus } from '../admin.enum';
-import { OrganizerBannerFilesEntity } from '../entity/admin.entity';
+import { ILanguage } from 'src/travel/shared/interfaces';
 
 export interface IShopUserInfoForJwtPayload {
   shop_id: string;
@@ -13,12 +13,10 @@ export interface IShopUserInfoForJwtPayload {
 }
 
 export interface IOrganizerCreateParam {
-  name: string;
-  description_uz?: string;
-  description_ru?: string;
-  image?: FilesEntity;
-  banner_image?: OrganizerBannerFilesEntity;
+  title: ILanguage;
+  description?: ILanguage;
   phone: string;
+  files?: FileDto[];
 }
 
 export interface IOrganizerUpdateParam {
@@ -26,7 +24,5 @@ export interface IOrganizerUpdateParam {
   name?: string;
   description_uz?: string;
   description_ru?: string;
-  image?: FilesEntity;
-  banner_image?: OrganizerBannerFilesEntity;
   phone?: string;
 }
