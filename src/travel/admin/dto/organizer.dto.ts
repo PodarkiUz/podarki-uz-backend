@@ -16,15 +16,10 @@ export class CreateOrganizerDto implements IOrganizerCreateParam {
   @Type(() => LanguageDto)
   title: LanguageDto;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  description_uz?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  description_ru?: string;
+  @ApiProperty({ type: LanguageDto })
+  @ValidateNested()
+  @Type(() => LanguageDto)
+  description: LanguageDto;
 
   @ApiPropertyOptional({ type: [FileDto] })
   @IsOptional()

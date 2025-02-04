@@ -53,6 +53,6 @@ export class OrganizerService {
 
   async getAllList() {
     const data = await this.repo.getAllOrganizers();
-    return data;
+    return { data, total: Number(data[0]?.total || 0) };
   }
 }

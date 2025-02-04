@@ -15,6 +15,7 @@ export class OrganizerRepo extends BaseRepo<OrganizerEntity> {
     const query = knex
       .select([
         'org.*',
+        knex.raw('count(org.id) over() as total'),
         knex.raw(
           `jsonb_agg(
               jsonb_build_object(
