@@ -25,7 +25,7 @@ export class OrganizerController {
     return this.service.update(body.id, body);
   }
 
-  @Post('get-list')
+  @Post('list')
   getAll() {
     return this.service.getAllList();
   }

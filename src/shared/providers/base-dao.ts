@@ -225,4 +225,14 @@ export class BaseRepo<T extends Partial<IdClass>> implements IBaseQuery<T> {
       .returning(returning);
     return data;
   }
+
+  async bulkDeleteByIdsWithTransaction(trx, ids: string[], returning = ['*']) {
+    const client = trx ? trx : this.knex;
+    const [data] = await client
+      .from(this._tableName)
+      .whereIn('id', ids)
+      .del()
+      .returning(returning);
+    return data;
+  }
 }

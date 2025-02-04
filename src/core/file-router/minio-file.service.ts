@@ -63,7 +63,11 @@ export class MinioService {
       file.size,
     );
 
-    return { url: fileName };
+    return {
+      url: `http://37.60.231.13:9000/travelapp/${fileName}`,
+      name: fileName,
+      size: file.size,
+    };
   }
 
   async uploadFile(file: Express.Multer.File) {
@@ -130,6 +134,8 @@ export class MinioService {
       bucketName || this.bucketName,
       fileName,
     );
+
+    return { success: true };
   }
 
   private async compressToOriginalWebp(imageBuffer: Buffer) {

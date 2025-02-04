@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { TourRepo } from '../repo/tour.repo';
 import {
   ITourCreateParam,
   ITourSeachByName,
   ITourUpdateParam,
 } from '../interface/tour.interface';
 import { OrganizerStatus } from '../admin.enum';
-import { CityRepo } from '../repo/cities.repo';
+import { CityRepo } from '../../shared/repo/cities.repo';
+import { TourRepo } from 'src/travel/shared/repo/tour.repo';
 
 @Injectable()
 export class TourService {
