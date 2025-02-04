@@ -7,6 +7,8 @@ import {
 import { OrganizerStatus } from '../admin.enum';
 import { isEmpty } from 'lodash';
 import { FilesRepo } from 'src/travel/shared/repo/files.repo';
+import { compareStringArrays } from 'src/travel/shared/utils';
+import { FileDependentType } from 'src/travel/shared/enums';
 
 @Injectable()
 export class OrganizerService {
@@ -48,7 +50,49 @@ export class OrganizerService {
   }
 
   async update(id: string, params: IOrganizerUpdateParam) {
-    return this.repo.updateById(id, params);
+    return this.repo.knex.transaction(async (trc) => {
+      const data: Record<string, any> = {
+        ...(params?.title && { birth_date: params.title }),
+        ...(params?.description && { first_name: params.description }),
+        ...(params?.phone && { last_name: params.phone }),
+      };
+
+      if (!isEmpty(data)) {
+        await this.repo.updateByIdWithTransaction(trc, id, data);
+      }
+
+      // Files update logic
+      if (!isEmpty(params?.files)) {
+        const old_files = await this.filesRepo.getAll({ dependent_id: id });
+        const { itemsToAdd, itemsToRemove } = compareStringArrays(
+          old_files,
+          params?.files,
+          'name',
+        );
+
+        if (!isEmpty(itemsToRemove)) {
+          await this.filesRepo.bulkDeleteByIdsWithTransaction(
+            trc,
+            itemsToRemove.map((i) => i['id']),
+          );
+        }
+
+        if (!isEmpty(itemsToAdd)) {
+          await this.filesRepo.bulkInsertWithTransaction(
+            trc,
+            itemsToAdd.map((i) => ({
+              dependent_id: id,
+              depend: FileDependentType.organizer,
+              name: i.name,
+              url: i.url,
+              size: i?.size,
+              type: i.type,
+            })),
+            ['id'],
+          );
+        }
+      }
+    });
   }
 
   async getAllList() {

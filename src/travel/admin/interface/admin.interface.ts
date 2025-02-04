@@ -21,8 +21,8 @@ export interface IOrganizerCreateParam {
 
 export interface IOrganizerUpdateParam {
   id?: string;
-  name?: string;
-  description_uz?: string;
-  description_ru?: string;
+  title?: ILanguage;
+  description?: ILanguage;
   phone?: string;
+  files?: FileDto[];
 }
