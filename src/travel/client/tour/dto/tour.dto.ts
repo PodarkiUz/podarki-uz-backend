@@ -98,4 +98,19 @@ export class SearchTourByNameDto implements ITourSeachByName {
   @IsOptional()
   @IsNumber()
   to_price?: number;
+
+  @ApiPropertyOptional()
+  @IsISO8601()
+  @IsOptional()
+  from_date?: string;
+
+  @ApiPropertyOptional()
+  @IsISO8601()
+  @IsOptional()
+  to_date?: string;
+
+  @ApiPropertyOptional()
+  @IsNumber()
+  @IsOptional()
+  seats?: number;
 }

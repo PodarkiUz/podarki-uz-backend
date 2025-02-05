@@ -34,4 +34,7 @@ export interface ITourSeachByName {
   location?: number;
   from_price?: number;
   to_price?: number;
+  from_date?: string;
+  to_date?: string;
+  seats?: number;
 }

@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { TourEntity } from 'src/travel/shared/repo/entity';
 import { ITourSeachByName } from 'src/travel/client/tour/interface/tour.interface';
 import { PaginationParams } from '../interfaces';
+import { FileDependentType } from '../enums';
 
 @Injectable()
 export class TourRepo extends BaseRepo<TourEntity> {
@@ -37,14 +38,53 @@ export class TourRepo extends BaseRepo<TourEntity> {
     return query;
   }
 
-  searchTour(params: ITourSeachByName) {
-    const query = this.knex
-      .select('*')
-      .from(this.tableName)
-      .where('is_deleted', false);
+  searchTour(params: ITourSeachByName & PaginationParams) {
+    const { offset = 0, limit = 10 } = params;
+
+    const knex = this.knex;
+
+    const query = knex
+      .select([
+        'tour.id',
+        'tour.price',
+        'tour.sale_price',
+        'tour.title',
+        'tour.duration',
+        'tour.start_date',
+        'tour.end_date',
+        'tour.seats',
+        'tour.rating',
+        knex.raw(`jsonb_build_object(
+            'id', org.id,
+            'title', org.title
+          ) as organizer`),
+        knex.raw('count(tour.id) over() as total'),
+        knex.raw(
+          `COALESCE(
+            jsonb_agg(
+              jsonb_build_object(
+                'id', file.id,
+                'url', file.url,
+                'type', file.type
+              )
+            ) filter (where file.id is not null), '[]') AS files`,
+        ),
+      ])
+      .from(`${this.tableName} as tour`)
+      .leftJoin('files as file', function () {
+        this.on(knex.raw(`file.depend = '${FileDependentType.tour}'`)).andOn(
+          'file.dependent_id',
+          'tour.id',
+        );
+      })
+      .leftJoin('organizers as org', function () {
+        this.on('tour.organizer_id', 'org.id');
+      })
+      .where('tour.is_deleted', false)
+      .groupBy(['tour.id', 'org.id']);
 
     if (params?.keyword) {
-      query.whereRaw(`make_multilingual_tsvector(title) @@ 
+      query.whereRaw(`make_multilingual_tsvector(tour.title) @@ 
         (
           plainto_tsquery('english', '${params.keyword}') ||
           plainto_tsquery('russian', '${params.keyword}') ||
@@ -53,19 +93,38 @@ export class TourRepo extends BaseRepo<TourEntity> {
     }
 
     if (params?.location) {
-      query.where('location', params.location);
+      query.where('tour.location', params.location);
     }
 
     if (params?.from_price) {
-      query.whereRaw('COALESCE(sale_price, price) >= :price', {
+      query.whereRaw('COALESCE(tour.sale_price, tour.price) >= :price', {
         price: params.from_price,
       });
     }
 
     if (params?.to_price) {
-      query.whereRaw('COALESCE(sale_price, price) <= :price', {
+      query.whereRaw('COALESCE(tour.sale_price, tour.price) <= :price', {
         price: params.to_price,
       });
+    }
+
+    if (params?.from_date) {
+      query.where('tour.start_date', '>=', params.from_date);
+    }
+
+    if (params?.to_date) {
+      query.where('tour.end_date', '<=', params.to_date);
+    }
+
+    if (params?.seats) {
+      query.where('tour.seats', '>=', params.seats);
+    }
+
+    if (limit) {
+      query.limit(limit);
+      if (offset) {
+        query.offset(offset);
+      }
     }
 
     return query;
