@@ -10,4 +10,4 @@ import { FilesRepo } from '../shared/repo/files.repo';
   controllers: [OrganizerController],
   providers: [OrganizerService, OrganizerRepo, FilesRepo],
 })
-export class OrganizerModule { }
+export class AdminModule { }

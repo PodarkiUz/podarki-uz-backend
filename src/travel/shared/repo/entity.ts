@@ -1,13 +1,11 @@
-import { OrganizerStatus } from '../../tour/admin.enum';
+import { OrganizerStatus } from '../../client/tour/admin.enum';
 import { FileType } from '../enums';
 import { ILanguage } from '../interfaces';
 
 export interface TourEntity {
   id?: string;
-  name_uz: string;
-  name_ru: string;
-  description_uz?: string;
-  description_ru?: string;
+  title: ILanguage;
+  description?: ILanguage;
   location: number;
   price: number;
   status: OrganizerStatus;
@@ -18,7 +16,6 @@ export interface TourEntity {
   seats: number;
   created_at?: Date;
   is_deleted?: boolean;
-  search_vector: string;
 }
 
 export interface CityEntity {

@@ -7,34 +7,26 @@ import {
   IsISO8601,
   IsEnum,
   Min,
-  IsNumberString,
+  ValidateNested,
 } from 'class-validator';
 import {
   ITourCreateParam,
   ITourSeachByName,
 } from '../interface/tour.interface';
 import { OrganizerStatus } from '../admin.enum';
+import { LanguageDto } from 'src/travel/shared/dtos';
+import { Type } from 'class-transformer';
 
 export class CreateTourDto implements ITourCreateParam {
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  name_uz: string;
+  @ApiProperty({ type: LanguageDto })
+  @ValidateNested()
+  @Type(() => LanguageDto)
+  title: LanguageDto;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  name_ru: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  description_uz?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  description_ru?: string;
+  @ApiProperty({ type: LanguageDto })
+  @ValidateNested()
+  @Type(() => LanguageDto)
+  description: LanguageDto;
 
   @ApiProperty({ enum: OrganizerStatus })
   @IsEnum(OrganizerStatus)

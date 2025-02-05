@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from '@core/auth/auth.module';
-import { OrganizerModule } from './admin/admin.module';
-import { TourModule } from './tour/admin.module';
+import { AdminModule } from './admin/admin.module';
+import { ClientModule } from './client/client.module';
 
 @Module({
-  imports: [AuthModule, OrganizerModule, TourModule],
+  imports: [AuthModule, AdminModule, ClientModule],
 })
 export class TravelModule { }
