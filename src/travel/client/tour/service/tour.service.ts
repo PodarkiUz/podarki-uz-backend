@@ -5,22 +5,21 @@ import {
   ITourUpdateParam,
 } from '../interface/tour.interface';
 import { OrganizerStatus } from '../admin.enum';
-import { CityRepo } from '../../shared/repo/cities.repo';
+import { CityRepo } from '../../../shared/repo/cities.repo';
 import { TourRepo } from 'src/travel/shared/repo/tour.repo';
+import { PaginationParams } from 'src/travel/shared/interfaces';
 
 @Injectable()
 export class TourService {
   constructor(
     private readonly repo: TourRepo,
     private readonly cityRepo: CityRepo,
-  ) {}
+  ) { }
 
   async create(params: ITourCreateParam) {
     const tour = await this.repo.insert({
-      description_ru: params?.description_ru,
-      description_uz: params?.description_uz,
-      name_ru: params.name_ru,
-      name_uz: params.name_uz,
+      title: params?.title,
+      description: params?.description,
       location: params.location,
       organizer_id: params.organizer_id,
       price: params.price,
@@ -29,9 +28,6 @@ export class TourService {
       seats: params.seats,
       start_date: params.start_date,
       duration: params?.duration,
-      search_vector: this.repo.knex.raw(
-        `to_tsvector('russian', '${params.name_ru}') || to_tsvector('simple', '${params.name_uz}')`,
-      ),
     });
 
     return { success: true, data: tour };
@@ -46,9 +42,9 @@ export class TourService {
     return this.repo.updateById(id, params);
   }
 
-  async getAllList() {
-    const data = await this.repo.getAllTours();
-    return data;
+  async getAllList(params: PaginationParams) {
+    const data = await this.repo.getAllTours(params);
+    return { data, total: Number(data[0]?.total) || 0 };
   }
 
   async getCitiesList() {

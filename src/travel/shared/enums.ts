@@ -8,3 +8,10 @@ export enum FileType {
 export enum FileDependentType {
   organizer = 'organizer',
 }
+
+export enum StatusEnum {
+  INACTIVE = 1,
+  ACTIVE = 2,
+  DELETED = 3,
+  BLOCKED = 4,
+}

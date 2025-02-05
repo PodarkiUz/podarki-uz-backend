@@ -1,10 +1,9 @@
+import { ILanguage } from 'src/travel/shared/interfaces';
 import { OrganizerStatus } from '../admin.enum';
 
 export interface ITourCreateParam {
-  name_uz: string;
-  name_ru: string;
-  description_uz?: string;
-  description_ru?: string;
+  title: ILanguage;
+  description?: ILanguage;
   status: OrganizerStatus;
   location: number;
   price: number;

@@ -9,6 +9,7 @@ import { isEmpty } from 'lodash';
 import { FilesRepo } from 'src/travel/shared/repo/files.repo';
 import { compareStringArrays } from 'src/travel/shared/utils';
 import { FileDependentType } from 'src/travel/shared/enums';
+import { PaginationParams } from 'src/travel/shared/interfaces';
 
 @Injectable()
 export class OrganizerService {
@@ -97,8 +98,8 @@ export class OrganizerService {
     });
   }
 
-  async getAllList() {
-    const data = await this.repo.getAllOrganizers();
+  async getAllList(params: PaginationParams) {
+    const data = await this.repo.getAllOrganizers(params);
     return { data, total: Number(data[0]?.total || 0) };
   }
 }

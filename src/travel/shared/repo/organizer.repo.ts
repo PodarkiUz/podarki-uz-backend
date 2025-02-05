@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { IShopUserInfoForJwtPayload } from '../../admin/interface/admin.interface';
 import { OrganizerEntity } from './entity';
 import { FileDependentType } from '../enums';
+import { PaginationParams } from '../interfaces';
 
 @Injectable()
 export class OrganizerRepo extends BaseRepo<OrganizerEntity> {
@@ -10,8 +11,9 @@ export class OrganizerRepo extends BaseRepo<OrganizerEntity> {
     super('organizers');
   }
 
-  getAllOrganizers() {
+  getAllOrganizers(params: PaginationParams) {
     const knex = this.knex;
+    const { offset = 0, limit = 10 } = params;
     const query = knex
       .select([
         'org.*',
@@ -33,6 +35,22 @@ export class OrganizerRepo extends BaseRepo<OrganizerEntity> {
       })
       .where('org.is_deleted', false)
       .groupBy('org.id');
+
+    if (params?.search) {
+      query.whereRaw(`make_multilingual_tsvector(org.title) @@ 
+        (
+          plainto_tsquery('english', '${params.search}') ||
+          plainto_tsquery('russian', '${params.search}') ||
+          plainto_tsquery('simple', '${params.search}')
+        )`);
+    }
+
+    if (limit) {
+      query.limit(limit);
+      if (offset) {
+        query.offset(offset);
+      }
+    }
 
     return query;
   }

@@ -2,6 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { OrganizerService } from '../service/organizer.service';
 import { CreateOrganizerDto, UpdateOrganizerDto } from '../dto/organizer.dto';
+import { OneByIdDto, PaginationDto } from 'src/travel/shared/dtos';
 
 @ApiTags('ORGANIZER')
 // @ApiBearerAuth('authorization')
@@ -16,7 +17,7 @@ export class OrganizerController {
   }
 
   @Post('delete')
-  delete(@Body() body: UpdateOrganizerDto) {
+  delete(@Body() body: OneByIdDto) {
     return this.service.delete(body.id);
   }
 
@@ -26,7 +27,7 @@ export class OrganizerController {
   }
 
   @Post('list')
-  getAll() {
-    return this.service.getAllList();
+  getAll(@Body() body: PaginationDto) {
+    return this.service.getAllList(body);
   }
 }

@@ -6,6 +6,7 @@ import {
   SearchTourByNameDto,
   UpdateTourDto,
 } from '../dto/tour.dto';
+import { OneByIdDto, PaginationDto } from 'src/travel/shared/dtos';
 
 @ApiTags('TOUR')
 // @ApiBearerAuth('authorization')
@@ -20,7 +21,7 @@ export class TourController {
   }
 
   @Post('delete')
-  delete(@Body() body: UpdateTourDto) {
+  delete(@Body() body: OneByIdDto) {
     return this.service.delete(body.id);
   }
 
@@ -30,8 +31,8 @@ export class TourController {
   }
 
   @Post('list')
-  getAll() {
-    return this.service.getAllList();
+  getAll(@Body() body: PaginationDto) {
+    return this.service.getAllList(body);
   }
 
   @Post('cities-list')
