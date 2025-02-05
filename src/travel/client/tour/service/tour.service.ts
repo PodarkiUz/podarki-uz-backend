@@ -53,6 +53,7 @@ export class TourService {
   }
 
   async searchTour(params: ITourSeachByName) {
-    return this.repo.searchTour(params);
+    const data = await this.repo.searchTour(params);
+    return { data, total: Number(data[0]?.total) || 0 };
   }
 }
