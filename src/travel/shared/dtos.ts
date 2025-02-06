@@ -48,12 +48,12 @@ export class LanguageDto {
 
 export class PaginationDto implements PaginationParams {
   @ApiPropertyOptional()
-  @IsNumberString()
+  @IsNumber()
   @IsOptional()
   limit?: number;
 
   @ApiPropertyOptional()
-  @IsNumberString()
+  @IsNumber()
   @IsOptional()
   offset?: number;
 
