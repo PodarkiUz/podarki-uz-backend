@@ -1,5 +1,5 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { TourService } from '../service/tour.service';
 import {
   CreateTourDto,
@@ -7,11 +7,12 @@ import {
   UpdateTourDto,
 } from '../dto/tour.dto';
 import { OneByIdDto, PaginationDto } from 'src/travel/shared/dtos';
+import { AuthorizationJwtGuard } from 'src/travel/core/auth/guards/authorization.jwt.guard';
 
 @ApiTags('TOUR')
-// @ApiBearerAuth('authorization')
-// @UseGuards(AuthorizationJwtGuard)
-@Controller('tour')
+@ApiBearerAuth('authorization')
+@UseGuards(AuthorizationJwtGuard)
+@Controller('admin/tour')
 export class TourController {
   constructor(private readonly service: TourService) { }
 
