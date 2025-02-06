@@ -33,15 +33,14 @@ export class OrganizerRepo extends BaseRepo<OrganizerEntity> {
           knex.raw('file.depend = ?', FileDependentType.organizer),
         );
       })
-      .where('org.is_deleted', false)
+      // .where('org.is_deleted', false)
       .groupBy('org.id');
 
     if (params?.search) {
-      query.whereRaw(`make_multilingual_tsvector(org.title) @@ 
-        (
-          plainto_tsquery('english', '${params.search}') ||
-          plainto_tsquery('russian', '${params.search}') ||
-          plainto_tsquery('simple', '${params.search}')
+      query.whereRaw(`(
+        org.title ->> 'ru' ilike '%${params.search}%'
+        or org.title ->> 'en' ilike '%${params.search}%'
+        or org.title ->> 'uz' ilike '%${params.search}%'
         )`);
     }
 
