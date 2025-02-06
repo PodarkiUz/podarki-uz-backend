@@ -13,7 +13,7 @@ import { OneByIdDto, PaginationDto } from 'src/travel/shared/dtos';
 // @UseGuards(AuthorizationJwtGuard)
 @Controller('tour')
 export class TourController {
-  constructor(private readonly service: TourService) {}
+  constructor(private readonly service: TourService) { }
 
   @Post('create')
   create(@Body() body: CreateTourDto) {

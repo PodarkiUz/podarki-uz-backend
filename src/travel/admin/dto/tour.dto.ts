@@ -13,9 +13,9 @@ import {
   ITourCreateParam,
   ITourSeachByName,
 } from '../interface/tour.interface';
-import { OrganizerStatus } from '../admin.enum';
 import { LanguageDto } from 'src/travel/shared/dtos';
 import { Type } from 'class-transformer';
+import { OrganizerStatus } from 'src/travel/shared/enums';
 
 export class CreateTourDto implements ITourCreateParam {
   @ApiProperty({ type: LanguageDto })
@@ -58,6 +58,11 @@ export class CreateTourDto implements ITourCreateParam {
   @IsString()
   @IsISO8601()
   start_date: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsISO8601()
+  end_date: string;
 
   @ApiProperty()
   @IsString()

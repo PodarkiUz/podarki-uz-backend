@@ -1,7 +1,7 @@
 import { BaseRepo } from '@shared/providers/base-dao';
 import { Injectable } from '@nestjs/common';
 import { TourEntity } from 'src/travel/shared/repo/entity';
-import { ITourSeachByName } from 'src/travel/client/tour/interface/tour.interface';
+import { ITourSeachByName } from 'src/travel/admin/interface/tour.interface';
 import { PaginationParams } from '../interfaces';
 import { FileDependentType } from '../enums';
 

@@ -4,11 +4,10 @@ import {
   IOrganizerCreateParam,
   IOrganizerUpdateParam,
 } from '../interface/admin.interface';
-import { OrganizerStatus } from '../admin.enum';
 import { isEmpty } from 'lodash';
 import { FilesRepo } from 'src/travel/shared/repo/files.repo';
-import { compareStringArrays } from 'src/travel/shared/utils';
-import { FileDependentType } from 'src/travel/shared/enums';
+import { compareArrays } from 'src/travel/shared/utils';
+import { FileDependentType, OrganizerStatus } from 'src/travel/shared/enums';
 import { PaginationParams } from 'src/travel/shared/interfaces';
 
 @Injectable()
@@ -31,7 +30,7 @@ export class OrganizerService {
         await this.filesRepo.bulkInsertWithTransaction(
           trc,
           params.files.map((file) => ({
-            depend: 'organizer',
+            depend: FileDependentType.organizer,
             dependent_id: organizer.id,
             name: file.name,
             size: file.size,
@@ -65,7 +64,7 @@ export class OrganizerService {
       // Files update logic
       if (!isEmpty(params?.files)) {
         const old_files = await this.filesRepo.getAll({ dependent_id: id });
-        const { itemsToAdd, itemsToRemove } = compareStringArrays(
+        const { itemsToAdd, itemsToRemove } = compareArrays(
           old_files,
           params?.files,
           'name',

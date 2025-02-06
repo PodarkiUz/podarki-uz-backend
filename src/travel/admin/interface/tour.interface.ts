@@ -1,5 +1,6 @@
+import { FileDto } from 'src/travel/shared/dtos';
+import { OrganizerStatus } from 'src/travel/shared/enums';
 import { ILanguage } from 'src/travel/shared/interfaces';
-import { OrganizerStatus } from '../admin.enum';
 
 export interface ITourCreateParam {
   title: ILanguage;
@@ -10,23 +11,25 @@ export interface ITourCreateParam {
   sale_price?: number;
   duration?: string;
   start_date: string;
+  end_date: string;
   organizer_id: string;
   seats: number;
+  files?: FileDto[];
 }
 
 export interface ITourUpdateParam {
   id?: string;
-  name_uz?: string;
-  name_ru?: string;
-  description_uz?: string;
-  description_ru?: string;
+  title?: ILanguage;
+  description?: ILanguage;
   location?: number;
   price?: number;
   sale_price?: number;
   duration?: string;
   start_date?: string;
+  end_date?: string;
   organizer_id?: string;
   seats?: number;
+  files?: FileDto[];
 }
 
 export interface ITourSeachByName {

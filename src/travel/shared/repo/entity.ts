@@ -1,5 +1,4 @@
-import { OrganizerStatus } from '../../client/tour/admin.enum';
-import { FileType } from '../enums';
+import { FileType, OrganizerStatus } from '../enums';
 import { ILanguage } from '../interfaces';
 
 export interface TourEntity {

@@ -1,8 +1,4 @@
-export function compareStringArrays<T>(
-  oldArray: T[],
-  newArray: T[],
-  prop?: string,
-) {
+export function compareArrays<T>(oldArray: T[], newArray: T[], prop?: string) {
   // Find items to remove (present in oldArray but not in newArray)
   const itemsToRemove = oldArray.filter(
     (item) =>

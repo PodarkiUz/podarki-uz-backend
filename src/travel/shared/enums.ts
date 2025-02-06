@@ -16,3 +16,10 @@ export enum StatusEnum {
   DELETED = 3,
   BLOCKED = 4,
 }
+
+export enum OrganizerStatus {
+  New = 1,
+  Registered = 2,
+  Allowed = 3,
+  Blocked = 4,
+}
