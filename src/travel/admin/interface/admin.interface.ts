@@ -1,5 +1,5 @@
 import { FileDto } from 'src/travel/shared/dtos';
-import { OrganizerStatus } from '../admin.enum';
+import { OrganizerStatus } from 'src/travel/shared/enums';
 import { ILanguage } from 'src/travel/shared/interfaces';
 
 export interface IShopUserInfoForJwtPayload {

@@ -8,7 +8,7 @@ import { AuthorizationJwtGuard } from 'src/travel/core/auth/guards/authorization
 @ApiTags('ORGANIZER')
 @ApiBearerAuth('authorization')
 @UseGuards(AuthorizationJwtGuard)
-@Controller('organizer')
+@Controller('admin/organizer')
 export class OrganizerController {
   constructor(private readonly service: OrganizerService) {}
 
