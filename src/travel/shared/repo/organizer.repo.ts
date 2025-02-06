@@ -4,6 +4,7 @@ import { IShopUserInfoForJwtPayload } from '../../admin/interface/admin.interfac
 import { OrganizerEntity } from './entity';
 import { FileDependentType } from '../enums';
 import { PaginationParams } from '../interfaces';
+import { isEmpty } from 'lodash';
 
 @Injectable()
 export class OrganizerRepo extends BaseRepo<OrganizerEntity> {
@@ -36,7 +37,7 @@ export class OrganizerRepo extends BaseRepo<OrganizerEntity> {
       // .where('org.is_deleted', false)
       .groupBy('org.id');
 
-    if (params?.search) {
+    if (!isEmpty(params?.search)) {
       query.whereRaw(`(
         org.title ->> 'ru' ilike '%${params.search}%'
         or org.title ->> 'en' ilike '%${params.search}%'
