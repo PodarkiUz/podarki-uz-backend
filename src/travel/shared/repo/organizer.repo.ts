@@ -34,7 +34,7 @@ export class OrganizerRepo extends BaseRepo<OrganizerEntity> {
           knex.raw('file.depend = ?', FileDependentType.organizer),
         );
       })
-      // .where('org.is_deleted', false)
+      .where('org.is_deleted', false)
       .groupBy('org.id');
 
     if (!isEmpty(params?.search)) {
