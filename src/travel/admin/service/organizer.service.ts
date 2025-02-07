@@ -101,4 +101,9 @@ export class OrganizerService {
     const data = await this.repo.getAllOrganizers(params);
     return { data, total: Number(data[0]?.total || 0) };
   }
+
+  async getOne(id: string) {
+    const data = await this.repo.getById(id);
+    return data;
+  }
 }

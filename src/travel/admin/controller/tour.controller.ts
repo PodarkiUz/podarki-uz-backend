@@ -10,8 +10,8 @@ import { OneByIdDto, PaginationDto } from 'src/travel/shared/dtos';
 import { AuthorizationJwtGuard } from 'src/travel/core/auth/guards/authorization.jwt.guard';
 
 @ApiTags('TOUR')
-@ApiBearerAuth('authorization')
-@UseGuards(AuthorizationJwtGuard)
+// @ApiBearerAuth('authorization')
+// @UseGuards(AuthorizationJwtGuard)
 @Controller('admin/tour')
 export class TourController {
   constructor(private readonly service: TourService) { }
@@ -37,12 +37,17 @@ export class TourController {
   }
 
   @Post('cities-list')
-  citiesList() {
-    return this.service.getCitiesList();
+  citiesList(@Body() body: PaginationDto) {
+    return this.service.getCitiesList(body);
   }
 
   @Post('search')
   searchByTour(@Body() params: SearchTourByNameDto) {
     return this.service.searchTour(params);
+  }
+
+  @Post('get-by-id')
+  getOne(@Body() params: OneByIdDto) {
+    return this.service.getOne(params.id);
   }
 }
