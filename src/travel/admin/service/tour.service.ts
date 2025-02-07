@@ -118,13 +118,18 @@ export class TourService {
     return { data, total: Number(data[0]?.total) || 0 };
   }
 
-  async getCitiesList() {
-    const data = await this.cityRepo.getAllCities();
+  async getCitiesList(params: PaginationParams) {
+    const data = await this.cityRepo.getAllCities(params);
     return data;
   }
 
   async searchTour(params: ITourSeachByName) {
     const data = await this.repo.searchTour(params);
     return { data, total: Number(data[0]?.total) || 0 };
+  }
+
+  async getOne(id: string) {
+    const data = await this.repo.getById(id);
+    return data;
   }
 }

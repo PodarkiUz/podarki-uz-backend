@@ -6,8 +6,8 @@ import { OneByIdDto, PaginationDto } from 'src/travel/shared/dtos';
 import { AuthorizationJwtGuard } from 'src/travel/core/auth/guards/authorization.jwt.guard';
 
 @ApiTags('ORGANIZER')
-@ApiBearerAuth('authorization')
-@UseGuards(AuthorizationJwtGuard)
+// @ApiBearerAuth('authorization')
+// @UseGuards(AuthorizationJwtGuard)
 @Controller('admin/organizer')
 export class OrganizerController {
   constructor(private readonly service: OrganizerService) {}
@@ -30,5 +30,10 @@ export class OrganizerController {
   @Post('list')
   getAll(@Body() body: PaginationDto) {
     return this.service.getAllList(body);
+  }
+
+  @Post('get-by-id')
+  getOne(@Body() params: OneByIdDto) {
+    return this.service.getOne(params.id);
   }
 }
