@@ -10,8 +10,8 @@ import { OneByIdDto, PaginationDto } from 'src/travel/shared/dtos';
 import { AuthorizationJwtGuard } from 'src/travel/core/auth/guards/authorization.jwt.guard';
 
 @ApiTags('TOUR')
-// @ApiBearerAuth('authorization')
-// @UseGuards(AuthorizationJwtGuard)
+@ApiBearerAuth('authorization')
+@UseGuards(AuthorizationJwtGuard)
 @Controller('admin/tour')
 export class TourController {
   constructor(private readonly service: TourService) { }
