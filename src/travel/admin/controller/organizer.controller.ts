@@ -6,8 +6,8 @@ import { OneByIdDto, PaginationDto } from 'src/travel/shared/dtos';
 import { AuthorizationJwtGuard } from 'src/travel/core/auth/guards/authorization.jwt.guard';
 
 @ApiTags('ORGANIZER')
-// @ApiBearerAuth('authorization')
-// @UseGuards(AuthorizationJwtGuard)
+@ApiBearerAuth('authorization')
+@UseGuards(AuthorizationJwtGuard)
 @Controller('admin/organizer')
 export class OrganizerController {
   constructor(private readonly service: OrganizerService) {}
