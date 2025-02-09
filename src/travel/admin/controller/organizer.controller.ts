@@ -5,7 +5,7 @@ import { CreateOrganizerDto, UpdateOrganizerDto } from '../dto/organizer.dto';
 import { OneByIdDto, PaginationDto } from 'src/travel/shared/dtos';
 import { AuthorizationJwtGuard } from 'src/travel/core/auth/guards/authorization.jwt.guard';
 
-@ApiTags('ORGANIZER')
+@ApiTags('ADMIN -> ORGANIZER')
 @ApiBearerAuth('authorization')
 @UseGuards(AuthorizationJwtGuard)
 @Controller('admin/organizer')
