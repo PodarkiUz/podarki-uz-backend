@@ -9,7 +9,7 @@ import {
 import { OneByIdDto, PaginationDto } from 'src/travel/shared/dtos';
 import { AuthorizationJwtGuard } from 'src/travel/core/auth/guards/authorization.jwt.guard';
 
-@ApiTags('TOUR')
+@ApiTags('ADMIN -> TOUR')
 @ApiBearerAuth('authorization')
 @UseGuards(AuthorizationJwtGuard)
 @Controller('admin/tour')
