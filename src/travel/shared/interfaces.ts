@@ -12,7 +12,7 @@ export enum Language {
   'en' = 'en',
 }
 
-export interface PaginationParams {
+export class PaginationParams {
   offset?: number;
   limit?: number;
   search?: string;
