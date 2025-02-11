@@ -6,6 +6,7 @@ import { SearchTourByNameDto } from 'src/travel/admin/dto/tour.dto';
 import { TourService } from '../service/tour.service';
 import { Lang } from 'src/travel/shared/decorators';
 import { ILanguage } from 'src/travel/shared/interfaces';
+import { GetTourListClientDto } from '../dto/tour.dto';
 
 @ApiTags('TOUR')
 // @ApiBearerAuth('authorization')
@@ -15,7 +16,7 @@ export class TourController {
   constructor(private readonly service: TourService) {}
 
   @Post('list')
-  getAll(@Body() body: PaginationDto, @Lang() lang: ILanguage) {
+  getAll(@Body() body: GetTourListClientDto, @Lang() lang: ILanguage) {
     return this.service.getAllList(body, lang);
   }
 

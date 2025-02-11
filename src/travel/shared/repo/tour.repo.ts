@@ -4,6 +4,7 @@ import { TourEntity } from 'src/travel/shared/repo/entity';
 import { ITourSeachByName } from 'src/travel/admin/interface/tour.interface';
 import { ILanguage, PaginationParams } from '../interfaces';
 import { FileDependentType } from '../enums';
+import { IGetTourListClient } from 'src/travel/client/interface/tour.interface';
 
 @Injectable()
 export class TourRepo extends BaseRepo<TourEntity> {
@@ -37,7 +38,7 @@ export class TourRepo extends BaseRepo<TourEntity> {
     }
     return query;
   }
-  getAllToursClient(params: PaginationParams, lang: ILanguage) {
+  getAllToursClient(params: IGetTourListClient, lang: ILanguage) {
     const knex = this.knex;
     const { offset = 0, limit = 10 } = params;
 
@@ -73,12 +74,33 @@ export class TourRepo extends BaseRepo<TourEntity> {
         )`);
     }
 
+    if (params?.from_date) {
+      query.where('tour.start_date', '>=', params.from_date);
+    }
+
+    if (params?.to_date) {
+      query.where('tour.end_date', '<=', params.to_date);
+    }
+
+    if (params?.from_price) {
+      query.where('tour.price', '>=', params.from_price);
+    }
+
+    if (params?.to_price) {
+      query.where('tour.price', '<=', params.to_price);
+    }
+
+    if (params?.location) {
+      query.where('tour.location', params.location);
+    }
+
     if (limit) {
       query.limit(limit);
       if (offset) {
         query.offset(offset);
       }
     }
+
     return query;
   }
 

@@ -5,6 +5,7 @@ import { TourRepo } from 'src/travel/shared/repo/tour.repo';
 import { ILanguage, PaginationParams } from 'src/travel/shared/interfaces';
 import { FilesRepo } from 'src/travel/shared/repo/files.repo';
 import { ITourSeachByName } from 'src/travel/admin/interface/tour.interface';
+import { IGetTourListClient } from '../interface/tour.interface';
 
 @Injectable()
 export class TourService {
@@ -14,7 +15,7 @@ export class TourService {
     private readonly filesRepo: FilesRepo,
   ) {}
 
-  async getAllList(params: PaginationParams, lang: ILanguage) {
+  async getAllList(params: IGetTourListClient, lang: ILanguage) {
     const data = await this.repo.getAllToursClient(params, lang);
     return { data, total: Number(data[0]?.total) || 0 };
   }
