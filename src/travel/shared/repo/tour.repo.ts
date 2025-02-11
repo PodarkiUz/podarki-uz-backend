@@ -2,7 +2,7 @@ import { BaseRepo } from '@shared/providers/base-dao';
 import { Injectable } from '@nestjs/common';
 import { TourEntity } from 'src/travel/shared/repo/entity';
 import { ITourSeachByName } from 'src/travel/admin/interface/tour.interface';
-import { PaginationParams } from '../interfaces';
+import { ILanguage, PaginationParams } from '../interfaces';
 import { FileDependentType } from '../enums';
 
 @Injectable()
@@ -19,6 +19,50 @@ export class TourRepo extends BaseRepo<TourEntity> {
       .select(['tour.*', knex.raw('count(tour.id) over() as total')])
       .from(`${this.tableName} as tour`)
       .where('tour.is_deleted', false);
+
+    if (params?.search) {
+      query.whereRaw(`make_multilingual_tsvector(tour.title) @@ 
+        (
+          plainto_tsquery('english', '${params.search}') ||
+          plainto_tsquery('russian', '${params.search}') ||
+          plainto_tsquery('simple', '${params.search}')
+        )`);
+    }
+
+    if (limit) {
+      query.limit(limit);
+      if (offset) {
+        query.offset(offset);
+      }
+    }
+    return query;
+  }
+  getAllToursClient(params: PaginationParams, lang: ILanguage) {
+    const knex = this.knex;
+    const { offset = 0, limit = 10 } = params;
+
+    const query = knex
+      .select([
+        'tour.*',
+        knex.raw('count(tour.id) over() as total'),
+        knex.raw(`tour.title -> '${lang}' as title`),
+        knex.raw(`tour.description -> '${lang}' as description`),
+        knex.raw(`org.title -> '${lang}' as organizer_title`),
+        knex.raw('count(review.id) as review_count'),
+      ])
+      .from(`${this.tableName} as tour`)
+      .join('organizers as org', function () {
+        this.on('org.id', 'tour.organizer_id').andOn(
+          knex.raw('org.is_deleted = false'),
+        );
+      })
+      .leftJoin('reviews as review', function () {
+        this.on('tour.id', 'review.tour_id').andOn(
+          knex.raw('review.is_deleted = false'),
+        );
+      })
+      .where('tour.is_deleted', false)
+      .groupBy(['tour.id', 'org.title']);
 
     if (params?.search) {
       query.whereRaw(`make_multilingual_tsvector(tour.title) @@ 

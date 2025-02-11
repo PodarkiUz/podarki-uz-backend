@@ -4,6 +4,8 @@ import { OneByIdDto, PaginationDto } from 'src/travel/shared/dtos';
 // import { AuthorizationJwtGuard } from 'src/travel/core/auth/guards/authorization.jwt.guard';
 import { SearchTourByNameDto } from 'src/travel/admin/dto/tour.dto';
 import { TourService } from '../service/tour.service';
+import { Lang } from 'src/travel/shared/decorators';
+import { ILanguage } from 'src/travel/shared/interfaces';
 
 @ApiTags('TOUR')
 // @ApiBearerAuth('authorization')
@@ -13,8 +15,8 @@ export class TourController {
   constructor(private readonly service: TourService) {}
 
   @Post('list')
-  getAll(@Body() body: PaginationDto) {
-    return this.service.getAllList(body);
+  getAll(@Body() body: PaginationDto, @Lang() lang: ILanguage) {
+    return this.service.getAllList(body, lang);
   }
 
   @Post('cities-list')
