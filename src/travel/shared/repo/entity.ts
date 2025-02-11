@@ -47,3 +47,12 @@ export interface FilesEntity {
   created_at?: Date;
   is_deleted?: boolean;
 }
+
+export interface ReviewEntity {
+  id?: string;
+  title?: string;
+  user_id: string;
+  tour_id: string;
+  created_at?: Date;
+  is_deleted?: boolean;
+}
