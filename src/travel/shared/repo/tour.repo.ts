@@ -50,6 +50,14 @@ export class TourRepo extends BaseRepo<TourEntity> {
         knex.raw(`tour.description -> '${lang}' as description`),
         knex.raw(`org.title -> '${lang}' as organizer_title`),
         knex.raw('count(review.id) as review_count'),
+        knex.raw(
+          `jsonb_agg(
+              jsonb_build_object(
+                'url', file.url,
+                'type', file.type
+              )
+            ) FILTER (WHERE file.id is not null) AS files`,
+        ),
       ])
       .from(`${this.tableName} as tour`)
       .join('organizers as org', function () {
@@ -60,6 +68,11 @@ export class TourRepo extends BaseRepo<TourEntity> {
       .leftJoin('reviews as review', function () {
         this.on('tour.id', 'review.tour_id').andOn(
           knex.raw('review.is_deleted = false'),
+        );
+      })
+      .leftJoin('files as file', function () {
+        this.on('file.dependent_id', 'tour.id').andOn(
+          knex.raw('file.depend = ?', FileDependentType.tour),
         );
       })
       .where('tour.is_deleted', false)
