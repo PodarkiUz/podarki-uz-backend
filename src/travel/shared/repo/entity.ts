@@ -19,12 +19,8 @@ export interface TourEntity {
 
 export interface CityEntity {
   id?: string;
-  name_uz: string;
-  name_ru: string;
-  name_en: string;
-  country_uz: string;
-  country_ru: string;
-  country_en: string;
+  title: ILanguage;
+  country?: ILanguage;
 }
 
 export interface OrganizerEntity {
