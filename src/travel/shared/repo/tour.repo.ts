@@ -49,6 +49,9 @@ export class TourRepo extends BaseRepo<TourEntity> {
         knex.raw(`tour.title -> '${lang}' as title`),
         knex.raw(`tour.description -> '${lang}' as description`),
         knex.raw(`org.title -> '${lang}' as organizer_title`),
+        knex.raw(
+          `(select url from files as f where f.depend = 'organizer' and dependent_id = org.id limit 1) as organizer_logo`,
+        ),
         knex.raw('count(review.id) as review_count'),
         knex.raw(
           `jsonb_agg(
@@ -76,7 +79,7 @@ export class TourRepo extends BaseRepo<TourEntity> {
         );
       })
       .where('tour.is_deleted', false)
-      .groupBy(['tour.id', 'org.title']);
+      .groupBy(['tour.id', 'org.id']);
 
     if (params?.search) {
       query.whereRaw(`make_multilingual_tsvector(tour.title) @@ 
