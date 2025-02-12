@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { IShopUserInfoForJwtPayload } from '../../admin/interface/admin.interface';
 import { OrganizerEntity } from './entity';
 import { FileDependentType } from '../enums';
-import { PaginationParams } from '../interfaces';
+import { ILanguage, PaginationParams } from '../interfaces';
 import { isEmpty } from 'lodash';
 
 @Injectable()
@@ -18,6 +18,51 @@ export class OrganizerRepo extends BaseRepo<OrganizerEntity> {
     const query = knex
       .select([
         'org.*',
+        knex.raw('count(org.id) over() as total'),
+        knex.raw(
+          `jsonb_agg(
+              jsonb_build_object(
+                'url', file.url,
+                'type', file.type
+              )
+            ) FILTER (WHERE file.id is not null) AS files`,
+        ),
+      ])
+      .from(`${this.tableName} as org`)
+      .leftJoin('files as file', function () {
+        this.on('file.dependent_id', 'org.id').andOn(
+          knex.raw('file.depend = ?', FileDependentType.organizer),
+        );
+      })
+      .where('org.is_deleted', false)
+      .groupBy('org.id');
+
+    if (!isEmpty(params?.search)) {
+      query.whereRaw(`(
+        org.title ->> 'ru' ilike '%${params.search}%'
+        or org.title ->> 'en' ilike '%${params.search}%'
+        or org.title ->> 'uz' ilike '%${params.search}%'
+        )`);
+    }
+
+    if (limit) {
+      query.limit(limit);
+      if (offset) {
+        query.offset(offset);
+      }
+    }
+
+    return query;
+  }
+
+  getAllOrganizersClient(params: PaginationParams, lang: ILanguage) {
+    const knex = this.knex;
+    const { offset = 0, limit = 10 } = params;
+    const query = knex
+      .select([
+        'org.*',
+        knex.raw(`org.title -> '${lang}' as title`),
+        knex.raw(`org.description -> '${lang}' as description`),
         knex.raw('count(org.id) over() as total'),
         knex.raw(
           `jsonb_agg(
