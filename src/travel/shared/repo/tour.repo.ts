@@ -49,6 +49,7 @@ export class TourRepo extends BaseRepo<TourEntity> {
         knex.raw(`tour.title -> '${lang}' as title`),
         knex.raw(`tour.description -> '${lang}' as description`),
         knex.raw(`org.title -> '${lang}' as organizer_title`),
+        knex.raw(`org.phone as organizer_phone`),
         knex.raw(
           `(select url from files as f where f.depend = 'organizer' and dependent_id = org.id limit 1) as organizer_logo`,
         ),

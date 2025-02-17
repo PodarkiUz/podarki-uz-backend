@@ -8,12 +8,13 @@ import {
   IsEnum,
   Min,
   ValidateNested,
+  IsArray,
 } from 'class-validator';
 import {
   ITourCreateParam,
   ITourSeachByName,
 } from '../interface/tour.interface';
-import { LanguageDto } from 'src/travel/shared/dtos';
+import { FileDto, LanguageDto } from 'src/travel/shared/dtos';
 import { Type } from 'class-transformer';
 import { OrganizerStatus } from 'src/travel/shared/enums';
 
@@ -73,6 +74,13 @@ export class CreateTourDto implements ITourCreateParam {
   @IsNumber()
   @IsNotEmpty()
   seats: number;
+
+  @ApiPropertyOptional({ type: [FileDto] })
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => FileDto)
+  files?: FileDto[];
 }
 
 export class UpdateTourDto extends PartialType(CreateTourDto) {

@@ -32,6 +32,7 @@ export class TourService {
         sale_price: params?.sale_price > 0 ? params.sale_price : null,
         seats: params.seats,
         start_date: params.start_date,
+        end_date: params.end_date,
         duration: params?.duration,
       });
 
