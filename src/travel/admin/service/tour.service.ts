@@ -68,15 +68,15 @@ export class TourService {
     return this.repo.knex.transaction(async (trc) => {
       const data: Record<string, any> = {
         ...(params?.title && { title: params.title }),
-        ...(params?.description && { first_name: params.description }),
-        ...(params?.duration && { last_name: params.duration }),
-        ...(params?.start_date && { last_name: params.start_date }),
-        ...(params?.end_date && { last_name: params.end_date }),
-        ...(params?.location && { last_name: params.location }),
-        ...(params?.organizer_id && { last_name: params.organizer_id }),
-        ...(params?.price && { last_name: params.price }),
-        ...(params?.sale_price && { last_name: params.sale_price }),
-        ...(params?.seats && { last_name: params.seats }),
+        ...(params?.description && { description: params.description }),
+        ...(params?.duration && { duration: params.duration }),
+        ...(params?.start_date && { start_date: params.start_date }),
+        ...(params?.end_date && { end_date: params.end_date }),
+        ...(params?.location && { location: params.location }),
+        ...(params?.organizer_id && { organizer_id: params.organizer_id }),
+        ...(params?.price && { price: params.price }),
+        ...(params?.sale_price && { sale_price: params.sale_price }),
+        ...(params?.seats && { seats: params.seats }),
       };
 
       if (!isEmpty(data)) {
@@ -135,7 +135,7 @@ export class TourService {
   }
 
   async getOne(id: string) {
-    const data = await this.repo.getById(id);
+    const data = await this.repo.getTourByIdAdmin(id);
     return data;
   }
 }

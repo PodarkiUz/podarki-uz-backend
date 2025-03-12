@@ -38,6 +38,7 @@ export class TourRepo extends BaseRepo<TourEntity> {
     }
     return query;
   }
+
   getAllToursClient(params: IGetTourListClient, lang: ILanguage) {
     const knex = this.knex;
     const { offset = 0, limit = 10 } = params;
@@ -209,6 +210,35 @@ export class TourRepo extends BaseRepo<TourEntity> {
         query.offset(offset);
       }
     }
+
+    return query;
+  }
+
+  getTourByIdAdmin(id: string) {
+    const knex = this.knex;
+
+    const query = knex
+      .select([
+        'tour.*',
+        knex.raw(
+          `jsonb_agg(
+              jsonb_build_object(
+                'url', file.url,
+                'type', file.type
+              )
+            ) FILTER (WHERE file.id is not null) AS files`,
+        ),
+      ])
+      .from(`${this.tableName} as tour`)
+      .leftJoin('files as file', function () {
+        this.on('file.dependent_id', 'tour.id').andOn(
+          knex.raw('file.depend = ?', FileDependentType.tour),
+        );
+      })
+      .where('tour.is_deleted', false)
+      .where('tour.id', id)
+      .groupBy(['tour.id'])
+      .first();
 
     return query;
   }
