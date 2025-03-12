@@ -1,4 +1,4 @@
-import { FileDto } from 'src/travel/shared/dtos';
+import { FileDto, RouteDto } from 'src/travel/shared/dtos';
 import { OrganizerStatus } from 'src/travel/shared/enums';
 import { ILanguage } from 'src/travel/shared/interfaces';
 
@@ -12,9 +12,9 @@ export interface ITourCreateParam {
   duration?: string;
   start_date: string;
   end_date: string;
-  organizer_id: string;
   seats: number;
   files?: FileDto[];
+  route?: RouteDto[];
 }
 
 export interface ITourUpdateParam {
