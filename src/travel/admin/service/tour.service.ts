@@ -11,6 +11,8 @@ import { FileDependentType, OrganizerStatus } from 'src/travel/shared/enums';
 import { isEmpty } from 'lodash';
 import { compareArrays } from 'src/travel/shared/utils';
 import { FilesRepo } from 'src/travel/shared/repo/files.repo';
+import { ICurrentOrganizer } from '@shared/interfaces/current-user';
+import { RouteDto } from 'src/travel/shared/dtos';
 
 @Injectable()
 export class TourService {
@@ -20,13 +22,13 @@ export class TourService {
     private readonly filesRepo: FilesRepo,
   ) {}
 
-  async create(params: ITourCreateParam) {
+  async create(params: ITourCreateParam, organizer: ICurrentOrganizer) {
     return this.repo.knex.transaction(async (trc) => {
       const tour = await this.repo.insert({
         title: params?.title,
         description: params?.description,
         location: params.location,
-        organizer_id: params.organizer_id,
+        organizer_id: organizer.id,
         price: params.price,
         status: OrganizerStatus.New,
         sale_price: params?.sale_price > 0 ? params.sale_price : null,
@@ -34,6 +36,9 @@ export class TourService {
         start_date: params.start_date,
         end_date: params.end_date,
         duration: params?.duration,
+        route_json: !isEmpty(params?.route)
+          ? (JSON.stringify(params.route) as unknown as RouteDto[])
+          : null,
       });
 
       if (!isEmpty(params?.files)) {

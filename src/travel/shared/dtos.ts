@@ -30,6 +30,17 @@ export class FileDto {
   size: number;
 }
 
+export class RouteDto {
+  @ApiProperty()
+  @IsString()
+  title: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  @IsOptional()
+  description?: string;
+}
+
 export class LanguageDto {
   @ApiPropertyOptional()
   @IsString()

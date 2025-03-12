@@ -14,7 +14,7 @@ import {
   ITourCreateParam,
   ITourSeachByName,
 } from '../interface/tour.interface';
-import { FileDto, LanguageDto } from 'src/travel/shared/dtos';
+import { FileDto, LanguageDto, RouteDto } from 'src/travel/shared/dtos';
 import { Type } from 'class-transformer';
 import { OrganizerStatus } from 'src/travel/shared/enums';
 
@@ -66,11 +66,6 @@ export class CreateTourDto implements ITourCreateParam {
   end_date: string;
 
   @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  organizer_id: string;
-
-  @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
   seats: number;
@@ -81,6 +76,13 @@ export class CreateTourDto implements ITourCreateParam {
   @ValidateNested({ each: true })
   @Type(() => FileDto)
   files?: FileDto[];
+
+  @ApiPropertyOptional({ type: [RouteDto] })
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => RouteDto)
+  route?: RouteDto[];
 }
 
 export class UpdateTourDto extends PartialType(CreateTourDto) {

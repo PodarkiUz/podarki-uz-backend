@@ -8,17 +8,22 @@ import {
 } from '../dto/tour.dto';
 import { OneByIdDto, PaginationDto } from 'src/travel/shared/dtos';
 import { AuthorizationJwtGuard } from 'src/travel/core/auth/guards/authorization.jwt.guard';
+import { CurrentUser } from '@shared/decorator/current-user.decorator';
+import { ICurrentOrganizer } from '@shared/interfaces/current-user';
 
 @ApiTags('ADMIN -> TOUR')
 @ApiBearerAuth('authorization')
 @UseGuards(AuthorizationJwtGuard)
 @Controller('admin/tour')
 export class TourController {
-  constructor(private readonly service: TourService) { }
+  constructor(private readonly service: TourService) {}
 
   @Post('create')
-  create(@Body() body: CreateTourDto) {
-    return this.service.create(body);
+  create(
+    @Body() body: CreateTourDto,
+    @CurrentUser() organizer: ICurrentOrganizer,
+  ) {
+    return this.service.create(body, organizer);
   }
 
   @Post('delete')
