@@ -71,7 +71,6 @@ export class PaginationDto implements PaginationParams {
   @ApiPropertyOptional()
   @IsString()
   @IsOptional()
-  @IsNotEmpty()
   search?: string;
 
   @ApiPropertyOptional()

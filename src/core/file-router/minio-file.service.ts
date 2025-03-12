@@ -18,7 +18,7 @@ export class MinioService {
       accessKey: 'minio-storage',
       secretKey: 'a3KfbndX0yoBWA6t',
     });
-    this.bucketName = 'files';
+    this.bucketName = 'travelapp';
   }
 
   async createBucketIfNotExists(bucketName: string) {
