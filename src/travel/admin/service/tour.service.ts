@@ -77,6 +77,9 @@ export class TourService {
         ...(params?.price && { price: params.price }),
         ...(params?.sale_price && { sale_price: params.sale_price }),
         ...(params?.seats && { seats: params.seats }),
+        ...(!isEmpty(params?.route) && {
+          route_json: JSON.stringify(params.route) as unknown as RouteDto[],
+        }),
       };
 
       if (!isEmpty(data)) {

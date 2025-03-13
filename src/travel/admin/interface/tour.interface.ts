@@ -30,6 +30,7 @@ export interface ITourUpdateParam {
   organizer_id?: string;
   seats?: number;
   files?: FileDto[];
+  route?: RouteDto[];
 }
 
 export interface ITourSeachByName {
