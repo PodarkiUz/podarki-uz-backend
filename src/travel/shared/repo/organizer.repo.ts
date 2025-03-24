@@ -123,30 +123,34 @@ export class OrganizerRepo extends BaseRepo<OrganizerEntity> {
     return query;
   }
 
-  getShopForJwtPayloadById(
-    owner_user_id: string,
-  ): Promise<IShopUserInfoForJwtPayload> {
+  getOrganizerByIdAdmin(id: string) {
     const knex = this.knex;
-    const shop = knex
+
+    const query = knex
       .select([
-        'shop.id as shop_id',
-        'shop.owner_user_id',
-        'user.phone as user_phone',
-        'shop.name as shop_name',
-        'user.first_name as user_first_name',
-        'user.last_name as user_last_name',
-        'shop.status as shop_status',
+        'o.*',
+        knex.raw(
+          `jsonb_agg(
+              jsonb_build_object(
+                'url', file.url,
+								'size', file.size,
+								'name', file.name,
+                'type', file.type
+              )
+            ) FILTER (WHERE file.id is not null) AS files`,
+        ),
       ])
-      .from(`${this.tableName} as shop`)
-      .join('users as user', function () {
-        this.on('shop.owner_user_id', 'user.id').andOn(
-          knex.raw('"user".is_deleted = false'),
+      .from(`${this.tableName} as o`)
+      .leftJoin('files as file', function () {
+        this.on('file.dependent_id', 'o.id').andOn(
+          knex.raw('file.depend = ?', FileDependentType.organizer),
         );
       })
-      .where('shop.owner_user_id', owner_user_id)
-      .where('shop.is_deleted', false)
+      .where('o.is_deleted', false)
+      .where('o.id', id)
+      .groupBy(['o.id'])
       .first();
 
-    return shop;
+    return query;
   }
 }

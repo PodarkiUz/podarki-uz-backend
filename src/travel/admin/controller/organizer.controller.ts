@@ -4,6 +4,8 @@ import { OrganizerService } from '../service/organizer.service';
 import { CreateOrganizerDto, UpdateOrganizerDto } from '../dto/organizer.dto';
 import { OneByIdDto, PaginationDto } from 'src/travel/shared/dtos';
 import { AuthorizationJwtGuard } from 'src/travel/core/auth/guards/authorization.jwt.guard';
+import { CurrentUser } from '@shared/decorator/current-user.decorator';
+import { ICurrentOrganizer } from '@shared/interfaces/current-user';
 
 @ApiTags('ADMIN -> ORGANIZER')
 @ApiBearerAuth('authorization')
@@ -35,5 +37,10 @@ export class OrganizerController {
   @Post('get-by-id')
   getOne(@Body() params: OneByIdDto) {
     return this.service.getOne(params.id);
+  }
+
+  @Post('me')
+  me(@CurrentUser() organizer: ICurrentOrganizer) {
+    return this.service.me(organizer.id);
   }
 }
