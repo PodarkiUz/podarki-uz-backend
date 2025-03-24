@@ -31,7 +31,7 @@ export class TourService {
   }
 
   async getOne(id: string) {
-    const data = await this.repo.getById(id);
+    const data = await this.repo.getTourByIdClient(id);
     return data;
   }
 }

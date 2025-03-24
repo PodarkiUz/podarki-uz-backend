@@ -52,9 +52,9 @@ export class OrganizerService {
   async update(id: string, params: IOrganizerUpdateParam) {
     return this.repo.knex.transaction(async (trc) => {
       const data: Record<string, any> = {
-        ...(params?.title && { birth_date: params.title }),
-        ...(params?.description && { first_name: params.description }),
-        ...(params?.phone && { last_name: params.phone }),
+        ...(params?.title && { title: params.title }),
+        ...(params?.description && { description: params.description }),
+        ...(params?.phone && { phone: params.phone }),
       };
 
       if (!isEmpty(data)) {
@@ -76,7 +76,7 @@ export class OrganizerService {
             itemsToRemove.map((i) => i['id']),
           );
         }
-
+				
         if (!isEmpty(itemsToAdd)) {
           await this.filesRepo.bulkInsertWithTransaction(
             trc,
@@ -104,6 +104,11 @@ export class OrganizerService {
 
   async getOne(id: string) {
     const data = await this.repo.getById(id);
+    return data;
+  }
+
+  async me(id: string) {
+    const data = await this.repo.getOrganizerByIdAdmin(id);
     return data;
   }
 }
