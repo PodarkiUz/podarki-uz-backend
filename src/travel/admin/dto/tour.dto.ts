@@ -77,12 +77,14 @@ export class CreateTourDto implements ITourCreateParam {
   @Type(() => FileDto)
   files?: FileDto[];
 
-  @ApiPropertyOptional({ type: [RouteDto] })
+	@ApiPropertyOptional(
+		// { type: [RouteDto] }
+	)
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => RouteDto)
-  route?: RouteDto[];
+  // @Type(() => RouteDto)
+  route_json?: any[];
 }
 
 export class UpdateTourDto extends PartialType(CreateTourDto) {

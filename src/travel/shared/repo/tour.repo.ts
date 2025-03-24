@@ -133,6 +133,7 @@ export class TourRepo extends BaseRepo<TourEntity> {
         'tour.price',
         'tour.sale_price',
         'tour.title',
+        'tour.route_json',
         'tour.duration',
         'tour.start_date',
         'tour.end_date',
@@ -210,6 +211,35 @@ export class TourRepo extends BaseRepo<TourEntity> {
         query.offset(offset);
       }
     }
+
+    return query;
+  }
+
+  getTourByIdClient(id: string) {
+    const knex = this.knex;
+
+    const query = knex
+      .select([
+        'tour.*',
+        knex.raw(
+          `jsonb_agg(
+              jsonb_build_object(
+                'url', file.url,
+                'type', file.type
+              )
+            ) FILTER (WHERE file.id is not null) AS files`,
+        ),
+      ])
+      .from(`${this.tableName} as tour`)
+      .leftJoin('files as file', function () {
+        this.on('file.dependent_id', 'tour.id').andOn(
+          knex.raw('file.depend = ?', FileDependentType.tour),
+        );
+      })
+      .where('tour.is_deleted', false)
+      .where('tour.id', id)
+      .groupBy(['tour.id'])
+      .first();
 
     return query;
   }
