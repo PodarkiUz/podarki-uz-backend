@@ -12,11 +12,11 @@ export class MinioService {
 
   constructor(private readonly configService: ConfigService) {
     this.minioClient = new Minio.Client({
-      endPoint: '37.60.231.13',
+      endPoint: '116.202.26.85',
       port: 9000,
       useSSL: false,
-      accessKey: 'minio-storage',
-      secretKey: 'a3KfbndX0yoBWA6t',
+      accessKey: 'myroot',
+      secretKey: 'faDEnTityPtontHemA',
     });
     this.bucketName = 'travelapp';
   }
@@ -64,7 +64,7 @@ export class MinioService {
     );
 
     return {
-      url: `http://37.60.231.13:9000/travelapp/${fileName}`,
+      url: `http://116.202.26.85:9000/travelapp/${fileName}`,
       name: fileName,
       size: file.size,
     };
