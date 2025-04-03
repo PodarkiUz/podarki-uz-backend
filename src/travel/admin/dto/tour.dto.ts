@@ -6,7 +6,6 @@ import {
   IsNumber,
   IsISO8601,
   IsEnum,
-  Min,
   ValidateNested,
   IsArray,
 	IsNumberString,
@@ -42,13 +41,12 @@ export class CreateTourDto implements ITourCreateParam {
   @ApiProperty()
   @IsNumberString()
   @IsNotEmpty()
-  @Min(1)
   price: number;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsNumber()
-  @IsNotEmpty()
-  @Min(1)
+	@IsNotEmpty()
+	@IsOptional()
   sale_price?: number;
 
   @ApiPropertyOptional()
