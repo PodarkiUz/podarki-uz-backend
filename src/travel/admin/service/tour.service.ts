@@ -31,7 +31,7 @@ export class TourService {
         organizer_id: organizer.id,
         price: +params.price,
         status: OrganizerStatus.New,
-        sale_price: params?.sale_price > 0 ? params.sale_price : null,
+        sale_price: +params?.sale_price > 0 ? +params.sale_price : null,
         seats: params.seats,
         start_date: params.start_date,
         end_date: params.end_date,
@@ -74,8 +74,8 @@ export class TourService {
         ...(params?.end_date && { end_date: params.end_date }),
         ...(params?.location && { location: params.location }),
         ...(params?.organizer_id && { organizer_id: params.organizer_id }),
-        ...(params?.price && { price: params.price }),
-        ...(params?.sale_price && { sale_price: params.sale_price }),
+        ...(params?.price && { price: +params.price }),
+        ...(params?.sale_price && { sale_price: +params.sale_price }),
         ...(params?.seats && { seats: params.seats }),
         ...(!isEmpty(params?.route_json) && {
           route_json: JSON.stringify(
