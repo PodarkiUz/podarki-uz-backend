@@ -44,9 +44,9 @@ export class CreateTourDto implements ITourCreateParam {
   price: number;
 
   @ApiPropertyOptional()
-  @IsNumber()
-	@IsNotEmpty()
-	@IsOptional()
+  @IsNumberString()
+  @IsNotEmpty()
+  @IsOptional()
   sale_price?: number;
 
   @ApiPropertyOptional()
@@ -76,9 +76,8 @@ export class CreateTourDto implements ITourCreateParam {
   @Type(() => FileDto)
   files?: FileDto[];
 
-	@ApiPropertyOptional(
-		// { type: [RouteDto] }
-	)
+  @ApiPropertyOptional()
+  // { type: [RouteDto] }
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
