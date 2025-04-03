@@ -9,6 +9,7 @@ import {
   Min,
   ValidateNested,
   IsArray,
+	IsNumberString,
 } from 'class-validator';
 import {
   ITourCreateParam,
@@ -39,7 +40,7 @@ export class CreateTourDto implements ITourCreateParam {
   location: number;
 
   @ApiProperty()
-  @IsNumber()
+  @IsNumberString()
   @IsNotEmpty()
   @Min(1)
   price: number;

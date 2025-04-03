@@ -29,7 +29,7 @@ export class TourService {
         description: params?.description,
         location: params.location,
         organizer_id: organizer.id,
-        price: params.price,
+        price: +params.price,
         status: OrganizerStatus.New,
         sale_price: params?.sale_price > 0 ? params.sale_price : null,
         seats: params.seats,
