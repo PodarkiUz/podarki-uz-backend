@@ -83,6 +83,14 @@ export class CreateTourDto implements ITourCreateParam {
   @ValidateNested({ each: true })
   // @Type(() => RouteDto)
   route_json?: any[];
+
+  @ApiPropertyOptional()
+  // { type: [RouteDto] }
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  // @Type(() => RouteDto)
+  includes?: any[];
 }
 
 export class UpdateTourDto extends PartialType(CreateTourDto) {

@@ -1,4 +1,4 @@
-import { RouteDto } from '../dtos';
+import { IncludesDto, RouteDto } from '../dtos';
 import { FileType, OrganizerStatus } from '../enums';
 import { ILanguage } from '../interfaces';
 
@@ -15,7 +15,8 @@ export interface TourEntity {
   end_date: string;
   organizer_id: string;
   seats: number;
-  route_json?: RouteDto[];
+	route_json?: RouteDto[];
+	includes?: IncludesDto[];
   created_at?: Date;
   is_deleted?: boolean;
 }

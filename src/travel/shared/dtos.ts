@@ -7,6 +7,7 @@ import {
   IsArray,
   IsNotEmpty,
   IsNumberString,
+	IsBoolean,
 } from 'class-validator';
 import { FileType, StatusEnum } from './enums';
 import { PaginationParams } from './interfaces';
@@ -39,6 +40,17 @@ export class RouteDto {
   @IsString()
   @IsOptional()
   description?: string;
+}
+
+
+export class IncludesDto {
+  @ApiProperty()
+  @IsString()
+  title: string;
+
+  @ApiProperty()
+  @IsBoolean()
+  include: boolean;
 }
 
 export class LanguageDto {
