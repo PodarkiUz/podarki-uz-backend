@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
+import { ICurrentOrganizer } from '@shared/interfaces/current-user';
+import { isEmpty } from 'lodash';
+import { IncludesDto, RouteDto } from 'src/travel/shared/dtos';
+import { FileDependentType, OrganizerStatus } from 'src/travel/shared/enums';
+import { PaginationParams } from 'src/travel/shared/interfaces';
+import { FilesRepo } from 'src/travel/shared/repo/files.repo';
+import { TourRepo } from 'src/travel/shared/repo/tour.repo';
+import { compareArrays } from 'src/travel/shared/utils';
+import { CityRepo } from '../../shared/repo/cities.repo';
 import {
   ITourCreateParam,
   ITourSeachByName,
   ITourUpdateParam,
 } from '../interface/tour.interface';
-import { CityRepo } from '../../shared/repo/cities.repo';
-import { TourRepo } from 'src/travel/shared/repo/tour.repo';
-import { PaginationParams } from 'src/travel/shared/interfaces';
-import { FileDependentType, OrganizerStatus } from 'src/travel/shared/enums';
-import { isEmpty } from 'lodash';
-import { compareArrays } from 'src/travel/shared/utils';
-import { FilesRepo } from 'src/travel/shared/repo/files.repo';
-import { ICurrentOrganizer } from '@shared/interfaces/current-user';
-import { RouteDto } from 'src/travel/shared/dtos';
 
 @Injectable()
 export class TourService {
@@ -38,6 +38,9 @@ export class TourService {
         duration: params?.duration,
         route_json: !isEmpty(params?.route)
           ? (JSON.stringify(params.route) as unknown as RouteDto[])
+          : null,
+        includes: !isEmpty(params?.includes)
+          ? (JSON.stringify(params.includes) as unknown as IncludesDto[])
           : null,
       });
 
@@ -81,6 +84,9 @@ export class TourService {
           route_json: JSON.stringify(
             params.route_json,
           ) as unknown as RouteDto[],
+        }),
+        ...(!isEmpty(params?.includes) && {
+          includes: JSON.stringify(params.includes) as unknown as IncludesDto[],
         }),
       };
 

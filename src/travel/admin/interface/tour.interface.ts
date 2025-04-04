@@ -1,4 +1,4 @@
-import { FileDto, RouteDto } from 'src/travel/shared/dtos';
+import { FileDto, IncludesDto, RouteDto } from 'src/travel/shared/dtos';
 import { OrganizerStatus } from 'src/travel/shared/enums';
 import { ILanguage } from 'src/travel/shared/interfaces';
 
@@ -15,6 +15,7 @@ export interface ITourCreateParam {
   seats: number;
   files?: FileDto[];
   route?: RouteDto[];
+  includes?: IncludesDto[];
 }
 
 export interface ITourUpdateParam {
@@ -31,6 +32,7 @@ export interface ITourUpdateParam {
   seats?: number;
   files?: FileDto[];
   route_json?: RouteDto[];
+  includes?: IncludesDto[];
 }
 
 export interface ITourSeachByName {
