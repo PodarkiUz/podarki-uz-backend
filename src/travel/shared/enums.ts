@@ -8,6 +8,7 @@ export enum FileType {
 export enum FileDependentType {
   organizer = 'organizer',
   tour = 'tour',
+  destination = 'destination',
 }
 
 export enum StatusEnum {

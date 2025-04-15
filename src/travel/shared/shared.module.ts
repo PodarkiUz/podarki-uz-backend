@@ -4,8 +4,9 @@ import { TourRepo } from './repo/tour.repo';
 import { OrganizerRepo } from './repo/organizer.repo';
 import { FilesRepo } from './repo/files.repo';
 import { CityRepo } from './repo/cities.repo';
+import { DestinationRepo } from './repo/destination.repo';
 
-const repos = [TourRepo, OrganizerRepo, FilesRepo, CityRepo];
+const repos = [TourRepo, OrganizerRepo, FilesRepo, CityRepo, DestinationRepo];
 
 const modules = [
   HttpModule.register({
