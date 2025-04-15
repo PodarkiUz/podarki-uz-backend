@@ -8,10 +8,13 @@ import { TourController } from './controller/tour.controller';
 import { TourService } from './service/tour.service';
 import { TourRepo } from '../shared/repo/tour.repo';
 import { CityRepo } from '../shared/repo/cities.repo';
+import { DestinationController } from './controller/destination.controller';
+import { DestinationService } from './service/destination.service';
+import { DestinationRepo } from '../shared/repo/destination.repo';
 
 @Module({
   imports: [AuthModule],
-  controllers: [OrganizerController, TourController],
+  controllers: [OrganizerController, TourController, DestinationController],
   providers: [
     OrganizerService,
     OrganizerRepo,
@@ -19,6 +22,8 @@ import { CityRepo } from '../shared/repo/cities.repo';
     TourService,
     TourRepo,
     CityRepo,
+    DestinationService,
+    DestinationRepo,
   ],
 })
 export class AdminModule {}
