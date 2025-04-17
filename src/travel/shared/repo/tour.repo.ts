@@ -84,12 +84,7 @@ export class TourRepo extends BaseRepo<TourEntity> {
       .groupBy(['tour.id', 'org.id']);
 
     if (params?.search) {
-      query.whereRaw(`make_multilingual_tsvector(tour.title) @@ 
-        (
-          plainto_tsquery('english', '${params.search}') ||
-          plainto_tsquery('russian', '${params.search}') ||
-          plainto_tsquery('simple', '${params.search}')
-        )`);
+      query.whereRaw(`tour.title->>'${lang}' ILIKE ?`, [`%${params.search}%`]);
     }
 
     if (params?.from_date) {

@@ -26,7 +26,7 @@ export class DestinationRepo extends BaseRepo<any> {
       .join('cities as c', 'c.id', '=', 'd.location')
       .where('d.is_deleted', false);
 
-    if (params.search) {
+    if (params?.search) {
       query.whereRaw(`d.title->>'${lang}' ILIKE ?`, [`%${params.search}%`]);
     }
 
