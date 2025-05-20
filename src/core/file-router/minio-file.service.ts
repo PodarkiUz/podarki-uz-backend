@@ -64,7 +64,7 @@ export class MinioService {
     );
 
     return {
-      url: `http://116.202.26.85:9000/travelapp/${fileName}`,
+      url: `https://console-z4488o8g0g4s4wcssww8g8s0.116.202.26.85.sslip.io/travelapp/${fileName}`,
       name: fileName,
       size: file.size,
     };
