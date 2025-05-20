@@ -12,11 +12,11 @@ export class MinioService {
 
   constructor(private readonly configService: ConfigService) {
     this.minioClient = new Minio.Client({
-      endPoint: '116.202.26.85',
-      port: 9000,
-      useSSL: false,
-      accessKey: 'myroot',
-      secretKey: 'faDEnTityPtontHemA',
+      endPoint: 'minio-z4488o8g0g4s4wcssww8g8s0.116.202.26.85.sslip.io',
+      port: 443,
+      useSSL: true,
+      accessKey: 'jYvCoxpI2W0RQkqk',
+      secretKey: 'SkgePM6vmKJ65JUpLTNJQ0O2pLN6vTSl',
     });
     this.bucketName = 'travelapp';
   }
@@ -64,7 +64,7 @@ export class MinioService {
     );
 
     return {
-      url: `https://console-z4488o8g0g4s4wcssww8g8s0.116.202.26.85.sslip.io/travelapp/${fileName}`,
+      url: `https://minio-z4488o8g0g4s4wcssww8g8s0.116.202.26.85.sslip.io/travelapp/${fileName}`,
       name: fileName,
       size: file.size,
     };
