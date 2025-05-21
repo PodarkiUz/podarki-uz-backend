@@ -27,6 +27,12 @@ export interface CityEntity {
   country?: ILanguage;
 }
 
+export interface LocationEntity {
+  id?: string;
+  title: ILanguage;
+  city_id: string;
+}
+
 export interface OrganizerEntity {
   id?: string;
   title: ILanguage;
