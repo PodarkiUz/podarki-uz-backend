@@ -83,7 +83,7 @@ export class CreateTourDto implements ITourCreateParam {
   @Type(() => RouteDto)
   route_json?: RouteDto[];
 
-  @ApiPropertyOptional({ type: IncludesDto })
+  @ApiPropertyOptional({ type: [IncludesDto] })
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
