@@ -25,6 +25,11 @@ export class TourController {
     return this.service.getCitiesList(body);
   }
 
+  @Post('locations-list')
+  locationsList(@Body() body: PaginationDto) {
+    return this.service.getLocationsList(body);
+  }
+
   @Post('search')
   searchByTour(@Body() params: SearchTourByNameDto) {
     return this.service.searchTour(params);
