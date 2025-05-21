@@ -8,10 +8,11 @@ import {
   IsNotEmpty,
   IsNumberString,
 	IsBoolean,
+	ValidateNested,
 } from 'class-validator';
 import { FileType, StatusEnum } from './enums';
 import { PaginationParams } from './interfaces';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 
 export class FileDto {
   @ApiProperty({ enum: FileType })
@@ -42,17 +43,6 @@ export class RouteDto {
   description?: string;
 }
 
-
-export class IncludesDto {
-  @ApiProperty()
-  @IsString()
-  title: string;
-
-  @ApiProperty()
-  @IsBoolean()
-  included: boolean;
-}
-
 export class LanguageDto {
   @ApiPropertyOptional()
   @IsString()
@@ -67,6 +57,16 @@ export class LanguageDto {
   @IsString()
   @IsOptional()
   ru?: string;
+}
+export class IncludesDto {
+  @ApiProperty({ type: LanguageDto })
+  @ValidateNested({ each: true })
+  @Type(() => LanguageDto)
+  title: LanguageDto;
+
+  @ApiProperty()
+  @IsBoolean()
+  included: boolean;
 }
 
 export class PaginationDto implements PaginationParams {
