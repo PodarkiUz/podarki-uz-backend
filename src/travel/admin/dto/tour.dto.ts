@@ -14,7 +14,7 @@ import {
   ITourCreateParam,
   ITourSeachByName,
 } from '../interface/tour.interface';
-import { FileDto, LanguageDto, RouteDto } from 'src/travel/shared/dtos';
+import { FileDto, IncludesDto, LanguageDto, RouteDto } from 'src/travel/shared/dtos';
 import { Type } from 'class-transformer';
 import { OrganizerStatus } from 'src/travel/shared/enums';
 
@@ -81,14 +81,14 @@ export class CreateTourDto implements ITourCreateParam {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => RouteDto)
-  route_json?: any[];
+  route_json?: RouteDto[];
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ type: IncludesDto })
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  // @Type(() => RouteDto)
-  includes?: any[];
+  @Type(() => IncludesDto)
+  includes?: IncludesDto[];
 }
 
 export class UpdateTourDto extends PartialType(CreateTourDto) {
