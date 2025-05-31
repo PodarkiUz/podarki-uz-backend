@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from '../providers/auth.service';
-import { IShopUserInfoForJwtPayload } from '@domain/shop/interface/shop.interface';
 
 @Injectable()
 export class AuthorizationJwtShopGuard implements CanActivate {
@@ -28,7 +27,7 @@ export class AuthorizationJwtShopGuard implements CanActivate {
       authToken = authToken.substring(7);
     }
 
-    let decodedToken: IShopUserInfoForJwtPayload;
+    let decodedToken;
     try {
       // check for valid JWT Token
       decodedToken = await this.jwtService.verifyAsync(authToken, {

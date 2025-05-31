@@ -1,4 +1,3 @@
-import { ErrorResponseDto, LoginResponseDto } from '@auth/swagger';
 import { Body, Controller, Inject, Ip, Post } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -22,16 +21,6 @@ export class AuthController {
   @ApiBody({
     type: RefreshTokenDto,
   })
-  @ApiResponse({
-    status: 200,
-    description: 'Example response',
-    type: () => LoginResponseDto, // Define your DTO (Data Transfer Object) for the response
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Example error response',
-    type: () => ErrorResponseDto, // Define your DTO (Data Transfer Object) for the response
-  })
   @Post('refreshToken')
   async refresh(@CurrentUser() user, @Body() body: RefreshTokenDto) {
     return await this.authService.refreshToken(body.refreshToken);
@@ -39,16 +28,6 @@ export class AuthController {
 
   @ApiBody({
     type: ClientAuthorizeDto,
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Example response',
-    type: () => LoginResponseDto, // Define your DTO (Data Transfer Object) for the response
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Example error response',
-    type: () => ErrorResponseDto, // Define your DTO (Data Transfer Object) for the response
   })
   @Post('client/login')
   async clientLogin(@Ip() ip: string, @Body() body: ClientAuthorizeDto) {
@@ -59,16 +38,6 @@ export class AuthController {
   @ApiBody({
     type: ClientConfirmOTPDto,
   })
-  @ApiResponse({
-    status: 200,
-    description: 'Example response',
-    type: () => LoginResponseDto, // Define your DTO (Data Transfer Object) for the response
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Example error response',
-    type: () => ErrorResponseDto, // Define your DTO (Data Transfer Object) for the response
-  })
   @Post('client/confirm-otp')
   async confirmOtp(@Body() body: ClientConfirmOTPDto) {
     // throw Error();
@@ -77,16 +46,6 @@ export class AuthController {
 
   @ApiBody({
     type: AuthorizeDto,
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Example response',
-    type: () => LoginResponseDto, // Define your DTO (Data Transfer Object) for the response
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Example error response',
-    type: () => ErrorResponseDto, // Define your DTO (Data Transfer Object) for the response
   })
   @Post('admin/login')
   async shopLogin(@Ip() ip: string, @Body() body: AuthorizeDto) {

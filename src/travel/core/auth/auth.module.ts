@@ -6,7 +6,6 @@ import { AuthService } from './providers/auth.service';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { SharedModule } from '@shared/shared.module';
 import { Module } from '@nestjs/common';
-import { ShopRepo } from '@domain/shop/repo/shop.repo';
 import { OrganizerRepo } from 'src/travel/shared/repo/organizer.repo';
 
 @Module({
@@ -26,7 +25,6 @@ import { OrganizerRepo } from 'src/travel/shared/repo/organizer.repo';
     AuthUserDao,
     AuthorizationJwtGuard,
     AuthUserRepo,
-    ShopRepo,
     OrganizerRepo,
   ],
   exports: [

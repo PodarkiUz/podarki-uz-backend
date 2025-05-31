@@ -1,4 +1,4 @@
-import { IAuthGetUserInfo } from '@core/auth/interface/user.interface';
+import { IAuthGetUserInfo } from 'src/travel/core/auth/interface/user.interface';
 import { Role } from 'src/travel/core/auth/role.enum';
 import { ILanguage } from 'src/travel/shared/interfaces';
 
