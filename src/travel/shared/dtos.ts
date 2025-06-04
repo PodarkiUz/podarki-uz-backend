@@ -6,9 +6,8 @@ import {
   IsOptional,
   IsArray,
   IsNotEmpty,
-  IsNumberString,
-	IsBoolean,
-	ValidateNested,
+  IsBoolean,
+  ValidateNested,
 } from 'class-validator';
 import { FileType, StatusEnum } from './enums';
 import { PaginationParams } from './interfaces';
