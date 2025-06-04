@@ -60,11 +60,6 @@ export class CreateTourDto implements ITourCreateParam {
   start_date: string;
 
   @ApiProperty()
-  @IsString()
-  @IsISO8601()
-  end_date: string;
-
-  @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
   seats: number;

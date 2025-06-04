@@ -12,7 +12,6 @@ export interface TourEntity {
   sale_price?: number;
   duration?: string;
   start_date: string;
-  end_date: string;
   organizer_id: string;
   seats: number;
 	route_json?: RouteDto[];

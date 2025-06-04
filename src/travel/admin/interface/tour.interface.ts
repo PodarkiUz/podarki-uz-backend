@@ -11,7 +11,6 @@ export interface ITourCreateParam {
   sale_price?: number;
   duration?: string;
   start_date: string;
-  end_date: string;
   seats: number;
   files?: FileDto[];
   route?: RouteDto[];
@@ -27,7 +26,6 @@ export interface ITourUpdateParam {
   sale_price?: number;
   duration?: string;
   start_date?: string;
-  end_date?: string;
   organizer_id?: string;
   seats?: number;
   files?: FileDto[];

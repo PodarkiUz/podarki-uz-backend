@@ -91,10 +91,6 @@ export class TourRepo extends BaseRepo<TourEntity> {
       query.where('tour.start_date', '>=', params.from_date);
     }
 
-    if (params?.to_date) {
-      query.where('tour.end_date', '<=', params.to_date);
-    }
-
     if (params?.from_price) {
       query.where('tour.price', '>=', params.from_price);
     }
@@ -131,7 +127,6 @@ export class TourRepo extends BaseRepo<TourEntity> {
         'tour.route_json',
         'tour.duration',
         'tour.start_date',
-        'tour.end_date',
         'tour.seats',
         'tour.rating',
         knex.raw(`jsonb_build_object(
@@ -190,10 +185,6 @@ export class TourRepo extends BaseRepo<TourEntity> {
 
     if (params?.from_date) {
       query.where('tour.start_date', '>=', params.from_date);
-    }
-
-    if (params?.to_date) {
-      query.where('tour.end_date', '<=', params.to_date);
     }
 
     if (params?.seats) {

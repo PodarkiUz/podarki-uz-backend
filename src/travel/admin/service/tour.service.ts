@@ -34,7 +34,6 @@ export class TourService {
         sale_price: +params?.sale_price > 0 ? +params.sale_price : null,
         seats: params.seats,
         start_date: params.start_date,
-        end_date: params.end_date,
         duration: params?.duration,
         route_json: !isEmpty(params?.route)
           ? (JSON.stringify(params.route) as unknown as RouteDto[])
@@ -74,7 +73,6 @@ export class TourService {
         ...(params?.description && { description: params.description }),
         ...(params?.duration && { duration: params.duration }),
         ...(params?.start_date && { start_date: params.start_date }),
-        ...(params?.end_date && { end_date: params.end_date }),
         ...(params?.location && { location: params.location }),
         ...(params?.organizer_id && { organizer_id: params.organizer_id }),
         ...(params?.price && { price: +params.price }),
