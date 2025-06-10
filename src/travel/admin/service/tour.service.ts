@@ -129,7 +129,7 @@ export class TourService {
   }
 
   async getAllList(params: PaginationParams) {
-    const data = await this.repo.getAllTours(params);
+    const data = await this.repo.getAllToursAdmin(params);
     return { data, total: Number(data[0]?.total) || 0 };
   }
 

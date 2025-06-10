@@ -12,22 +12,68 @@ export class TourRepo extends BaseRepo<TourEntity> {
     super('tours');
   }
 
-  getAllTours(params: PaginationParams) {
+  getAllToursAdmin(params: IGetTourListClient) {
     const knex = this.knex;
     const { offset = 0, limit = 10 } = params;
 
     const query = knex
-      .select(['tour.*', knex.raw('count(tour.id) over() as total')])
+      .select([
+        'tour.*',
+        knex.raw('count(tour.id) over() as total'),
+        knex.raw(`tour.title`),
+        knex.raw(`tour.description`),
+        knex.raw(`org.title`),
+        knex.raw(`org.phone`),
+        knex.raw(
+          `(select url from files as f where f.depend = 'organizer' and dependent_id = org.id limit 1) as organizer_logo`,
+        ),
+        knex.raw('count(review.id) as review_count'),
+        knex.raw(
+          `jsonb_agg(
+              jsonb_build_object(
+                'url', file.url,
+                'type', file.type
+              )
+            ) FILTER (WHERE file.id is not null) AS files`,
+        ),
+      ])
       .from(`${this.tableName} as tour`)
-      .where('tour.is_deleted', false);
+      .join('organizers as org', function () {
+        this.on('org.id', 'tour.organizer_id').andOn(
+          knex.raw('org.is_deleted = false'),
+        );
+      })
+      .leftJoin('reviews as review', function () {
+        this.on('tour.id', 'review.tour_id').andOn(
+          knex.raw('review.is_deleted = false'),
+        );
+      })
+      .leftJoin('files as file', function () {
+        this.on('file.dependent_id', 'tour.id').andOn(
+          knex.raw('file.depend = ?', FileDependentType.tour),
+        );
+      })
+      .where('tour.is_deleted', false)
+      .groupBy(['tour.id', 'org.id']);
 
     if (params?.search) {
-      query.whereRaw(`make_multilingual_tsvector(tour.title) @@ 
-        (
-          plainto_tsquery('english', '${params.search}') ||
-          plainto_tsquery('russian', '${params.search}') ||
-          plainto_tsquery('simple', '${params.search}')
-        )`);
+      query.whereRaw(`tour.title->>'${lang}' ILIKE ?`, [`%${params.search}%`]);
+    }
+
+    if (params?.from_date) {
+      query.where('tour.start_date', '>=', params.from_date);
+    }
+
+    if (params?.from_price) {
+      query.where('tour.price', '>=', params.from_price);
+    }
+
+    if (params?.to_price) {
+      query.where('tour.price', '<=', params.to_price);
+    }
+
+    if (params?.location) {
+      query.where('tour.location', params.location);
     }
 
     if (limit) {
@@ -36,6 +82,7 @@ export class TourRepo extends BaseRepo<TourEntity> {
         query.offset(offset);
       }
     }
+
     return query;
   }
 
