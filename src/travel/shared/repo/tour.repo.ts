@@ -56,10 +56,6 @@ export class TourRepo extends BaseRepo<TourEntity> {
       .where('tour.is_deleted', false)
       .groupBy(['tour.id', 'org.id']);
 
-    if (params?.search) {
-      query.whereRaw(`tour.title->>'${lang}' ILIKE ?`, [`%${params.search}%`]);
-    }
-
     if (params?.from_date) {
       query.where('tour.start_date', '>=', params.from_date);
     }
