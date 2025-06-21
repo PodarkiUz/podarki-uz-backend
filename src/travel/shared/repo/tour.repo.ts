@@ -90,7 +90,6 @@ export class TourRepo extends BaseRepo<TourEntity> {
       .select([
         'tour.*',
         knex.raw('count(tour.id) over() as total'),
-        knex.raw(`tour.includes -> '${lang}' as includes`),
         knex.raw(`tour.title -> '${lang}' as title`),
         knex.raw(`tour.description -> '${lang}' as description`),
         knex.raw(`org.title -> '${lang}' as organizer_title`),
