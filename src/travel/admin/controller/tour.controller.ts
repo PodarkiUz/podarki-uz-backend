@@ -10,6 +10,8 @@ import { OneByIdDto, PaginationDto } from 'src/travel/shared/dtos';
 import { AuthorizationJwtGuard } from 'src/travel/core/auth/guards/authorization.jwt.guard';
 import { CurrentUser } from '@shared/decorator/current-user.decorator';
 import { ICurrentOrganizer } from '@shared/interfaces/current-user';
+import { ILanguage } from 'src/travel/shared/interfaces';
+import { Lang } from 'src/travel/shared/decorators';
 
 @ApiTags('ADMIN -> TOUR')
 @ApiBearerAuth('authorization')
@@ -37,8 +39,8 @@ export class TourController {
   }
 
   @Post('list')
-  getAll(@Body() body: PaginationDto) {
-    return this.service.getAllList(body);
+  getAll(@Body() body: PaginationDto, @Lang() lang: ILanguage) {
+    return this.service.getAllList(body, lang);
   }
 
   @Post('cities-list')

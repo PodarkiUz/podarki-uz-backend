@@ -12,7 +12,7 @@ export class TourRepo extends BaseRepo<TourEntity> {
     super('tours');
   }
 
-  getAllToursAdmin(params: IGetTourListClient) {
+  getAllToursAdmin(params: IGetTourListClient, lang: ILanguage) {
     const knex = this.knex;
     const { offset = 0, limit = 10 } = params;
 
@@ -20,13 +20,9 @@ export class TourRepo extends BaseRepo<TourEntity> {
       .select([
         'tour.*',
         knex.raw('count(tour.id) over() as total'),
-        knex.raw(`tour.title`),
+        knex.raw(`tour.title -> '${lang}' as title`),
         knex.raw(`tour.description`),
-        knex.raw(`org.title`),
-        knex.raw(`org.phone`),
-        knex.raw(
-          `(select url from files as f where f.depend = 'organizer' and dependent_id = org.id limit 1) as organizer_logo`,
-        ),
+        knex.raw(`org.title as organizer_title`),
         knex.raw('count(review.id) as review_count'),
         knex.raw(
           `jsonb_agg(

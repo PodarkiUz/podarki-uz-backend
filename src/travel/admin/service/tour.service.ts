@@ -3,7 +3,7 @@ import { ICurrentOrganizer } from '@shared/interfaces/current-user';
 import { isEmpty } from 'lodash';
 import { IncludesDto, RouteDto } from 'src/travel/shared/dtos';
 import { FileDependentType, OrganizerStatus } from 'src/travel/shared/enums';
-import { PaginationParams } from 'src/travel/shared/interfaces';
+import { ILanguage, PaginationParams } from 'src/travel/shared/interfaces';
 import { FilesRepo } from 'src/travel/shared/repo/files.repo';
 import { TourRepo } from 'src/travel/shared/repo/tour.repo';
 import { compareArrays } from 'src/travel/shared/utils';
@@ -128,8 +128,8 @@ export class TourService {
     });
   }
 
-  async getAllList(params: PaginationParams) {
-    const data = await this.repo.getAllToursAdmin(params);
+  async getAllList(params: PaginationParams, lang: ILanguage) {
+    const data = await this.repo.getAllToursAdmin(params, lang);
     return { data, total: Number(data[0]?.total) || 0 };
   }
 

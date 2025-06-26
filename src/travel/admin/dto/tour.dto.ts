@@ -8,13 +8,18 @@ import {
   IsEnum,
   ValidateNested,
   IsArray,
-	IsNumberString,
+  IsNumberString,
 } from 'class-validator';
 import {
   ITourCreateParam,
   ITourSeachByName,
 } from '../interface/tour.interface';
-import { FileDto, IncludesDto, LanguageDto, RouteDto } from 'src/travel/shared/dtos';
+import {
+  FileDto,
+  IncludesDto,
+  LanguageDto,
+  RouteDto,
+} from 'src/travel/shared/dtos';
 import { Type } from 'class-transformer';
 import { OrganizerStatus } from 'src/travel/shared/enums';
 
