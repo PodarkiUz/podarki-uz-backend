@@ -1,0 +1,119 @@
+### Traveler Authentication API Tests
+
+# Base URL
+@baseUrl = http://localhost:3000/api
+
+### 1. Send Phone Verification Code
+POST {{baseUrl}}/traveler/auth/send-verification
+Content-Type: application/json
+
+{
+  "phone_number": "+998901234567"
+}
+
+### 2. Verify Phone OTP
+POST {{baseUrl}}/traveler/auth/verify-phone
+Content-Type: application/json
+
+{
+  "phone_number": "+998901234567",
+  "otp_code": "123456"
+}
+
+### 3. Sign Up with Phone
+POST {{baseUrl}}/traveler/auth/signup
+Content-Type: application/json
+
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "john.doe@example.com",
+  "phone_number": "+998901234567",
+  "date_of_birth": "1990-01-01",
+  "gender": "male",
+  "nationality": "Uzbek",
+  "passport_number": "AA1234567",
+  "home_country": "Uzbekistan",
+  "home_city": "Tashkent"
+}
+
+### 4. Sign In with Phone
+POST {{baseUrl}}/traveler/auth/signin
+Content-Type: application/json
+
+{
+  "provider": "phone",
+  "phone_number": "+998901234567"
+}
+
+### 5. Sign In with Google
+POST {{baseUrl}}/traveler/auth/signin
+Content-Type: application/json
+
+{
+  "provider": "google",
+  "google_token": "your_google_token_here",
+  "google_token_type": "id_token"
+}
+
+### 6. Google Authentication (Direct)
+POST {{baseUrl}}/traveler/auth/google
+Content-Type: application/json
+
+{
+  "token": "your_google_token_here",
+  "token_type": "id_token"
+}
+
+### 7. Refresh Token
+POST {{baseUrl}}/traveler/auth/refresh
+Content-Type: application/json
+
+{
+  "refresh_token": "your_refresh_token_here"
+}
+
+### 8. Get Profile (Requires Authentication)
+GET {{baseUrl}}/traveler/auth/profile
+Authorization: Bearer your_access_token_here
+
+### 9. Update Profile (Requires Authentication)
+PUT {{baseUrl}}/traveler/auth/profile
+Authorization: Bearer your_access_token_here
+Content-Type: application/json
+
+{
+  "first_name": "John",
+  "last_name": "Smith",
+  "email": "john.smith@example.com",
+  "nationality": "American"
+}
+
+### 10. Logout (Requires Authentication)
+POST {{baseUrl}}/traveler/auth/logout
+Authorization: Bearer your_access_token_here
+Content-Type: application/json
+
+{
+  "access_token": "your_access_token_here"
+}
+
+### 11. Get All Travelers (Admin - Requires Authentication)
+GET {{baseUrl}}/travelers?limit=10&offset=0&search=john
+Authorization: Bearer your_access_token_here
+
+### 12. Get Traveler by ID (Admin - Requires Authentication)
+GET {{baseUrl}}/travelers/traveler_id_here
+Authorization: Bearer your_access_token_here
+
+### 13. Activate Traveler (Admin - Requires Authentication)
+POST {{baseUrl}}/travelers/traveler_id_here/activate
+Authorization: Bearer your_access_token_here
+
+### 14. Deactivate Traveler (Admin - Requires Authentication)
+POST {{baseUrl}}/travelers/traveler_id_here/deactivate
+Authorization: Bearer your_access_token_here
+
+### 15. Delete Traveler (Admin - Requires Authentication)
+DELETE {{baseUrl}}/travelers/traveler_id_here
+Authorization: Bearer your_access_token_here 

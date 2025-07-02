@@ -6,7 +6,7 @@ import { InjectKnex } from 'nestjs-knex';
 export interface IBaseQuery<T> {
   getById(id: string, columns?: string[]): Promise<T>;
 
-  updateById(id: string, value: T): Promise<T[]>;
+  updateById(id: string, value: T): Promise<T>;
 
   insert(value: T, returning?: string[]): Promise<T>;
 
@@ -85,7 +85,7 @@ export class BaseRepo<T extends Partial<IdClass>> implements IBaseQuery<T> {
     id: string,
     value: Partial<T>,
     returning = ['*'],
-  ): Promise<T[]> {
+  ): Promise<T> {
     const [data] = await this._knex(this._tableName)
       .update(value)
       .where('id', id)

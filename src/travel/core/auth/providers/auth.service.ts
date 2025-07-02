@@ -14,20 +14,16 @@ import getFiveDigitNumberOTP from '@shared/utils/otp-generator';
 import { UserNotFoundException } from '@shared/errors/permission.error';
 import { UsersRepo } from '@shared/repos/users.repo';
 import { Role, UserStatus } from '../role.enum';
-import { ShopRepo } from '@domain/shop/repo/shop.repo';
-import { ShopStatus } from '@domain/shop/shop.enum';
 import { IAuthGetUserInfo } from '../interface/user.interface';
 import { AuthUserRepo } from '../repo/auth-user.repo';
 import { isEmpty } from 'lodash';
-import { IShopUserInfoForJwtPayload } from '@domain/shop/interface/shop.interface';
 import { OrganizerRepo } from 'src/travel/shared/repo/organizer.repo';
+import { GoogleUserInfo } from '../google-oauth.service';
 
 @Injectable()
 export class AuthService {
   @Inject() private readonly authUserDao: AuthUserDao;
   @Inject() private readonly userRepo: UsersRepo;
-  @Inject() private readonly authUserRepo: AuthUserRepo;
-  @Inject() private readonly shopRepo: ShopRepo;
   @Inject() private readonly organizerRepo: OrganizerRepo;
   @Inject() readonly jwtService: JwtService;
 
@@ -51,33 +47,6 @@ export class AuthService {
     const decodedToken = this.jwtService.decode(accessToken, { json: true });
     await this.authUserDao.createToken(
       user.id,
-      decodedToken,
-      accessToken,
-      refreshToken,
-    );
-    return { accessToken, refreshToken, success: true };
-  }
-
-  async createShopToken(shop: IShopUserInfoForJwtPayload) {
-    const accessToken = await this.jwtService.signAsync(
-      { ...shop },
-      {
-        expiresIn: '23h',
-        secret: 'NO_SHOP_SECRET_JWT',
-      },
-    );
-
-    const refreshToken = await this.jwtService.signAsync(
-      { id: shop.shop_id },
-      {
-        expiresIn: '14d',
-        secret: 'NO_SHOP_SECRET_JWT',
-      },
-    );
-
-    const decodedToken = this.jwtService.decode(accessToken, { json: true });
-    await this.authUserDao.createToken(
-      shop.owner_user_id,
       decodedToken,
       accessToken,
       refreshToken,
@@ -236,44 +205,6 @@ export class AuthService {
     });
   }
 
-  async confirmShopOtp(
-    phone: string,
-    otpCode: string,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
-    const user = await this.authUserDao.getUserByPhone(phone);
-
-    if (!user) {
-      throw new UserNotFoundException();
-    }
-
-    const shop = await this.shopRepo.getShopForJwtPayloadById(user.id);
-
-    if (!user) {
-      throw new UserNotFoundException();
-    }
-
-    if (!user.otp) {
-      throw new BadRequestException();
-    }
-
-    if (!bcrypt.compareSync(otpCode, user.otp)) {
-      throw new BadRequestException('INCORRECT CODE');
-    }
-
-    return this.authUserDao.knex.transaction(async (trx) => {
-      await this.userRepo.updateByIdWithTransaction(trx, shop.owner_user_id, {
-        status: UserStatus.Registered,
-        otp: null,
-      });
-
-      await this.shopRepo.updateByIdWithTransaction(trx, shop.shop_id, {
-        status: ShopStatus.Registered,
-      });
-      // const payload = await this.authUserRepo.getUserInfo
-      return await this.createShopToken(shop);
-    });
-  }
-
   async organizerAuthorize(
     params: AuthorizeDto,
   ): Promise<{ success: boolean; otp: string }> {
@@ -304,5 +235,13 @@ export class AuthService {
 
   async generatePasswordHash(password: string) {
     return bcrypt.hashSync(password, 10);
+  }
+
+  async validateGoogleUser(googleUser: GoogleUserInfo) {
+    const user = await this.authUserDao.getUserByEmail(googleUser.email);
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+    return user;
   }
 }

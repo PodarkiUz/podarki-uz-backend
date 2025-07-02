@@ -28,9 +28,10 @@ import {
   LogoutDto,
 } from './dto/traveler.dto';
 import { TravelerAuthGuard } from './guards/traveler-auth.guard';
+import { OneByIdDto } from 'src/travel/shared/dtos';
 
-@ApiTags('Travelers')
-@Controller('travelers')
+@ApiTags('TRAVELER')
+@Controller('traveler')
 export class TravelerController {
   constructor(private readonly travelerService: TravelerService) {}
 
@@ -134,14 +135,14 @@ export class TravelerController {
     return this.travelerService.getTravelerById(req.user.sub);
   }
 
-  @Post('get/:id')
+  @Post('get-by-id')
   @UseGuards(TravelerAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get traveler by ID' })
   @ApiResponse({ status: 200, description: 'Traveler retrieved' })
   @ApiResponse({ status: 404, description: 'Traveler not found' })
-  async getTravelerById(@Param('id') id: string) {
-    return this.travelerService.getTravelerById(id);
+  async getTravelerById(@Body() params: OneByIdDto) {
+    return this.travelerService.getTravelerById(params.id);
   }
 
   @Post('update-profile')
@@ -157,27 +158,27 @@ export class TravelerController {
     return this.travelerService.updateTraveler(req.user.sub, updateDto);
   }
 
-  @Post('update/:id')
+  @Post('update-by-id')
   @UseGuards(TravelerAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update traveler by ID (Admin only)' })
   @ApiResponse({ status: 200, description: 'Traveler updated successfully' })
   @ApiResponse({ status: 404, description: 'Traveler not found' })
   async updateTraveler(
-    @Param('id') id: string,
+    @Body() params: OneByIdDto,
     @Body() updateDto: UpdateTravelerDto,
   ) {
-    return this.travelerService.updateTraveler(id, updateDto);
+    return this.travelerService.updateTraveler(params.id, updateDto);
   }
 
-  @Post('delete/:id')
+  @Post('delete-by-id')
   @UseGuards(TravelerAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete traveler by ID (Admin only)' })
   @ApiResponse({ status: 200, description: 'Traveler deleted successfully' })
   @ApiResponse({ status: 404, description: 'Traveler not found' })
-  async deleteTraveler(@Param('id') id: string) {
-    return this.travelerService.deleteTraveler(id);
+  async deleteTraveler(@Body() params: OneByIdDto) {
+    return this.travelerService.deleteTraveler(params.id);
   }
 
   @Post('change-password')

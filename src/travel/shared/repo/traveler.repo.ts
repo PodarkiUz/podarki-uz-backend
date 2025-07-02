@@ -37,12 +37,128 @@ export class TravelerRepo extends BaseRepo<TravelerEntity> {
     await this.updateById(travelerId, { last_login_at: new Date() });
   }
 
-  async verifyPhone(travelerId: string): Promise<void> {
-    await this.updateById(travelerId, { is_phone_verified: true });
+  async getByPhone(phone_number: string, trx?: any) {
+    const knex = trx || this.knex;
+    return knex
+      .select('*')
+      .from(this.tableName)
+      .where('phone_number', phone_number)
+      .where('is_deleted', false)
+      .first();
   }
 
-  async verifyEmail(travelerId: string): Promise<void> {
-    await this.updateById(travelerId, { is_email_verified: true });
+  async getByEmail(email: string, trx?: any) {
+    const knex = trx || this.knex;
+    return knex
+      .select('*')
+      .from(this.tableName)
+      .where('email', email)
+      .where('is_deleted', false)
+      .first();
+  }
+
+  async getByGoogleId(google_id: string, trx?: any) {
+    const knex = trx || this.knex;
+    return knex
+      .select('*')
+      .from(this.tableName)
+      .where('google_id', google_id)
+      .where('is_deleted', false)
+      .first();
+  }
+
+  async getById(id: string, trx?: any) {
+    const knex = trx || this.knex;
+    return knex
+      .select('*')
+      .from(this.tableName)
+      .where('id', id)
+      .where('is_deleted', false)
+      .first();
+  }
+
+  async getAllTravelers(limit = 50, offset = 0, trx?: any) {
+    const knex = trx || this.knex;
+    return knex
+      .select('*')
+      .from(this.tableName)
+      .where('is_deleted', false)
+      .orderBy('created_at', 'desc')
+      .limit(limit)
+      .offset(offset);
+  }
+
+  async search(query: string, limit = 50, offset = 0, trx?: any) {
+    const knex = trx || this.knex;
+    return knex
+      .select('*')
+      .from(this.tableName)
+      .where('is_deleted', false)
+      .andWhere(function () {
+        this.where('first_name', 'ilike', `%${query}%`)
+          .orWhere('last_name', 'ilike', `%${query}%`)
+          .orWhere('email', 'ilike', `%${query}%`)
+          .orWhere('phone_number', 'ilike', `%${query}%`);
+      })
+      .orderBy('created_at', 'desc')
+      .limit(limit)
+      .offset(offset);
+  }
+
+  async count(trx?: any) {
+    const knex = trx || this.knex;
+    const result = await knex
+      .count('* as count')
+      .from(this.tableName)
+      .where('is_deleted', false)
+      .first();
+
+    return parseInt(result.count);
+  }
+
+  async deleteById(id: string, trx?: any) {
+    const knex = trx || this.knex;
+    return knex
+      .update({ is_deleted: true, updated_at: knex.fn.now() })
+      .from(this.tableName)
+      .where('id', id)
+      .returning('*');
+  }
+
+  async activateAccount(id: string, trx?: any) {
+    const knex = trx || this.knex;
+    return knex
+      .update({ is_active: true, updated_at: knex.fn.now() })
+      .from(this.tableName)
+      .where('id', id)
+      .returning('*');
+  }
+
+  async deactivateAccount(id: string, trx?: any) {
+    const knex = trx || this.knex;
+    return knex
+      .update({ is_active: false, updated_at: knex.fn.now() })
+      .from(this.tableName)
+      .where('id', id)
+      .returning('*');
+  }
+
+  async verifyPhone(id: string, trx?: any) {
+    const knex = trx || this.knex;
+    return knex
+      .update({ is_phone_verified: true, updated_at: knex.fn.now() })
+      .from(this.tableName)
+      .where('id', id)
+      .returning('*');
+  }
+
+  async verifyEmail(id: string, trx?: any) {
+    const knex = trx || this.knex;
+    return knex
+      .update({ is_email_verified: true, updated_at: knex.fn.now() })
+      .from(this.tableName)
+      .where('id', id)
+      .returning('*');
   }
 }
 
@@ -91,53 +207,5 @@ export class PhoneVerificationCodeRepo extends BaseRepo<PhoneVerificationCodeEnt
 
   async deleteExpiredCodes(): Promise<void> {
     await this.delete({ expires_at: { $lt: new Date() } });
-  }
-}
-
-@Injectable()
-export class TravelerSessionRepo extends BaseRepo<TravelerSessionEntity> {
-  constructor() {
-    super('traveler_sessions');
-  }
-
-  async createSession(
-    sessionData: Omit<
-      TravelerSessionEntity,
-      'id' | 'created_at' | 'is_deleted'
-    >,
-  ): Promise<TravelerSessionEntity> {
-    return this.insert(sessionData);
-  }
-
-  async findByAccessToken(
-    accessToken: string,
-  ): Promise<TravelerSessionEntity | null> {
-    const result = await this.getOne({
-      access_token: accessToken,
-      is_deleted: false,
-    });
-    return result || null;
-  }
-
-  async findByRefreshToken(
-    refreshToken: string,
-  ): Promise<TravelerSessionEntity | null> {
-    const result = await this.getOne({
-      refresh_token: refreshToken,
-      is_deleted: false,
-    });
-    return result || null;
-  }
-
-  async deleteSession(sessionId: string): Promise<void> {
-    await this.delete({ id: sessionId });
-  }
-
-  async deleteExpiredSessions(): Promise<void> {
-    await this.delete({ expires_at: { $lt: new Date() } });
-  }
-
-  async deleteAllSessionsForTraveler(travelerId: string): Promise<void> {
-    await this.delete({ traveler_id: travelerId });
   }
 }

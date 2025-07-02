@@ -1,4 +1,3 @@
-import { ErrorResponseDto, LoginResponseDto } from '@auth/swagger';
 import { Body, Controller, Inject, Ip, Post } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -12,6 +11,8 @@ import {
 } from './dto/authorize.dto';
 import { AuthUserRepo } from './repo/auth-user.repo';
 import { CurrentUser } from '@decorator/current-user.decorator';
+import { ErrorResponseDto } from './swagger';
+import { LoginResponseDto } from './swagger';
 
 @ApiTags('TRAVEL AUTH')
 @Controller('auth')

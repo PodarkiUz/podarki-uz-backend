@@ -9,7 +9,6 @@ import * as bcrypt from 'bcrypt';
 import {
   TravelerRepo,
   PhoneVerificationCodeRepo,
-  TravelerSessionRepo,
 } from '../../shared/repo/traveler.repo';
 import {
   TravelerSignUpDto,
@@ -23,6 +22,8 @@ import {
   RefreshTokenDto,
 } from './dto/traveler.dto';
 import { TravelerEntity } from '../../shared/repo/traveler.entity';
+import { GoogleOAuthService } from './google-oauth.service';
+import { TravelerSessionRepo } from './repo/traveler-session.repo';
 
 @Injectable()
 export class TravelerService {
@@ -31,6 +32,7 @@ export class TravelerService {
     private readonly phoneVerificationRepo: PhoneVerificationCodeRepo,
     private readonly sessionRepo: TravelerSessionRepo,
     private readonly jwtService: JwtService,
+    private readonly googleOAuthService: GoogleOAuthService,
   ) {}
 
   async signUp(
@@ -135,9 +137,11 @@ export class TravelerService {
     ipAddress?: string,
   ) {
     try {
-      // Verify Google ID token (you'll need to implement this with Google's API)
-      const googleUser = await this.verifyGoogleToken(googleAuthDto.id_token);
-
+      // Verify Google ID token using the Google OAuth service
+      const googleUser = await this.googleOAuthService.verifyIdToken(
+        googleAuthDto.id_token,
+      );
+      console.log(googleUser);
       // Check if traveler exists with this Google ID
       let traveler = await this.travelerRepo.findByGoogleId(googleUser.sub);
 
@@ -194,6 +198,9 @@ export class TravelerService {
         ...tokens,
       };
     } catch (error) {
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      }
       throw new UnauthorizedException('Invalid Google token');
     }
   }
@@ -376,12 +383,12 @@ export class TravelerService {
   ) {
     const accessToken = this.jwtService.sign(
       { sub: travelerId, type: 'traveler' },
-      { expiresIn: '1h' },
+      { expiresIn: '1h', secret: process.env.JWT_SECRET },
     );
 
     const refreshToken = this.jwtService.sign(
       { sub: travelerId, type: 'traveler_refresh' },
-      { expiresIn: '7d' },
+      { expiresIn: '7d', secret: process.env.JWT_SECRET },
     );
 
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
@@ -405,19 +412,6 @@ export class TravelerService {
 
   private generateVerificationCode(): string {
     return Math.floor(100000 + Math.random() * 900000).toString();
-  }
-
-  private async verifyGoogleToken(idToken: string): Promise<any> {
-    // TODO: Implement Google token verification
-    // This is a placeholder - you'll need to use Google's API to verify the token
-    // For now, we'll return a mock user object
-    return {
-      sub: 'mock_google_id',
-      email: 'mock@example.com',
-      given_name: 'Mock',
-      family_name: 'User',
-      picture: 'https://example.com/avatar.jpg',
-    };
   }
 
   private sanitizeTraveler(traveler: TravelerEntity): Partial<TravelerEntity> {

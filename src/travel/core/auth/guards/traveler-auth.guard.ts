@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { TravelerSessionRepo } from '../../../shared/repo/traveler.repo';
+import { TravelerSessionRepo } from '../repo/traveler-session.repo';
 
 @Injectable()
 export class TravelerAuthGuard implements CanActivate {
@@ -47,7 +47,7 @@ export class TravelerAuthGuard implements CanActivate {
     }
 
     // Check if session exists and is valid
-    const session = await this.sessionRepo.findByAccessToken(authToken);
+    const session = await this.sessionRepo.getByAccessToken(authToken);
     if (!session || session.expires_at < new Date()) {
       throw new UnauthorizedException('Session expired or invalid');
     }
@@ -56,4 +56,4 @@ export class TravelerAuthGuard implements CanActivate {
     context.switchToHttp().getRequest().user = decodedToken;
     return true;
   }
-} 
+}

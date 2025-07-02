@@ -5,11 +5,8 @@ import { FileRouterModule } from './travel/core/file-router/file-router.module';
 import { KnexModule } from 'nestjs-knex';
 import config from '../knexfile';
 import { ConfigModule } from '@nestjs/config';
-import { AuthModule } from '@auth/auth.module';
-import { AdminModule } from '@domain/admin/admin.module';
-import { ClientModule } from '@domain/client/client.module';
-import { ShopModule } from '@domain/shop/shop.module';
 import { TravelModule } from './travel/travel.module';
+import { AuthModule } from './travel/core/auth/auth.module';
 
 @Module({
   imports: [
@@ -20,9 +17,6 @@ import { TravelModule } from './travel/travel.module';
     KnexModule.forRoot({ config }),
     FileRouterModule,
     AuthModule,
-    AdminModule,
-    ClientModule,
-    ShopModule,
 
     TravelModule,
   ],
