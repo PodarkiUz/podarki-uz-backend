@@ -33,4 +33,4 @@ export async function down(knex: Knex): Promise<void> {
   return knex.raw(`
      drop function generate_object_id();
   `);
-}
+} 

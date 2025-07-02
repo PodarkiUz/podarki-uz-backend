@@ -23,7 +23,7 @@ export const config: Knex.Config = {
     tableName: '_migrations',
     extension: 'ts',
     disableTransactions: true,
-    directory: './migrations',
+    directory: ['./src/travel/migrations'],
   },
   seeds: {
     directory: './seeds',

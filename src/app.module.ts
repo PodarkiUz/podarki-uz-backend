@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { FileRouterModule } from './core/file-router/file-router.module';
+import { FileRouterModule } from './travel/core/file-router/file-router.module';
 import { KnexModule } from 'nestjs-knex';
 import config from '../knexfile';
 import { ConfigModule } from '@nestjs/config';

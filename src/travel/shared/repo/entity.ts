@@ -14,8 +14,8 @@ export interface TourEntity {
   start_date: string;
   organizer_id: string;
   seats: number;
-	route_json?: RouteDto[];
-	includes?: IncludesDto[];
+  route_json?: RouteDto[];
+  includes?: IncludesDto[];
   created_at?: Date;
   is_deleted?: boolean;
 }
