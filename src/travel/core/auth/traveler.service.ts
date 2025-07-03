@@ -141,7 +141,6 @@ export class TravelerService {
       const googleUser = await this.googleOAuthService.verifyIdToken(
         googleAuthDto.id_token,
       );
-      console.log(googleUser);
       // Check if traveler exists with this Google ID
       let traveler = await this.travelerRepo.findByGoogleId(googleUser.sub);
 
@@ -198,6 +197,8 @@ export class TravelerService {
         ...tokens,
       };
     } catch (error) {
+      console.log(error);
+
       if (error instanceof UnauthorizedException) {
         throw error;
       }
