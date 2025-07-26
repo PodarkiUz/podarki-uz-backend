@@ -14,7 +14,6 @@ import { ILanguage } from 'src/travel/shared/interfaces';
 import { Lang } from 'src/travel/shared/decorators';
 
 @ApiTags('ADMIN -> TOUR')
-
 @Controller('admin/tour')
 export class TourController {
   constructor(private readonly service: TourService) {}
@@ -31,7 +30,7 @@ export class TourController {
 
   @Post('createWithoutAuth')
   createWithoutAuth(@Body() body: CreateTourDto) {
-    return this.service.create(body);
+    return this.service.createWithoutAuth(body);
   }
 
   @ApiBearerAuth('authorization')
