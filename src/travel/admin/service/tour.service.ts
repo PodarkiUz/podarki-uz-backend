@@ -61,6 +61,45 @@ export class TourService {
     });
   }
 
+  async createWithoutAuth(params: ITourCreateParam) {
+    return this.repo.knex.transaction(async (trc) => {
+      const tour = await this.repo.insert({
+        title: params?.title,
+        description: params?.description,
+        location: params.location,
+        organizer_id: '65c38ad9dcf8140001d4fa31',
+        price: +params.price,
+        status: OrganizerStatus.New,
+        sale_price: +params?.sale_price > 0 ? +params.sale_price : null,
+        seats: params.seats,
+        start_date: params.start_date,
+        duration: params?.duration,
+        route_json: !isEmpty(params?.route)
+          ? (JSON.stringify(params.route) as unknown as RouteDto[])
+          : null,
+        includes: !isEmpty(params?.includes)
+          ? (JSON.stringify(params.includes) as unknown as IncludesDto[])
+          : null,
+      });
+
+      if (!isEmpty(params?.files)) {
+        await this.filesRepo.bulkInsertWithTransaction(
+          trc,
+          params.files.map((file) => ({
+            depend: FileDependentType.tour,
+            dependent_id: tour.id,
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            url: file.url,
+          })),
+        );
+      }
+
+      return { success: true, data: tour };
+    });
+  }
+
   async delete(id: string) {
     await this.repo.updateById(id, { is_deleted: true });
     return { success: true };
