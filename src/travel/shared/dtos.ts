@@ -58,10 +58,9 @@ export class LanguageDto {
   ru?: string;
 }
 export class IncludesDto {
-  @ApiProperty({ type: LanguageDto })
-  @ValidateNested({ each: true })
-  @Type(() => LanguageDto)
-  title: LanguageDto;
+  @ApiProperty()
+  @IsString()
+  title: string;
 
   @ApiProperty()
   @IsBoolean()
