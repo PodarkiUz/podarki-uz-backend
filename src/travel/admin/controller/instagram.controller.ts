@@ -41,7 +41,7 @@ export class InstagramController {
 
     return {
       message: 'Post fetched successfully',
-      post,
+      data: post,
     };
   }
 
@@ -52,10 +52,18 @@ export class InstagramController {
     description: 'Unprocessed posts fetched successfully',
   })
   async getUnProcessedPosts() {
-    const posts = await this.instagramPostRepository.getOne({
-      processed: false,
-    });
-    return posts;
+    const posts = await this.instagramPostRepository.getAll(
+      {
+        processed: false,
+      },
+      ['*'],
+      'created_at',
+      'desc',
+    );
+    return {
+      message: 'Unprocessed posts fetched successfully',
+      data: posts,
+    };
   }
 
   @Post('create-tour-from-post')
@@ -133,7 +141,7 @@ export class InstagramController {
       return {
         message: 'No tour data could be extracted from the post',
         success: false,
-        post: postData,
+        data: postData,
       };
     }
 
@@ -171,7 +179,7 @@ export class InstagramController {
     return {
       message: 'Tours created successfully',
       success: true,
-      post: postData,
+      data: postData,
       toursCreated: createdTours.length,
       tours: createdTours,
       isTourAnnouncement: true,
