@@ -42,7 +42,7 @@ export class InstagramController {
     }
 
     const post = await this.instagramService.getPostByUrl(params.postUrl);
-    await this.instagramPostRepository.insert({
+    const newPost = await this.instagramPostRepository.insert({
       id: this.instagramPostRepository.generateRecordId(),
       username: post?.owner.username,
       post_id: post?.id,
@@ -50,7 +50,7 @@ export class InstagramController {
       url: params.postUrl,
       attempt: 0,
     });
-
+    post.id = newPost.id;
     return {
       message: 'Post fetched successfully',
       data: post,
