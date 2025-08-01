@@ -30,12 +30,24 @@ export class InstagramController {
   @ApiOperation({ summary: 'Fetch Instagram post' })
   @ApiResponse({ status: 200, description: 'Post fetched successfully' })
   async fetchPost(@Body() params: ProcessInstagramPostDto) {
+    const isPostExists = await this.instagramPostRepository.getOne({
+      url: params.postUrl,
+    });
+
+    if (isPostExists) {
+      return {
+        message: 'Post already exists',
+        data: isPostExists?.response_json,
+      };
+    }
+
     const post = await this.instagramService.getPostByUrl(params.postUrl);
     await this.instagramPostRepository.insert({
       id: this.instagramPostRepository.generateRecordId(),
       username: post?.owner.username,
       post_id: post?.id,
       response_json: post,
+      url: params.postUrl,
       attempt: 0,
     });
 

@@ -7,6 +7,7 @@ export class InstagramPostEntity {
   post_id: string;
   response_json: any;
   attempt: number;
+  url: string;
   processed?: boolean;
   created_at?: Date;
 }
