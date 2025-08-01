@@ -76,7 +76,7 @@ export class OrganizerService {
             itemsToRemove.map((i) => i['id']),
           );
         }
-				
+
         if (!isEmpty(itemsToAdd)) {
           await this.filesRepo.bulkInsertWithTransaction(
             trc,
