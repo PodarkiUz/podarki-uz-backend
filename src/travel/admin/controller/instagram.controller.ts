@@ -35,9 +35,11 @@ export class InstagramController {
     });
 
     if (isPostExists) {
+      const post = isPostExists?.response_json;
+      post['post_id'] = isPostExists.id;
       return {
         message: 'Post already exists',
-        data: isPostExists?.response_json,
+        data: post,
       };
     }
 
@@ -50,7 +52,7 @@ export class InstagramController {
       url: params.postUrl,
       attempt: 0,
     });
-    post.id = newPost.id;
+    post['post_id'] = newPost.id;
     return {
       message: 'Post fetched successfully',
       data: post,
