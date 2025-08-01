@@ -11,10 +11,19 @@ import { CityRepo } from '../shared/repo/cities.repo';
 import { DestinationController } from './controller/destination.controller';
 import { DestinationService } from './service/destination.service';
 import { DestinationRepo } from '../shared/repo/destination.repo';
+import { InstagramController } from './controller/instagram.controller';
+import { InstagramService } from './service/instagram.service';
+import { OpenAIService } from './service/openai.service';
+import { InstagramPostsRepo } from '../shared/repo/instagram-posts.repo';
 
 @Module({
   imports: [AuthModule],
-  controllers: [OrganizerController, TourController, DestinationController],
+  controllers: [
+    OrganizerController,
+    TourController,
+    DestinationController,
+    InstagramController,
+  ],
   providers: [
     OrganizerService,
     OrganizerRepo,
@@ -24,6 +33,9 @@ import { DestinationRepo } from '../shared/repo/destination.repo';
     CityRepo,
     DestinationService,
     DestinationRepo,
+    InstagramService,
+    OpenAIService,
+    InstagramPostsRepo,
   ],
 })
 export class AdminModule {}
