@@ -80,6 +80,7 @@ export class TourService {
         includes: !isEmpty(params?.includes)
           ? (JSON.stringify(params.includes) as unknown as IncludesDto[])
           : null,
+        is_deleted: true,
       });
 
       if (!isEmpty(params?.files)) {
