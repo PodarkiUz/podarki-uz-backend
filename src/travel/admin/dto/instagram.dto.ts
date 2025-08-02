@@ -45,6 +45,10 @@ export class ProcessInstagramPostResponseDto {
   @IsString()
   id: string;
 
+  @ApiProperty({
+    description: 'The index of the main image',
+    example: 0,
+  })
   @IsNumber()
   mainImageIndex: number;
 }
