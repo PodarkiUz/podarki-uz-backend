@@ -185,11 +185,7 @@ export class InstagramController {
       }
     }
 
-    return {
-      message: 'Tours created successfully',
-      success: true,
-      data: createdTours,
-    };
+    return createdTours;
   }
 
   // @Get('proxy-image')
