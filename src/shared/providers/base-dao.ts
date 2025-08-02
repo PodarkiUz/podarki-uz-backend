@@ -110,14 +110,7 @@ export class BaseRepo<T extends Partial<IdClass>> implements IBaseQuery<T> {
       ? { ...value }
       : value.id
       ? { ...value }
-        : { ...value, id: this.generateRecordId() };
-    console.log(
-      this.knex
-        .insert(values)
-        .into(this._tableName)
-        .returning(returning)
-        .toString(),
-    );
+      : { ...value, id: this.generateRecordId() };
 
     const [data] = await this.knex
       .insert(values)

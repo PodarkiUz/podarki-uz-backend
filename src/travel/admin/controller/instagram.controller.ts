@@ -155,7 +155,7 @@ export class InstagramController {
       return {
         message: 'No tour data could be extracted from the post',
         success: false,
-        data: postData,
+        data: parsedTours,
       };
     }
 
@@ -179,24 +179,16 @@ export class InstagramController {
           processed: true,
         });
       }
-
+      externalTour['files'] = uploadedImages;
       if (externalTour) {
-        createdTours.push({
-          tourId: externalTour.id,
-          title: parsedData?.title,
-          price: parsedData?.price,
-          organizerId: organizerId,
-        });
+        createdTours.push(externalTour);
       }
     }
 
     return {
       message: 'Tours created successfully',
       success: true,
-      data: postData,
-      toursCreated: createdTours.length,
-      tours: createdTours,
-      isTourAnnouncement: true,
+      data: createdTours,
     };
   }
 
