@@ -122,7 +122,7 @@ export class OpenAIService {
         - price: number (tour price, extract numeric value only) (required)
         - sale_price: number (discounted price if mentioned) (optional)
         - duration: string (e.g., "5 days", "1 week", "3 nights") (optional)
-        - start_date: string in YYYY-MM-DD format (optional) if not present, use 'no date' string
+        - start_date: string in YYYY-MM-DD format, if not present use null
         - seats: number (maximum participants/available seats) (optional)
         - includes: object with included services (e.g., {"accommodation": true, "meals": true, "transport": true}) (optional)
 

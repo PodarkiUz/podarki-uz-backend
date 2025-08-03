@@ -72,7 +72,8 @@ export class TourService {
         status: OrganizerStatus.New,
         sale_price: +params?.sale_price > 0 ? +params.sale_price : null,
         seats: params.seats,
-        start_date: params.start_date == 'no date' ? '1970-01-01' : params.start_date,
+        start_date:
+          params.start_date == 'no date' ? '1970-01-01' : params.start_date,
         duration: params?.duration,
         route_json: !isEmpty(params?.route)
           ? (JSON.stringify(params.route) as unknown as RouteDto[])
