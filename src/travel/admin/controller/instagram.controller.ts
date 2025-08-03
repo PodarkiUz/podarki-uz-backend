@@ -169,19 +169,19 @@ export class InstagramController {
           parsedData,
           uploadedImages,
         );
-      // Create tour in external API using createWithoutAuth
-      const externalTour = await this.tourService.createWithoutAuth(
-        externalTourData,
-      );
+      // // Create tour in external API using createWithoutAuth
+      // const externalTour = await this.tourService.createWithoutAuth(
+      //   externalTourData,
+      // );
 
-      if (externalTour !== null) {
-        await this.instagramPostRepository.updateById(dto.id, {
-          processed: true,
-        });
-      }
-      externalTour['files'] = uploadedImages;
-      if (externalTour) {
-        createdTours.push(externalTour);
+      // if (externalTour !== null) {
+      //   await this.instagramPostRepository.updateById(dto.id, {
+      //     processed: true,
+      //   });
+      // }
+      // externalTour['files'] = uploadedImages;
+      if (externalTourData) {
+        createdTours.push(externalTourData);
       }
     }
 
