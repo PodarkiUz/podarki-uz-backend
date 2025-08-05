@@ -44,6 +44,12 @@ export class InstagramController {
     }
 
     const post = await this.instagramService.getPostByUrl(params.postUrl);
+    if (!post) {
+      return {
+        message: 'Post not found',
+        data: null,
+      };
+    }
     const newPost = await this.instagramPostRepository.insert({
       id: this.instagramPostRepository.generateRecordId(),
       username: post?.owner.username,
