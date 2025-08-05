@@ -77,7 +77,7 @@ export class InstagramService {
         `https://${this.rapidApiHost}/get_media_data.php`,
         {
           headers: {
-            'X-RapidAPI-Key': keys[0],
+            'X-RapidAPI-Key': keys[1],
             'X-RapidAPI-Host': this.rapidApiHost,
           },
           params: {
