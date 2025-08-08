@@ -1,5 +1,5 @@
 import { FileDto, IncludesDto, RouteDto } from 'src/travel/shared/dtos';
-import { OrganizerStatus } from 'src/travel/shared/enums';
+import { CurrencyType, OrganizerStatus } from 'src/travel/shared/enums';
 import { ILanguage } from 'src/travel/shared/interfaces';
 
 export interface ITourCreateParam {
@@ -9,6 +9,7 @@ export interface ITourCreateParam {
   location: number;
   price: number;
   sale_price?: number;
+  currency: CurrencyType;
   duration?: string;
   start_date: string;
   seats: number;

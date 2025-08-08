@@ -24,3 +24,9 @@ export enum OrganizerStatus {
   Allowed = 3,
   Blocked = 4,
 }
+
+export enum CurrencyType {
+  UZS = 'UZS',
+  USD = 'USD',
+  EUR = 'EUR',
+}

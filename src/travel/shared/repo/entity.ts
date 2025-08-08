@@ -1,5 +1,5 @@
 import { IncludesDto, RouteDto } from '../dtos';
-import { FileType, OrganizerStatus } from '../enums';
+import { CurrencyType, FileType, OrganizerStatus } from '../enums';
 import { ILanguage } from '../interfaces';
 
 export interface TourEntity {
@@ -10,6 +10,7 @@ export interface TourEntity {
   price: number;
   status: OrganizerStatus;
   sale_price?: number;
+  currency: CurrencyType;
   duration?: string;
   start_date: string;
   organizer_id: string;

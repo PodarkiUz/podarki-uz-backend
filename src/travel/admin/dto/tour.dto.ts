@@ -21,7 +21,7 @@ import {
   RouteDto,
 } from 'src/travel/shared/dtos';
 import { Type } from 'class-transformer';
-import { OrganizerStatus } from 'src/travel/shared/enums';
+import { CurrencyType, OrganizerStatus } from 'src/travel/shared/enums';
 
 export class CreateTourDto implements ITourCreateParam {
   @ApiProperty({ type: LanguageDto })
@@ -53,6 +53,10 @@ export class CreateTourDto implements ITourCreateParam {
   @IsNotEmpty()
   @IsOptional()
   sale_price?: number;
+
+  @ApiProperty({ enum: CurrencyType })
+  @IsEnum(CurrencyType)
+  currency: CurrencyType;
 
   @ApiPropertyOptional()
   @IsString()

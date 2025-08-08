@@ -30,11 +30,11 @@ export class OpenAIService {
         
         Each tour object should have the following fields:
         - title: object with language keys (e.g., {"en": "Tour Title", "ru": "Название тура", "uz": "Tur nomi"}) (required)
-        - description: object with language keys (e.g., {"en": "Description", "ru": "Описание", "uz": "Tavsif"}) (optional)
+        - description: object with language keys, more detailed description of the tour (e.g., {"en": "Description", "ru": "Описание", "uz": "Tavsif"}) (optional)
         - price: number (tour price, extract numeric value only) (required)
         - salePrice: number (discounted price if mentioned) (optional)
         - duration: string (e.g., "5 days", "1 week", "3 nights") (optional)
-        - startDate: string in YYYY-MM-DD format (optional)
+        - startDate: string in YYYY-MM-DD format, if not mentioned then return null
         - seats: number (maximum participants/available seats) (optional)
         - includes: object with included services (e.g., {"accommodation": true, "meals": true, "transport": true}) (optional)
 
@@ -118,11 +118,11 @@ export class OpenAIService {
         
         Each tour object should have the following fields:
         - title: object with language keys (e.g., {"en": "Tour Title", "ru": "Название тура", "uz": "Tur nomi"}) (required)
-        - description: object with language keys (e.g., {"en": "Description", "ru": "Описание", "uz": "Tavsif"}) (optional)
+        - description: object with language keys, more detailed description of the tour (e.g., {"en": "Description", "ru": "Описание", "uz": "Tavsif"}) (optional)
         - price: number (tour price, extract numeric value only) (required)
         - sale_price: number (discounted price if mentioned) (optional)
         - duration: string (e.g., "5 days", "1 week", "3 nights") (optional)
-        - start_date: string in YYYY-MM-DD format (optional), if not mentioned then use null
+        - start_date: string in YYYY-MM-DD format (optional), if not mentioned then return null
         - seats: number (maximum participants/available seats) (optional)
         - includes: object with included services (e.g., {"accommodation": true, "meals": true, "transport": true}) (optional)
 
