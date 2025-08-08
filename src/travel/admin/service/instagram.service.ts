@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import axios from 'axios';
 import { FileDto, IncludesDto, RouteDto } from 'src/travel/shared/dtos';
+import { CurrencyType } from 'src/travel/shared/enums';
 import { TourEntity } from 'src/travel/shared/repo/entity';
 
 // Instagram API Response Types
@@ -167,7 +168,8 @@ export class InstagramService {
       sale_price: parsedData.sale_price || 0,
       duration: parsedData.duration || '',
       start_date:
-        parsedData.start_date || new Date().toISOString().split('T')[0],
+        parsedData.start_date || null,
+      currency: parsedData.currency || CurrencyType.UZS,
       seats: parsedData.seats || 0,
       files,
       route_json,
