@@ -118,6 +118,7 @@ export class OpenAIService {
         
         Each tour object should have the following fields:
         - title: object with language keys (e.g., {"en": "Tour Title", "ru": "Название тура", "uz": "Tur nomi"}) (required)
+          **Include the main destination names mentioned in the text as part of the title in each language.**
         - description: object with language keys, more detailed description of the tour (e.g., {"en": "Description", "ru": "Описание", "uz": "Tavsif"}) (optional)
         - price: number (tour price, extract numeric value only) (required)
         - sale_price: number (discounted price if mentioned) (optional)
