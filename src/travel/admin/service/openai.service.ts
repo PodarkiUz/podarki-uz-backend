@@ -117,7 +117,7 @@ export class OpenAIService {
         A single message may contain multiple tours. Return the result as a valid JSON array of tour objects.
         
         Each tour object should have the following fields:
-        - title: object with language keys (e.g., {"en": "Tour Title", "ru": "Название тура", "uz": "Tur nomi"}) (required)
+        - title: object with language keys, add if available any destination name (e.g., {"en": "Tour Title", "ru": "Название тура", "uz": "Tur nomi"}) (required)
         - description: object with language keys, more detailed description of the tour (e.g., {"en": "Description", "ru": "Описание", "uz": "Tavsif"}) (optional)
         - price: number (tour price, extract numeric value only) (required)
         - sale_price: number (discounted price if mentioned) (optional)
