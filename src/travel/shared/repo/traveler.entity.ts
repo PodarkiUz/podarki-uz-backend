@@ -8,7 +8,7 @@ export interface TravelerEntity {
   first_name?: string;
   last_name?: string;
   email?: string;
-  phone_number: string;
+  phone_number?: string;
 
   // Authentication fields
   password_hash?: string;
@@ -16,7 +16,7 @@ export interface TravelerEntity {
   google_email?: string;
   telegram_id?: number;
   auth_provider?: 'phone' | 'google' | 'telegram';
-  username?: string;
+  tg_username?: string;
 
   // Profile information
   avatar_url?: string;

@@ -95,28 +95,63 @@ export class TelegramBotService {
   }
 
   /**
-   * Send welcome message to new users
-   */
-  async sendWelcomeMessage(username: string): Promise<boolean> {
+ * Get user information from Telegram
+ */
+async getUserInfo(username: string): Promise<{
+    id: number;
+    first_name: string;
+    last_name?: string;
+    username: string;
+    photo_url?: string;
+  } | null> {
     try {
-      const chatId = await this.getChatIdByUsername(username);
+      // Remove @ if present
+      const cleanUsername = username.startsWith('@') ? username.slice(1) : username;
       
-      if (!chatId) {
-        return false;
+      // Try to get user info from recent updates
+      const response = await axios.get(`${this.botApiUrl}/getUpdates`);
+      
+      if (response.data.ok) {
+        const updates = response.data.result;
+        
+        // Find the user in recent updates
+        for (const update of updates) {
+          if (update.message?.from?.username === cleanUsername) {
+            const user = update.message.from;
+            return {
+              id: user.id,
+              first_name: user.first_name,
+              last_name: user.last_name,
+              username: user.username,
+            };
+          }
+        }
       }
-
-      const message = `👋 Welcome to our travel platform!\n\nYou can now use your Telegram account to authenticate and access our services.\n\nYour username: @${username}`;
-
-      const response = await axios.post(`${this.botApiUrl}/sendMessage`, {
-        chat_id: chatId,
-        text: message,
-        parse_mode: 'Markdown',
+  
+      // If not found in updates, try to get user info by sending a message
+      const testResponse = await axios.post(`${this.botApiUrl}/sendMessage`, {
+        chat_id: `@${cleanUsername}`,
+        text: 'Getting your profile information...',
       });
-
-      return response.data.ok;
+  
+      if (testResponse.data.ok) {
+        // Get user info from the response
+        const chat = testResponse.data.result.chat;
+        return {
+          id: chat.id,
+          first_name: chat.first_name || cleanUsername,
+          last_name: chat.last_name,
+          username: cleanUsername,
+          photo_url: chat.photo?.small_file_id ? 
+            `https://api.telegram.org/file/bot${this.botToken}/${chat.photo.small_file_id}` : 
+            undefined
+        };
+      }
+  
+      return null;
     } catch (error) {
-      console.error('Error sending welcome message:', error);
-      return false;
+      console.error('Error getting user info:', error);
+      return null;
     }
   }
 }
