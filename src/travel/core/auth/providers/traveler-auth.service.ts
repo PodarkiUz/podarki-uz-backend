@@ -196,7 +196,7 @@ export class TravelerAuthService {
         email: params.email,
         phone_number: params.phone_number,
         date_of_birth: params.date_of_birth
-          ? new Date(params.date_of_birth)
+          ? params.date_of_birth
           : null,
         gender: params.gender,
         nationality: params.nationality,

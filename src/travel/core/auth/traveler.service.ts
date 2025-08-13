@@ -262,7 +262,7 @@ export class TravelerService {
     const travelerData: TravelerEntity = {
       ...createDto,
       date_of_birth: createDto.date_of_birth
-        ? new Date(createDto.date_of_birth)
+        ? createDto.date_of_birth
         : undefined,
     };
 
@@ -288,7 +288,7 @@ export class TravelerService {
     const updateData: Partial<TravelerEntity> = {
       ...updateDto,
       date_of_birth: updateDto.date_of_birth
-        ? new Date(updateDto.date_of_birth)
+        ? updateDto.date_of_birth
         : undefined,
     };
 

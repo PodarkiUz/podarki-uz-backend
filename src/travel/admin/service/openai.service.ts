@@ -13,6 +13,7 @@ export class OpenAIService {
     // DEBUG: Print the API key being used (REMOVE after debugging!)
     console.log('DEBUG OPENAI_API_KEY:', apiKey);
     if (!apiKey) {
+      return;
       throw new Error('OPENAI_API_KEY is not configured');
     }
     this.openai = new OpenAI({ apiKey });

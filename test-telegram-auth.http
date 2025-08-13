@@ -1,0 +1,60 @@
+### Telegram Authentication Test
+
+### 1. Send OTP to Telegram Username
+POST http://localhost:3000/client/telegram-auth/send-otp
+Content-Type: application/json
+
+{
+  "username": "johndoe"
+}
+
+### 2. Verify Telegram OTP
+POST http://localhost:3000/client/telegram-auth/verify-otp
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "otp_code": "12345"
+}
+
+### 3. Authenticate with Telegram
+POST http://localhost:3000/client/telegram-auth/authenticate
+Content-Type: application/json
+
+{
+  "id": 123456789,
+  "first_name": "John",
+  "last_name": "Doe",
+  "username": "johndoe",
+  "photo_url": "https://t.me/i/userpic/320/johndoe.jpg",
+  "auth_date": 1640995200,
+  "hash": "test_hash_for_demo"
+}
+
+### 4. Get User Profile (requires authentication)
+GET http://localhost:3000/client/telegram-auth/profile
+Authorization: Bearer {{accessToken}}
+
+### 5. Update User Profile (requires authentication)
+PUT http://localhost:3000/client/telegram-auth/profile
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "email": "john.doe@example.com",
+  "phone_number": "+998901234567",
+  "date_of_birth": "1990-01-01",
+  "gender": "male",
+  "nationality": "Uzbek",
+  "passport_number": "AA1234567",
+  "home_country": "Uzbekistan",
+  "home_city": "Tashkent"
+}
+
+### 6. Refresh Token
+POST http://localhost:3000/client/telegram-auth/refresh
+Content-Type: application/json
+
+{
+  "refresh_token": "{{refreshToken}}"
+}

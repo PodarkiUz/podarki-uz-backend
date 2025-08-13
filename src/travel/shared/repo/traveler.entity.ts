@@ -14,10 +14,14 @@ export interface TravelerEntity {
   password_hash?: string;
   google_id?: string;
   google_email?: string;
+  telegram_id?: number;
+  auth_provider?: 'phone' | 'google' | 'telegram';
+  username?: string;
 
   // Profile information
   avatar_url?: string;
-  date_of_birth?: Date;
+  photo_url?: string;
+  date_of_birth?: string;
   gender?: 'male' | 'female' | 'other';
   nationality?: string;
   passport_number?: string;

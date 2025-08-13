@@ -28,6 +28,14 @@ export class TravelerRepo extends BaseRepo<TravelerEntity> {
     return result || null;
   }
 
+  async findByTelegramId(telegramId: number): Promise<TravelerEntity | null> {
+    const result = await this.getOne({
+      telegram_id: telegramId,
+      is_deleted: false,
+    });
+    return result || null;
+  }
+
   async findByEmail(email: string): Promise<TravelerEntity | null> {
     const result = await this.getOne({ email: email, is_deleted: false });
     return result || null;
@@ -63,6 +71,16 @@ export class TravelerRepo extends BaseRepo<TravelerEntity> {
       .select('*')
       .from(this.tableName)
       .where('google_id', google_id)
+      .where('is_deleted', false)
+      .first();
+  }
+
+  async getByTelegramId(telegram_id: number, trx?: any) {
+    const knex = trx || this.knex;
+    return knex
+      .select('*')
+      .from(this.tableName)
+      .where('telegram_id', telegram_id)
       .where('is_deleted', false)
       .first();
   }
