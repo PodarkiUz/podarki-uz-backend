@@ -1,3 +1,4 @@
+import { TourDetailsDto } from 'src/travel/admin/dto/tour.dto';
 import { IncludesDto, RouteDto } from '../dtos';
 import { CurrencyType, FileType, OrganizerStatus } from '../enums';
 import { ILanguage } from '../interfaces';
@@ -14,6 +15,7 @@ export interface TourEntity {
   duration?: string;
   start_date: string;
   organizer_id: string;
+  details?: TourDetailsDto;
   seats: number;
   route_json?: RouteDto[];
   includes?: IncludesDto[];

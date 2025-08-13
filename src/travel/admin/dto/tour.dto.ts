@@ -23,6 +23,23 @@ import {
 import { Type } from 'class-transformer';
 import { CurrencyType, OrganizerStatus } from 'src/travel/shared/enums';
 
+export class TourDetailsDto {
+  @ApiPropertyOptional()
+  @IsString()
+  @IsOptional()
+  tour_type?: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  @IsOptional()
+  difficulty?: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  @IsOptional()
+  start_location?: string;
+}
+
 export class CreateTourDto implements ITourCreateParam {
   @ApiProperty({ type: LanguageDto })
   @ValidateNested()
@@ -47,6 +64,11 @@ export class CreateTourDto implements ITourCreateParam {
   @IsNumberString()
   @IsNotEmpty()
   price: number;
+
+  @ApiPropertyOptional({ type: TourDetailsDto })
+  @ValidateNested()
+  @Type(() => TourDetailsDto)
+  tour_details?: TourDetailsDto;
 
   @ApiPropertyOptional()
   @IsNumberString()

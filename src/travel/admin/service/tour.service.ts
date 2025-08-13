@@ -13,6 +13,7 @@ import {
   ITourSeachByName,
   ITourUpdateParam,
 } from '../interface/tour.interface';
+import { TourDetailsDto } from '../dto/tour.dto';
 
 @Injectable()
 export class TourService {
@@ -34,6 +35,9 @@ export class TourService {
         status: OrganizerStatus.New,
         sale_price: +params?.sale_price > 0 ? +params.sale_price : null,
         seats: params.seats,
+        details: params?.details
+          ? (JSON.stringify(params.details) as unknown as TourDetailsDto)
+          : null,
         start_date: params.start_date,
         duration: params?.duration,
         route_json: !isEmpty(params?.route)
@@ -121,6 +125,9 @@ export class TourService {
         ...(params?.price && { price: +params.price }),
         ...(params?.sale_price && { sale_price: +params.sale_price }),
         ...(params?.seats && { seats: params.seats }),
+        ...(params?.details && {
+          details: JSON.stringify(params.details) as unknown as TourDetailsDto,
+        }),
         ...(!isEmpty(params?.route_json) && {
           route_json: JSON.stringify(
             params.route_json,

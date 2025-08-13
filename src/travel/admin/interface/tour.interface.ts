@@ -1,6 +1,7 @@
 import { FileDto, IncludesDto, RouteDto } from 'src/travel/shared/dtos';
 import { CurrencyType, OrganizerStatus } from 'src/travel/shared/enums';
 import { ILanguage } from 'src/travel/shared/interfaces';
+import { TourDetailsDto } from '../dto/tour.dto';
 
 export interface ITourCreateParam {
   title: ILanguage;
@@ -16,6 +17,7 @@ export interface ITourCreateParam {
   files?: FileDto[];
   route?: RouteDto[];
   includes?: IncludesDto[];
+  details?: TourDetailsDto;
 }
 
 export interface ITourUpdateParam {
@@ -32,6 +34,7 @@ export interface ITourUpdateParam {
   files?: FileDto[];
   route_json?: RouteDto[];
   includes?: IncludesDto[];
+  details?: TourDetailsDto;
 }
 
 export interface ITourSeachByName {
