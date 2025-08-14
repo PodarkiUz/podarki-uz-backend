@@ -38,7 +38,7 @@ export class TelegramBotService {
       return response.data.ok;
     } catch (error) {
       console.error('Error sending Telegram OTP:', error);
-      throw new BadRequestException('Failed to send OTP via Telegram');
+      throw new BadRequestException('Failed to send OTP via Telegram: ' + error.message);
     }
   }
 
