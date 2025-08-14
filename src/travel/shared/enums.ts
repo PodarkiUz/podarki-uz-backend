@@ -29,4 +29,6 @@ export enum CurrencyType {
   UZS = 'UZS',
   USD = 'USD',
   EUR = 'EUR',
+  KGS = 'KGS',
+  RUB = 'RUB',
 }
