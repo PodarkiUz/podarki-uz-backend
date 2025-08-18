@@ -4,7 +4,7 @@ import { TourEntity } from 'src/travel/shared/repo/entity';
 import { ITourSeachByName } from 'src/travel/admin/interface/tour.interface';
 import { ILanguage, PaginationParams } from '../interfaces';
 import { FileDependentType } from '../enums';
-import { IGetTourListClient } from 'src/travel/client/interface/tour.interface';
+import { IGetTourListClient, TourOrderTypes } from 'src/travel/client/interface/tour.interface';
 
 @Injectable()
 export class TourRepo extends BaseRepo<TourEntity> {
@@ -152,6 +152,23 @@ export class TourRepo extends BaseRepo<TourEntity> {
 
     if (params?.difficulty) {
       query.whereRaw(`tour.details->>'difficulty' = ?`, [params.difficulty]);
+    }
+
+    if (params?.order_by) {
+      switch (params.order_by) {
+        case TourOrderTypes.Popular:
+          query.orderBy('tour.rating', 'desc');
+          break;
+        case TourOrderTypes.Newest:
+          query.orderBy('tour.created_at', 'desc');
+          break;
+        case TourOrderTypes.PriceLowToHigh:
+          query.orderByRaw('COALESCE(tour.sale_price, tour.price) asc');
+          break;
+        case TourOrderTypes.PriceHighToLow:
+          query.orderByRaw('COALESCE(tour.sale_price, tour.price) desc');
+          break;
+      }
     }
 
     if (limit) {
