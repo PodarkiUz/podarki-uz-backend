@@ -24,18 +24,18 @@ import { Type } from 'class-transformer';
 import { CurrencyType, OrganizerStatus } from 'src/travel/shared/enums';
 
 export enum TourType {
-  Historical = 'historical',
-  Camping = 'camping',
-  Exploring = 'exploring',
-  Rafting = 'rafting',
-  Hiking = 'hiking',
-  Nature = 'nature',
+  Historical = 'Historical',
+  Camping = 'Camping',
+  Exploring = 'Exploring',
+  Rafting = 'Rafting',
+  Hiking = 'Hiking',
+  Nature = 'Nature',
 }
 
 export enum TourDifficulty {
-  Easy = 'easy',
-  Medium = 'medium',
-  Hard = 'hard',
+  Easy = 'Easy',
+  Medium = 'Medium',
+  Hard = 'Hard',
 }
 
 export class TourDetailsDto {
