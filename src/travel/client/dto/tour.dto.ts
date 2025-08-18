@@ -1,5 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsISO8601, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsISO8601, IsNumber, IsOptional, IsString } from 'class-validator';
+import { TourDifficulty, TourType } from 'src/travel/admin/dto/tour.dto';
 import { PaginationDto } from 'src/travel/shared/dtos';
 
 export class GetTourListClientDto extends PaginationDto {
@@ -28,4 +29,14 @@ export class GetTourListClientDto extends PaginationDto {
   @IsOptional()
   @IsNumber()
   to_price?: number;
+
+  @ApiPropertyOptional({ enum: TourType, enumName: 'TourType' })
+  @IsOptional()
+  @IsEnum(TourType)
+  tour_type?: TourType;
+
+  @ApiPropertyOptional({ enum: TourDifficulty, enumName: 'TourDifficulty' })
+  @IsOptional()
+  @IsEnum(TourDifficulty)
+  difficulty?: TourDifficulty;
 }

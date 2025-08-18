@@ -146,6 +146,14 @@ export class TourRepo extends BaseRepo<TourEntity> {
       query.where('tour.location', params.location);
     }
 
+    if (params?.tour_type) {
+      query.whereRaw(`tour.details->>'tour_type' = ?`, [params.tour_type]);
+    }
+
+    if (params?.difficulty) {
+      query.whereRaw(`tour.details->>'difficulty' = ?`, [params.difficulty]);
+    }
+
     if (limit) {
       query.limit(limit);
       if (offset) {
