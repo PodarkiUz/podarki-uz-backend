@@ -15,6 +15,9 @@ import { InstagramController } from './controller/instagram.controller';
 import { InstagramService } from './service/instagram.service';
 import { OpenAIService } from './service/openai.service';
 import { InstagramPostsRepo } from '../shared/repo/instagram-posts.repo';
+import { BlogController } from './controller/blog.controller';
+import { BlogRepo } from '../shared/repo/blogs.repo';
+import { BlogService } from './service/blog.service';
 
 @Module({
   imports: [AuthModule],
@@ -23,6 +26,7 @@ import { InstagramPostsRepo } from '../shared/repo/instagram-posts.repo';
     TourController,
     DestinationController,
     InstagramController,
+    BlogController,
   ],
   providers: [
     OrganizerService,
@@ -36,6 +40,8 @@ import { InstagramPostsRepo } from '../shared/repo/instagram-posts.repo';
     InstagramService,
     OpenAIService,
     InstagramPostsRepo,
+    BlogService,
+    BlogRepo,
   ],
 })
 export class AdminModule {}

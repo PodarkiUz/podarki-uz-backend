@@ -64,3 +64,13 @@ export interface ReviewEntity {
   created_at?: Date;
   is_deleted?: boolean;
 }
+
+export interface BlogEntity {
+  id?: string;
+  status: number;
+  is_deleted?: boolean;
+  created_at?: Date;
+  title: string;
+  description: string;
+  author: string;
+}
