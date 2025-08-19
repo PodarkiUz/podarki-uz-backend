@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { CreateBlogDto, UpdateBlogDto, BlogStatusDto } from '../dto/blog.dto';
 import { PaginationParams } from 'src/travel/shared/interfaces';
 import { BlogRepo } from 'src/travel/shared/repo/blogs.repo';
+import { StatusEnum } from 'src/travel/shared/enums';
 
 @Injectable()
 export class BlogService {
@@ -12,7 +13,7 @@ export class BlogService {
       title: params.title,
       description: params.description,
       author: params.author,
-      status: params.status || 0, // Default to draft
+      status: params.status || StatusEnum.ACTIVE, // Default to draft
     });
 
     return { success: true, data: blog };
