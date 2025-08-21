@@ -10,6 +10,6 @@ export class BlogController {
 
   @Post('list')
   getAll(@Body() body: PaginationDto) {
-    return this.service.getClientBlogist(body);
+    return this.service.getClientBlogList(body);
   }
 }

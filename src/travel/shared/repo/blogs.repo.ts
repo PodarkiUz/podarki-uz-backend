@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { BlogEntity } from './entity';
 import { PaginationParams } from '../interfaces';
 import { isEmpty } from 'lodash';
+import { StatusEnum } from '../enums';
 
 @Injectable()
 export class BlogRepo extends BaseRepo<BlogEntity> {
@@ -20,6 +21,37 @@ export class BlogRepo extends BaseRepo<BlogEntity> {
       ])
       .from(`${this.tableName} as blog`)
       .where('blog.is_deleted', false)
+      .orderBy('blog.created_at', 'desc');
+
+    if (!isEmpty(params?.search)) {
+      query.whereRaw(`(
+        blog.title ilike '%${params.search}%'
+        or blog.description ilike '%${params.search}%'
+        or blog.author ilike '%${params.search}%'
+        )`);
+    }
+
+    if (limit) {
+      query.limit(limit);
+      if (offset) {
+        query.offset(offset);
+      }
+    }
+
+    return query;
+  }
+
+  getClientBlogs(params: PaginationParams) {
+    const knex = this.knex;
+    const { offset = 0, limit = 10 } = params;
+    const query = knex
+      .select([
+        'blog.*',
+        knex.raw('count(blog.id) over() as total'),
+      ])
+      .from(`${this.tableName} as blog`)
+      .where('blog.is_deleted', false)
+      .where('blog.status', StatusEnum.ACTIVE)
       .orderBy('blog.created_at', 'desc');
 
     if (!isEmpty(params?.search)) {
