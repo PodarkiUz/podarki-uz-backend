@@ -6,6 +6,8 @@ import { FilesRepo } from './repo/files.repo';
 import { CityRepo } from './repo/cities.repo';
 import { DestinationRepo } from './repo/destination.repo';
 import { LocationRepo } from './repo/locations.repo';
+import { BlogRepo } from './repo/blogs.repo';
+import { TelegramOtpRepo } from '../client/repo/telegram-otp.repo';
 
 const repos = [
   TourRepo,
@@ -14,6 +16,8 @@ const repos = [
   CityRepo,
   DestinationRepo,
   LocationRepo,
+  TelegramOtpRepo,
+  BlogRepo
 ];
 
 const modules = [

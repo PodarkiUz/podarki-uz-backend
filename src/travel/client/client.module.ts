@@ -10,10 +10,11 @@ import { AuthModule } from '../core/auth/auth.module';
 import { TelegramAuthController } from './controller/telegram-auth.controller';
 import { TelegramAuthService } from './service/telegram-auth.service';
 import { TelegramBotService } from './service/telegram-bot.service';
-import { TelegramOtpRepo } from './repo/telegram-otp.repo';
+import { BlogController } from './controller/blog.controller';
+import { BlogService } from './service/blog.service';
 @Module({
   imports: [AuthModule, SharedModule],
-  controllers: [TourController, OrganizerController, DestinationController, TelegramAuthController],
-  providers: [TourService, OrganizerService, DestinationService, TelegramAuthService, TelegramBotService, TelegramOtpRepo],
+  controllers: [TourController, OrganizerController, DestinationController, TelegramAuthController, BlogController],
+  providers: [TourService, OrganizerService, DestinationService, TelegramAuthService, TelegramBotService, BlogService],
 })
 export class ClientModule {}
