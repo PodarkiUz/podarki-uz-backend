@@ -17,9 +17,11 @@ export class BlogRepo extends BaseRepo<BlogEntity> {
     const query = knex
       .select([
         'blog.*',
+        'files.url as file_url',
         knex.raw('count(blog.id) over() as total'),
       ])
       .from(`${this.tableName} as blog`)
+      .leftJoin('files', 'files.id', 'blog.file_id')
       .where('blog.is_deleted', false)
       .orderBy('blog.created_at', 'desc');
 

@@ -13,7 +13,8 @@ export class BlogService {
       title: params.title,
       description: params.description,
       author: params.author,
-      status: params.status || StatusEnum.ACTIVE, // Default to draft
+      status: params.status || StatusEnum.ACTIVE,
+      file_id: params.file_id,
     });
 
     return { success: true, data: blog };
@@ -54,6 +55,10 @@ export class BlogService {
     }
     if (params.status !== undefined) {
       updateData.status = params.status;
+    }
+
+    if (params.file_id !== undefined) {
+      updateData.file_id = params.file_id;
     }
 
     if (Object.keys(updateData).length === 0) {
