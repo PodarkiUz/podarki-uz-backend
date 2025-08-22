@@ -37,7 +37,8 @@ export class BlogRepo extends BaseRepo<BlogEntity> {
         );
       })
       .where('blog.is_deleted', false)
-      .orderBy('blog.created_at', 'desc');
+      .orderBy('blog.created_at', 'desc')
+      .groupBy('blog.id');
 
     if (!isEmpty(params?.search)) {
       query.whereRaw(`(
@@ -64,11 +65,28 @@ export class BlogRepo extends BaseRepo<BlogEntity> {
       .select([
         'blog.*',
         knex.raw('count(blog.id) over() as total'),
+        knex.raw(
+            `COALESCE(
+              jsonb_agg(
+                jsonb_build_object(
+                  'id', file.id,
+                  'url', file.url,
+                  'type', file.type
+                )
+              ) filter (where file.id is not null), '[]') AS files`,
+          ),
       ])
       .from(`${this.tableName} as blog`)
+      .leftJoin('files as file', function () {
+        this.on(knex.raw(`file.depend = '${FileDependentType.blog}'`)).andOn(
+          'file.dependent_id',
+          'blog.id',
+        );
+      })
       .where('blog.is_deleted', false)
       .where('blog.status', StatusEnum.ACTIVE)
-      .orderBy('blog.created_at', 'desc');
+      .orderBy('blog.created_at', 'desc')
+      .groupBy('blog.id');
 
     if (!isEmpty(params?.search)) {
       query.whereRaw(`(
@@ -91,10 +109,29 @@ export class BlogRepo extends BaseRepo<BlogEntity> {
   getBlogById(id: string) {
     const knex = this.knex;
     return knex
-      .select('*')
+      .select([
+        'blog.*',
+        knex.raw(
+            `COALESCE(
+              jsonb_agg(
+                jsonb_build_object(
+                  'id', file.id,
+                  'url', file.url,
+                  'type', file.type
+                )
+              ) filter (where file.id is not null), '[]') AS files`,
+          ),
+      ])
       .from(this.tableName)
+      .leftJoin('files as file', function () {
+        this.on(knex.raw(`file.depend = '${FileDependentType.blog}'`)).andOn(
+          'file.dependent_id',
+          'blog.id',
+        );
+      })
       .where('id', id)
       .where('is_deleted', false)
+      .groupBy('id')
       .first();
   }
 
