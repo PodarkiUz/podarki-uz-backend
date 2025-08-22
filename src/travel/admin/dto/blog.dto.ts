@@ -1,5 +1,7 @@
 import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsOptional, IsNumber, Min, Max, IsEnum } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsString, IsNotEmpty, IsOptional, IsNumber, Min, Max, IsEnum, ValidateNested, IsArray } from 'class-validator';
+import { FileDto } from 'src/travel/shared/dtos';
 import { StatusEnum } from 'src/travel/shared/enums';
 
 export class CreateBlogDto {
@@ -23,9 +25,12 @@ export class CreateBlogDto {
   @IsEnum(StatusEnum)
   status?: StatusEnum;
 
-  @ApiProperty({ description: 'Blog image' })
-  @IsString()
-  file_id: string;
+  @ApiPropertyOptional({ type: [FileDto] })
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => FileDto)
+  files?: FileDto[];
 }
 
 export class UpdateBlogDto extends PartialType(CreateBlogDto) {

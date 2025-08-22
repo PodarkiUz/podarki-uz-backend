@@ -73,5 +73,4 @@ export interface BlogEntity {
   title: string;
   description: string;
   author: string;
-  file_id: string;
 }

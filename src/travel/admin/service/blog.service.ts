@@ -2,22 +2,39 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { CreateBlogDto, UpdateBlogDto, BlogStatusDto } from '../dto/blog.dto';
 import { PaginationParams } from 'src/travel/shared/interfaces';
 import { BlogRepo } from 'src/travel/shared/repo/blogs.repo';
-import { StatusEnum } from 'src/travel/shared/enums';
+import { FileDependentType, StatusEnum } from 'src/travel/shared/enums';
+import { isEmpty } from 'lodash';
+import { FilesRepo } from 'src/travel/shared/repo/files.repo';
 
 @Injectable()
 export class BlogService {
-  constructor(private readonly repo: BlogRepo) {}
+  constructor(private readonly repo: BlogRepo, private readonly filesRepo: FilesRepo) {}
 
   async create(params: CreateBlogDto) {
-    const blog = await this.repo.insert({
-      title: params.title,
-      description: params.description,
-      author: params.author,
-      status: params.status || StatusEnum.ACTIVE,
-      file_id: params.file_id,
+    return await this.repo.knex.transaction(async (trc) => {
+        const blog = await this.repo.insert({
+            title: params.title,
+            description: params.description,
+            author: params.author,
+            status: params.status || StatusEnum.ACTIVE,
+          });
+      
+          if (!isEmpty(params?.files)) {
+              await this.filesRepo.bulkInsertWithTransaction(
+                trc,
+                params.files.map((file) => ({
+                  depend: FileDependentType.blog,
+                  dependent_id: blog.id,
+                  name: file.name,
+                  size: file.size,
+                  type: file.type,
+                  url: file.url,
+                })),
+              );
+            }
+      
+          return { success: true, data: blog };
     });
-
-    return { success: true, data: blog };
   }
 
   async getAllList(params: PaginationParams) {
@@ -55,10 +72,6 @@ export class BlogService {
     }
     if (params.status !== undefined) {
       updateData.status = params.status;
-    }
-
-    if (params.file_id !== undefined) {
-      updateData.file_id = params.file_id;
     }
 
     if (Object.keys(updateData).length === 0) {
