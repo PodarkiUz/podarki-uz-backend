@@ -3,6 +3,7 @@ export enum FileType {
   banner = 'banner',
   extra = 'extra',
   main = 'main',
+  blog = 'blog',
 }
 
 export enum FileDependentType {
