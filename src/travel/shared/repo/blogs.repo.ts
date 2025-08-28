@@ -155,7 +155,6 @@ export class BlogRepo extends BaseRepo<BlogEntity> {
       .where('status', 1) // Active status
       .andWhere(function () {
         this.where('title', 'ilike', `%${query}%`)
-          .orWhere('description', 'ilike', `%${query}%`)
           .orWhere('author', 'ilike', `%${query}%`);
       })
       .orderBy('created_at', 'desc')

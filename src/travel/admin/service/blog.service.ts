@@ -14,7 +14,7 @@ export class BlogService {
     return await this.repo.knex.transaction(async (trc) => {
         const blog = await this.repo.insert({
             title: params.title,
-            description: params.description,
+            content: params.content,
             author: params.author,
             status: params.status || StatusEnum.ACTIVE,
           });
@@ -64,8 +64,8 @@ export class BlogService {
     if (params.title !== undefined) {
       updateData.title = params.title;
     }
-    if (params.description !== undefined) {
-      updateData.description = params.description;
+    if (params.content !== undefined) {
+      updateData.content = params.content;
     }
     if (params.author !== undefined) {
       updateData.author = params.author;

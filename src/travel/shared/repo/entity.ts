@@ -71,6 +71,6 @@ export interface BlogEntity {
   is_deleted?: boolean;
   created_at?: Date;
   title: string;
-  description: string;
+  content: string;
   author: string;
 }

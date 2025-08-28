@@ -13,7 +13,7 @@ export class CreateBlogDto {
   @ApiProperty({ description: 'Blog description/content' })
   @IsString()
   @IsNotEmpty()
-  description: string;
+  content: string;
 
   @ApiProperty({ description: 'Blog author' })
   @IsString()
