@@ -122,7 +122,7 @@ export class BlogRepo extends BaseRepo<BlogEntity> {
               ) filter (where file.id is not null), '[]') AS files`,
           ),
       ])
-      .from(this.tableName)
+      .from(`${this.tableName} as blog`)
       .leftJoin('files as file', function () {
         this.on(knex.raw(`file.depend = '${FileDependentType.blog}'`)).andOn(
           'file.dependent_id',
