@@ -129,9 +129,9 @@ export class BlogRepo extends BaseRepo<BlogEntity> {
           'blog.id',
         );
       })
-      .where('id', id)
-      .where('is_deleted', false)
-      .groupBy('id')
+      .where('blog.id', id)
+      .where('blog.is_deleted', false)
+      .groupBy('blog.id')
       .first();
   }
 
