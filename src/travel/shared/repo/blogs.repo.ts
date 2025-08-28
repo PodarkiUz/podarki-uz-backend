@@ -91,7 +91,6 @@ export class BlogRepo extends BaseRepo<BlogEntity> {
     if (!isEmpty(params?.search)) {
       query.whereRaw(`(
         blog.title ilike '%${params.search}%'
-        or blog.description ilike '%${params.search}%'
         or blog.author ilike '%${params.search}%'
         )`);
     }
