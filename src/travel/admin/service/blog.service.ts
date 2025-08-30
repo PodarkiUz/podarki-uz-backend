@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { CreateBlogDto, UpdateBlogDto, BlogStatusDto } from '../dto/blog.dto';
 import { PaginationParams } from 'src/travel/shared/interfaces';
 import { BlogRepo } from 'src/travel/shared/repo/blogs.repo';
@@ -8,40 +12,43 @@ import { FilesRepo } from 'src/travel/shared/repo/files.repo';
 
 @Injectable()
 export class BlogService {
-  constructor(private readonly repo: BlogRepo, private readonly filesRepo: FilesRepo) {}
+  constructor(
+    private readonly repo: BlogRepo,
+    private readonly filesRepo: FilesRepo,
+  ) {}
 
   async create(params: CreateBlogDto) {
     return await this.repo.knex.transaction(async (trc) => {
-        const blog = await this.repo.insert({
-            title: params.title,
-            content: params.content,
-            author: params.author,
-            status: params.status || StatusEnum.ACTIVE,
-          });
-      
-          if (!isEmpty(params?.files)) {
-              await this.filesRepo.bulkInsertWithTransaction(
-                trc,
-                params.files.map((file) => ({
-                  depend: FileDependentType.blog,
-                  dependent_id: blog.id,
-                  name: file.name,
-                  size: file.size,
-                  type: file.type,
-                  url: file.url,
-                })),
-              );
-            }
-      
-          return { success: true, data: blog };
+      const blog = await this.repo.insert({
+        title: params.title,
+        content: params.content,
+        author: params.author,
+        status: params.status || StatusEnum.ACTIVE,
+      });
+
+      if (!isEmpty(params?.files)) {
+        await this.filesRepo.bulkInsertWithTransaction(
+          trc,
+          params.files.map((file) => ({
+            depend: FileDependentType.blog,
+            dependent_id: blog.id,
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            url: file.url,
+          })),
+        );
+      }
+
+      return { success: true, data: blog };
     });
   }
 
   async getAllList(params: PaginationParams) {
     const data = await this.repo.getAllBlogs(params);
-    return { 
-      data, 
-      total: Number(data[0]?.total) || 0 
+    return {
+      data,
+      total: Number(data[0]?.total) || 0,
     };
   }
 
@@ -59,27 +66,48 @@ export class BlogService {
       throw new NotFoundException('Blog not found');
     }
 
-    const updateData: any = {};
-    
-    if (params.title !== undefined) {
-      updateData.title = params.title;
-    }
-    if (params.content !== undefined) {
-      updateData.content = params.content;
-    }
-    if (params.author !== undefined) {
-      updateData.author = params.author;
-    }
-    if (params.status !== undefined) {
-      updateData.status = params.status;
-    }
+    return await this.repo.knex.transaction(async (trc) => {
+      const updateData: any = {};
 
-    if (Object.keys(updateData).length === 0) {
-      throw new BadRequestException('No fields to update');
-    }
+      if (params.title !== undefined) {
+        updateData.title = params.title;
+      }
+      if (params.content !== undefined) {
+        updateData.content = params.content;
+      }
+      if (params.author !== undefined) {
+        updateData.author = params.author;
+      }
+      if (params.status !== undefined) {
+        updateData.status = params.status;
+      }
 
-    const updatedBlog = await this.repo.updateById(id, updateData);
-    return { success: true, data: updatedBlog };
+      if (Object.keys(updateData).length === 0) {
+        throw new BadRequestException('No fields to update');
+      }
+
+      const updatedBlog = await this.repo.updateByIdWithTransaction(
+        trc,
+        id,
+        updateData,
+      );
+
+      if (!isEmpty(params?.files)) {
+        await this.filesRepo.deleteWithTransaction(trc, { dependent_id: id });
+        await this.filesRepo.bulkInsertWithTransaction(
+          trc,
+          params.files.map((file) => ({
+            dependent_id: id,
+            depend: FileDependentType.blog,
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            url: file.url,
+          })),
+        );
+      }
+      return { success: true, data: updatedBlog };
+    });
   }
 
   async delete(id: string) {
@@ -98,8 +126,8 @@ export class BlogService {
       throw new NotFoundException('Blog not found');
     }
 
-    const updatedBlog = await this.repo.updateById(params.id, { 
-      status: params.status 
+    const updatedBlog = await this.repo.updateById(params.id, {
+      status: params.status,
     });
     return { success: true, data: updatedBlog };
   }
