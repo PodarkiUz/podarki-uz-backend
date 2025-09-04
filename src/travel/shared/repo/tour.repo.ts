@@ -4,7 +4,11 @@ import { TourEntity } from 'src/travel/shared/repo/entity';
 import { ITourSeachByName } from 'src/travel/admin/interface/tour.interface';
 import { ILanguage, PaginationParams } from '../interfaces';
 import { FileDependentType } from '../enums';
-import { IGetTourListClient, TourOrderTypes } from 'src/travel/client/interface/tour.interface';
+import {
+  IGetTourListClient,
+  TourOrderTypes,
+} from 'src/travel/client/interface/tour.interface';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class TourRepo extends BaseRepo<TourEntity> {
@@ -120,6 +124,7 @@ export class TourRepo extends BaseRepo<TourEntity> {
         );
       })
       .where('tour.is_deleted', false)
+      .where('tour.start_date', '>=', dayjs().format('YYYY-MM-DD'))
       .groupBy(['tour.id', 'org.id']);
 
     if (params?.search) {

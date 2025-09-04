@@ -48,6 +48,7 @@
     "bson-objectid": "^2.0.4",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "dayjs": "^1.11.18",
     "dotenv": "^16.4.5",
     "google-auth-library": "^10.1.0",
     "heic-convert": "^2.1.0",
