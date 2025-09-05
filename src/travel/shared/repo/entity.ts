@@ -19,7 +19,7 @@ export interface TourEntity {
   seats: number;
   route_json?: RouteDto[];
   includes?: IncludesDto[];
-  contact_phone?: string[];
+  contact_phone?: string[] | string;
   created_at?: Date;
   is_deleted?: boolean;
 }
