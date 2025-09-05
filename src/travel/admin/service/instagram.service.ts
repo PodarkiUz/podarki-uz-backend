@@ -174,6 +174,7 @@ export class InstagramService {
       files,
       route_json,
       includes,
+      contact_phone: parsedData.contact_phone || [],
     };
   }
 

@@ -128,6 +128,7 @@ export class OpenAIService {
         - seats: number (maximum participants/available seats) (optional)
         - includes: object with included services (e.g., {"accommodation": true, "meals": true, "transport": true}) (optional)
         - currency: string (currency of the tour, e.g., "UZS", "USD", "EUR") (optional)
+        - contact_phone: array of strings (contact phone of the tour, e.g., ["+998901234567", "+998901234568"]) (optional)
 
         If a field cannot be extracted from the text, omit it from the JSON response.
         Only return valid JSON array, no additional text or explanations.
