@@ -130,6 +130,12 @@ export class CreateTourDto implements ITourCreateParam {
   @ValidateNested({ each: true })
   @Type(() => IncludesDto)
   includes?: IncludesDto[];
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  contact_phone?: string[];
 }
 
 export class UpdateTourDto extends PartialType(CreateTourDto) {

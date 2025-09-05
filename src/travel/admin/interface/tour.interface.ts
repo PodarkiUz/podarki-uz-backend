@@ -18,6 +18,7 @@ export interface ITourCreateParam {
   route?: RouteDto[];
   includes?: IncludesDto[];
   details?: TourDetailsDto;
+  contact_phone?: string[];
 }
 
 export interface ITourUpdateParam {
@@ -35,6 +36,7 @@ export interface ITourUpdateParam {
   route_json?: RouteDto[];
   includes?: IncludesDto[];
   details?: TourDetailsDto;
+  contact_phone?: string[];
 }
 
 export interface ITourSeachByName {

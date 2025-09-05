@@ -46,6 +46,7 @@ export class TourService {
         includes: !isEmpty(params?.includes)
           ? (JSON.stringify(params.includes) as unknown as IncludesDto[])
           : null,
+        contact_phone: params?.contact_phone,
       });
 
       if (!isEmpty(params?.files)) {
@@ -135,6 +136,9 @@ export class TourService {
         }),
         ...(!isEmpty(params?.includes) && {
           includes: JSON.stringify(params.includes) as unknown as IncludesDto[],
+        }),
+        ...(!isEmpty(params?.contact_phone) && {
+          contact_phone: params.contact_phone,
         }),
       };
 
