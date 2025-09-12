@@ -114,32 +114,35 @@ export class OpenAIService {
     await new Promise((res) => setTimeout(res, 1500));
     try {
       const prompt = `
-        Parse the following Telegram tour announcement text and extract ALL tours mentioned.
-        A single message may contain multiple tours. Return the result as a valid JSON array of tour objects.
-        
-        Each tour object should have the following fields:
-        - title: object with language keys (e.g., {"en": "Tour Title", "ru": "Название тура", "uz": "Tur nomi"}) (required)
-        - description: object with language keys, more detailed description of the tour (e.g., {"en": "Description", "ru": "Описание", "uz": "Tavsif"}) (optional)
-        - price: number (tour price, extract numeric value only) (required)
-        - sale_price: number (discounted price if mentioned) (optional)
-        - duration: string (e.g., "5 days", "1 week", "3 nights") (optional)
-        - start_date: string in YYYY-MM-DD format (optional), if not mentioned then return null
-        - start_location: string (optional), if not mentioned then return null
-        - seats: number (maximum participants/available seats) (optional)
-        - includes: object with included services (e.g., {"accommodation": true, "meals": true, "transport": true}) (optional)
-        - currency: string (currency of the tour, e.g., "UZS", "USD", "EUR") (optional)
-        - contact_phone: array of strings (contact phone of the tour, e.g., ["+998901234567", "+998901234568"]) (optional)
-
-        If a field cannot be extracted from the text, omit it from the JSON response.
-        Only return valid JSON array, no additional text or explanations.
-        For prices, extract only the numeric value without currency symbols.
-        For dates, use YYYY-MM-DD format.
-        For multi-language fields, use language codes as keys.
-        
-        IMPORTANT: If there are multiple tours in the message, create a separate object for each tour.
-
-        Instagram text:
-        ${rawText}
+      Parse the following Telegram tour announcement text and extract ALL tours mentioned.
+      A single message may contain multiple tours. Return the result as a valid JSON array of tour objects.
+      
+      Each tour object should have the following fields:
+      - title: object with language keys (e.g., {"en": "Tour Title", "ru": "Название тура", "uz": "Tur nomi"}) (required)
+      - description: object with language keys, containing a detailed description of the tour. 
+        IMPORTANT: If there are details in the text that do not map directly to other fields 
+        (such as departure time, meeting point, return time, schedule, etc.), 
+        include them in the description so no important information is lost. (required)
+      - price: number (tour price, extract numeric value only) (required)
+      - sale_price: number (discounted price if mentioned) (optional)
+      - duration: string (e.g., "5 days", "1 week", "3 nights") (optional)
+      - start_date: string in YYYY-MM-DD format (optional), if not mentioned then return null
+      - start_location: string (optional), if not mentioned then return null
+      - seats: number (maximum participants/available seats) (optional)
+      - includes: object with included services (e.g., {"accommodation": true, "meals": true, "transport": true}) (optional)
+      - currency: string (currency of the tour, e.g., "UZS", "USD", "EUR") (optional)
+      - contact_phone: array of strings (contact phone of the tour, e.g., ["+998901234567", "+998901234568"]) (optional)
+      
+      IMPORTANT RULES:
+      1. If a field cannot be extracted, omit it from the JSON response.
+      2. For prices, extract only the numeric value without currency symbols.
+      3. For dates, use YYYY-MM-DD format.
+      4. If the same tour is offered from multiple locations or with different prices, 
+         create a separate object for each variation (e.g., Tashkent departure vs. Andijan departure).
+      5. Only return valid JSON array, no explanations or text outside of JSON.
+      
+      Telegram text:
+      ${rawText}
       `;
 
       const completion = await this.openai.chat.completions.create({
