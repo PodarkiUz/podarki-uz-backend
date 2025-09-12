@@ -15,7 +15,7 @@ export interface TravelerEntity {
   google_id?: string;
   google_email?: string;
   telegram_id?: number;
-  auth_provider?: 'phone' | 'google' | 'telegram';
+  auth_provider?: 'phone' | 'google' | 'telegram' | 'telegram_gateway';
   tg_username?: string;
 
   // Profile information

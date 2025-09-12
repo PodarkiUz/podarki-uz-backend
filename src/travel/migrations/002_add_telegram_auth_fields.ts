@@ -4,7 +4,7 @@ export async function up(knex: Knex): Promise<void> {
   return knex.schema.alterTable('travelers', function (table) {
     // Add Telegram authentication fields
     table.bigInteger('telegram_id').unique(); // Telegram user ID
-    table.enum('auth_provider', ['phone', 'google', 'telegram']).defaultTo('phone'); // Authentication provider
+    table.enum('auth_provider', ['phone', 'google', 'telegram', 'telegram_gateway']).defaultTo('phone'); // Authentication provider
     table.text('photo_url'); // Telegram photo URL
   });
 }

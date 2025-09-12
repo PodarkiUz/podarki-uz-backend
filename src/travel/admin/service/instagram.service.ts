@@ -63,6 +63,8 @@ export class InstagramService {
     if (!this.rapidApiKeys || this.rapidApiKeys?.length === 0) {
       throw new Error('RAPID_API_KEYS is not configured');
     }
+
+    process.env.RAPID_API_ACTIVE_KEY = this.rapidApiKeys[0];
   }
 
   async getPostByUrl(postUrl: string): Promise<InstagramApiResponse | null> {
@@ -73,21 +75,41 @@ export class InstagramService {
       if (!keys || keys.length === 0) {
         throw new Error('RAPID_API_KEYS is not configured');
       }
+      let response;
+      try {
+        response = await axios.get(
+          `https://${this.rapidApiHost}/get_media_data.php`,
+          {
+            headers: {
+              'X-RapidAPI-Key': process.env.RAPID_API_ACTIVE_KEY,
+              'X-RapidAPI-Host': this.rapidApiHost,
+            },
+            params: {
+              reel_post_code_or_url: postUrl,
+              type: 'post',
+            },
+            timeout: 10000,
+          },
+        );
+      } catch (error) {
+        const activeKeyIndex = this.rapidApiKeys.findIndex(key => key === process.env.RAPID_API_ACTIVE_KEY) + 1;
+        process.env.RAPID_API_ACTIVE_KEY = this.rapidApiKeys[activeKeyIndex];
+        response = await axios.get(
+          `https://${this.rapidApiHost}/get_media_data.php`,
+          {
+            headers: {
+              'X-RapidAPI-Key': process.env.RAPID_API_ACTIVE_KEY,
+              'X-RapidAPI-Host': this.rapidApiHost,
+            },
+            params: {
+              reel_post_code_or_url: postUrl,
+              type: 'post',
+            },
+            timeout: 10000,
+          },
+        );
+      }
 
-      const response = await axios.get(
-        `https://${this.rapidApiHost}/get_media_data.php`,
-        {
-          headers: {
-            'X-RapidAPI-Key': keys[1],
-            'X-RapidAPI-Host': this.rapidApiHost,
-          },
-          params: {
-            reel_post_code_or_url: postUrl,
-            type: 'post',
-          },
-          timeout: 10000,
-        },
-      );
       const responseData = response.data as InstagramApiResponse;
       if (responseData) {
         return responseData;
@@ -96,8 +118,7 @@ export class InstagramService {
       return null;
     } catch (error: any) {
       this.logger.error(
-        `Error fetching Instagram post by URL ${postUrl}: ${
-          error?.message || 'Unknown error'
+        `Error fetching Instagram post by URL ${postUrl}: ${error?.message || 'Unknown error'
         }`,
       );
       return null;
@@ -145,18 +166,18 @@ export class InstagramService {
       typeof parsedData.title === 'string'
         ? { en: parsedData.title, uz: parsedData.title, ru: parsedData.title }
         : parsedData.title || {
-            en: 'Untitled Tour',
-            uz: 'Untitled Tour',
-            ru: 'Untitled Tour',
-          };
+          en: 'Untitled Tour',
+          uz: 'Untitled Tour',
+          ru: 'Untitled Tour',
+        };
 
     const description =
       typeof parsedData.description === 'string'
         ? {
-            en: parsedData.description,
-            uz: parsedData.description,
-            ru: parsedData.description,
-          }
+          en: parsedData.description,
+          uz: parsedData.description,
+          ru: parsedData.description,
+        }
         : parsedData.description || { en: '', uz: '', ru: '' };
 
     return {
