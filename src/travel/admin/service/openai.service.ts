@@ -126,7 +126,7 @@ export class OpenAIService {
       - price: number (tour price, extract numeric value only) (required)
       - sale_price: number (discounted price if mentioned) (optional)
       - duration: string (e.g., "5 days", "1 week", "3 nights") (optional)
-      - start_date: string in YYYY-MM-DD format (optional), if not mentioned then return null
+      - start_date: string in YYYY-MM-DD format, if year is not mentioned then use current year (optional), if not mentioned then return null
       - start_location: string (optional), if not mentioned then return null
       - seats: number (maximum participants/available seats) (optional)
       - includes: object with included services (e.g., {"accommodation": true, "meals": true, "transport": true}) (optional)
@@ -136,7 +136,7 @@ export class OpenAIService {
       IMPORTANT RULES:
       1. If a field cannot be extracted, omit it from the JSON response.
       2. For prices, extract only the numeric value without currency symbols.
-      3. For dates, use YYYY-MM-DD format.
+      3. For dates, use YYYY-MM-DD format, if year is not mentioned then use current year.
       4. If the same tour is offered from multiple locations or with different prices, 
          create a separate object for each variation (e.g., Tashkent departure vs. Andijan departure).
       5. Only return valid JSON array, no explanations or text outside of JSON.
