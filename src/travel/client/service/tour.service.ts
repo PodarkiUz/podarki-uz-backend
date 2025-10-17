@@ -36,8 +36,8 @@ export class TourService {
     return { data, total: Number(data[0]?.total) || 0 };
   }
 
-  async getOne(id: string) {
-    const data = await this.repo.getTourByIdClient(id);
+  async getOne(id: string, lang: ILanguage) {
+    const data = await this.repo.getTourByIdClient(id, lang);
     return data;
   }
 }
