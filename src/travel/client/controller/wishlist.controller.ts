@@ -1,17 +1,9 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { WishlistService } from '../service/wishlist.service';
 import {
   CreateWishlistDto,
+  DeleteWishlistDto,
   GetWishlistListDto,
   UpdateWishlistDto,
 } from '../dto/wishlist.dto';
@@ -43,7 +35,7 @@ export class WishlistController {
   }
 
   @Post('delete')
-  remove(@Body() body: OneByIdDto) {
+  remove(@Body() body: DeleteWishlistDto) {
     return this.wishlistService.remove(body);
   }
 }

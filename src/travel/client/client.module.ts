@@ -16,6 +16,8 @@ import { BlogController } from './controller/blog.controller';
 import { BlogService } from './service/blog.service';
 import { WishlistController } from './controller/wishlist.controller';
 import { WishlistService } from './service/wishlist.service';
+import { WishlistAuthController } from './controller/wishlist-auth.controller';
+import { WishlistAuthService } from './service/wishlist-auth.service';
 @Module({
   imports: [AuthModule, SharedModule],
   controllers: [
@@ -25,6 +27,7 @@ import { WishlistService } from './service/wishlist.service';
     TelegramAuthController,
     BlogController,
     WishlistController,
+    WishlistAuthController,
   ],
   providers: [
     TourService,
@@ -36,6 +39,7 @@ import { WishlistService } from './service/wishlist.service';
     TelegramGatewayOtpRepo,
     BlogService,
     WishlistService,
+    WishlistAuthService,
   ],
 })
 export class ClientModule {}

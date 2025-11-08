@@ -6,9 +6,14 @@ import {
   MaxLength,
   IsUrl,
 } from 'class-validator';
-import { PaginationDto } from 'src/travel/shared/dtos';
+import { OneByIdDto, PaginationDto } from 'src/travel/shared/dtos';
 
 export class CreateWishlistDto {
+  @ApiProperty({ description: 'Owner of the wishlist item' })
+  @IsString()
+  @IsNotEmpty()
+  owner_id: string;
+
   @ApiProperty({ description: 'Title of the wishlist item' })
   @IsString()
   @IsNotEmpty()
@@ -36,8 +41,20 @@ export class UpdateWishlistDto extends PartialType(CreateWishlistDto) {
 }
 
 export class GetWishlistListDto extends PaginationDto {
+  @ApiProperty({ description: 'Owner ID of the wishlist items' })
+  @IsString()
+  @IsNotEmpty()
+  owner_id: string;
+
   @ApiPropertyOptional({ description: 'Search wishlist items by title' })
   @IsString()
   @IsOptional()
   search?: string;
+}
+
+export class DeleteWishlistDto extends OneByIdDto {
+  @ApiProperty({ description: 'Owner ID of the wishlist item' })
+  @IsString()
+  @IsNotEmpty()
+  owner_id: string;
 }

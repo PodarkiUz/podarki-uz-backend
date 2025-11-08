@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { WishlistRepo } from 'src/travel/shared/repo/wishlist.repo';
 import {
   CreateWishlistDto,
+  DeleteWishlistDto,
   GetWishlistListDto,
   UpdateWishlistDto,
 } from '../dto/wishlist.dto';
@@ -13,6 +14,7 @@ export class WishlistService {
 
   async create(payload: CreateWishlistDto) {
     return this.wishlistRepo.insert({
+      owner_id: payload.owner_id,
       title: payload.title,
       imageurl: payload.imageUrl,
       producturl: payload.productUrl,
@@ -20,11 +22,12 @@ export class WishlistService {
   }
 
   async findAll(params: GetWishlistListDto) {
-    const { limit = 10, offset = 0, search } = params;
+    const { limit = 10, offset = 0, search, owner_id } = params;
 
     const query = this.wishlistRepo.knex
       .select(['id', 'title', 'imageurl', 'producturl'])
       .from(this.wishlistRepo.tableName)
+      .where('owner_id', owner_id)
       .limit(limit)
       .offset(offset);
 
@@ -58,10 +61,16 @@ export class WishlistService {
 
   async update(payload: UpdateWishlistDto) {
     const { id, ...updateData } = payload;
-    return this.wishlistRepo.updateById(id, updateData);
+    return this.wishlistRepo.updateById(id, {
+      ...updateData,
+      owner_id: payload.owner_id,
+    });
   }
 
-  async remove(payload: OneByIdDto) {
-    return this.wishlistRepo.delete({ id: payload.id });
+  async remove(payload: DeleteWishlistDto) {
+    return this.wishlistRepo.delete({
+      id: payload.id,
+      owner_id: payload.owner_id,
+    });
   }
 }
