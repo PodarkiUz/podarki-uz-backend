@@ -274,12 +274,14 @@ export class TourRepo extends BaseRepo<TourEntity> {
     return query;
   }
 
-  getTourByIdClient(id: string) {
+  getTourByIdClient(id: string, lang: ILanguage) {
     const knex = this.knex;
 
     const query = knex
       .select([
         'tour.*',
+        knex.raw(`tour.title -> '${lang}' as title`),
+        knex.raw(`tour.description -> '${lang}' as description`),
         knex.raw(
           `jsonb_agg(
               jsonb_build_object(

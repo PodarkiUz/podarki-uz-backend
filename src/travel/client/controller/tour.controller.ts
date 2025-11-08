@@ -36,7 +36,7 @@ export class TourController {
   }
 
   @Post('get-by-id')
-  getOne(@Body() params: OneByIdDto) {
-    return this.service.getOne(params.id);
+  getOne(@Body() params: OneByIdDto, @Lang() lang: ILanguage) {
+    return this.service.getOne(params.id, lang);
   }
 }
