@@ -37,7 +37,9 @@ async function bootstrap() {
   SwaggerModule.setup('swagger', app, document);
 
   await app.listen(HTTP_PORT, () =>
-    console.log(`APPLICATION IS RUNNING ON ${HTTP_PORT} PORT`),
+    console.log(
+      `You can explore the API at http://localhost:${HTTP_PORT}/swagger`,
+    ),
   );
 }
 bootstrap();

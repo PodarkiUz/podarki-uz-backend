@@ -75,3 +75,10 @@ export interface BlogEntity {
   content: string;
   author: string;
 }
+
+export interface WishlistEntity {
+  id?: string;
+  title: string;
+  imageurl?: string;
+  producturl?: string;
+}
