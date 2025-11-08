@@ -23,12 +23,12 @@ export class WishlistService {
 
   async findAll(params: GetWishlistListDto) {
     const { limit = 10, offset = 0, search, owner_id } = params;
-
+    limit;
     const query = this.wishlistRepo.knex
       .select(['id', 'title', 'imageurl', 'producturl'])
       .from(this.wishlistRepo.tableName)
       .where('owner_id', owner_id)
-      .limit(limit)
+      // .limit(limit)
       .offset(offset);
 
     if (search) {
@@ -50,7 +50,7 @@ export class WishlistService {
     return {
       data,
       total: totalRow ? Number((totalRow as { count?: string }).count ?? 0) : 0,
-      limit,
+      // limit,
       offset,
     };
   }
