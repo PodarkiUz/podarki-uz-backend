@@ -1,6 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { WishlistSignInDto, WishlistSignUpDto } from '../dto/wishlist-auth.dto';
+import {
+  WishlistSignInDto,
+  WishlistSignUpDto,
+  WishlistTelegramAuthDto,
+} from '../dto/wishlist-auth.dto';
 import { WishlistAuthService } from '../service/wishlist-auth.service';
 
 @ApiTags('WISHLIST AUTH')
@@ -16,5 +20,15 @@ export class WishlistAuthController {
   @Post('sign-in')
   signIn(@Body() body: WishlistSignInDto) {
     return this.wishlistAuthService.signIn(body);
+  }
+
+  @Post('telegram/sign-up')
+  signUpWithTelegram(@Body() body: WishlistTelegramAuthDto) {
+    return this.wishlistAuthService.signUpWithTelegram(body);
+  }
+
+  @Post('telegram/sign-in')
+  signInWithTelegram(@Body() body: WishlistTelegramAuthDto) {
+    return this.wishlistAuthService.signInWithTelegram(body);
   }
 }

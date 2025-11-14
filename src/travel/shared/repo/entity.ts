@@ -86,7 +86,12 @@ export interface WishlistEntity {
 
 export interface WishlistUserEntity {
   id?: string;
-  login: string;
-  password: string;
+  login?: string;
+  password?: string;
+  telegram_id?: number;
+  first_name?: string;
+  last_name?: string;
+  username?: string;
+  photo_url?: string;
   created_at?: Date;
 }
