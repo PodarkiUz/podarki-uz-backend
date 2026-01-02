@@ -60,9 +60,10 @@ export class WishlistService {
   }
 
   async update(payload: UpdateWishlistDto) {
-    const { id, ...updateData } = payload;
+    const { id } = payload;
     return this.wishlistRepo.updateById(id, {
-      ...updateData,
+      imageurl: payload.imageUrl,
+      producturl: payload.productUrl,
       owner_id: payload.owner_id,
     });
   }
