@@ -12,12 +12,14 @@ import {
   WishlistTelegramAuthDto,
 } from '../dto/wishlist-auth.dto';
 import { verifyTelegramAuthData } from '@shared/utils/telegram-hash';
+import { WishlistCodesRepo } from 'src/travel/shared/repo/wishlist.repo';
+import { generateRandomCode } from 'src/travel/shared/utils';
 
 @Injectable()
 export class WishlistAuthService {
   private readonly botToken: string;
 
-  constructor(private readonly wishlistUserRepo: WishlistUserRepo) {
+  constructor(private readonly wishlistUserRepo: WishlistUserRepo, private readonly wishlistCodesRepo: WishlistCodesRepo) {
     this.botToken = process.env.TELEGRAM_BOT_TOKEN || '';
     if (!this.botToken) {
       console.warn(
@@ -32,16 +34,27 @@ export class WishlistAuthService {
       throw new ConflictException('Login already taken');
     }
 
-    const password = this.hashPassword(payload.password);
-    const user = await this.wishlistUserRepo.insert({
+    return this.wishlistUserRepo.knex.transaction(async (trx) => {
+      const password = this.hashPassword(payload.password);
+      const user = await this.wishlistUserRepo.insertWithTransaction(trx, {
       login: payload.login,
       password,
+    });
+
+    const code = generateRandomCode(6);
+
+    const wishlistCode = await this.wishlistCodesRepo.insertWithTransaction(trx, {
+      owner_id: user.id,
+      name: user.login+code,
+      code: code,
     });
 
     return {
       id: user.id,
       login: user.login,
-    };
+        code: wishlistCode.code,
+      };
+    });
   }
 
   async signIn(payload: WishlistSignInDto) {
@@ -55,9 +68,12 @@ export class WishlistAuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    const code = await this.wishlistCodesRepo.getOne({owner_id: user.id});
+
     return {
       id: user.id,
       login: user.login,
+      code: code.code,
     };
   }
 
