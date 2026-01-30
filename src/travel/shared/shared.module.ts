@@ -7,7 +7,7 @@ import { CityRepo } from './repo/cities.repo';
 import { DestinationRepo } from './repo/destination.repo';
 import { LocationRepo } from './repo/locations.repo';
 import { BlogRepo } from './repo/blogs.repo';
-import { WishlistRepo } from './repo/wishlist.repo';
+import { WishlistCodesRepo, WishlistRepo } from './repo/wishlist.repo';
 import { WishlistUserRepo } from './repo/wishlist-user.repo';
 import { TelegramOtpRepo } from '../client/repo/telegram-otp.repo';
 
@@ -22,6 +22,7 @@ const repos = [
   BlogRepo,
   WishlistRepo,
   WishlistUserRepo,
+  WishlistCodesRepo,
 ];
 
 const modules = [
