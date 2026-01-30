@@ -44,7 +44,7 @@ export class GetWishlistListDto extends PaginationDto {
   @ApiProperty({ description: 'Owner ID of the wishlist items' })
   @IsString()
   @IsNotEmpty()
-  owner_id: string;
+  code: string;
 
   @ApiPropertyOptional({ description: 'Search wishlist items by title' })
   @IsString()
@@ -57,4 +57,11 @@ export class DeleteWishlistDto extends OneByIdDto {
   @IsString()
   @IsNotEmpty()
   owner_id: string;
+}
+
+export class GetWishlistByCodeDto {
+  @ApiProperty({ description: 'Code of the wishlist item' })
+  @IsString()
+  @IsNotEmpty()
+  code: string;
 }

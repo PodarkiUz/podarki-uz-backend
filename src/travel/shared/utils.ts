@@ -1,3 +1,22 @@
+import crypto from 'crypto';
+
+const ALPHANUMERIC_CHARS =
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+/**
+ * Generates a random alphanumeric code (uppercase + lowercase + 0-9).
+ * @param length - Length of the code (default: 6)
+ * @returns Random code string
+ */
+export function generateRandomCode(length = 6): string {
+  const bytes = crypto.randomBytes(length);
+  let code = '';
+  for (let i = 0; i < length; i++) {
+    code += ALPHANUMERIC_CHARS[bytes[i] % ALPHANUMERIC_CHARS.length];
+  }
+  return code;
+}
+
 export function compareArrays<T>(oldArray: T[], newArray: T[], prop?: string) {
   // Find items to remove (present in oldArray but not in newArray)
   const itemsToRemove = oldArray.filter(

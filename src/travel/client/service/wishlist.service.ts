@@ -1,5 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { WishlistRepo } from 'src/travel/shared/repo/wishlist.repo';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  WishlistCodesRepo,
+  WishlistRepo,
+} from 'src/travel/shared/repo/wishlist.repo';
 import {
   CreateWishlistDto,
   DeleteWishlistDto,
@@ -7,27 +10,50 @@ import {
   UpdateWishlistDto,
 } from '../dto/wishlist.dto';
 import { OneByIdDto } from 'src/travel/shared/dtos';
+import { generateRandomCode } from 'src/travel/shared/utils';
 
 @Injectable()
 export class WishlistService {
-  constructor(private readonly wishlistRepo: WishlistRepo) { }
+  constructor(
+    private readonly wishlistRepo: WishlistRepo,
+    private readonly wishlistCodesRepo: WishlistCodesRepo,
+  ) {}
 
   async create(payload: CreateWishlistDto) {
-    return this.wishlistRepo.insert({
-      owner_id: payload.owner_id,
-      title: payload.title,
-      imageurl: payload.imageUrl,
-      producturl: payload.productUrl,
+    return this.wishlistCodesRepo.knex.transaction(async (trx) => {
+      const owner = await this.wishlistCodesRepo.getOne(
+        { owner_id: payload.owner_id },
+        trx,
+      );
+      if (owner) {
+        throw new BadRequestException('Code not found');
+      }
+
+      const code = generateRandomCode(6);
+
+      await this.wishlistCodesRepo.insertWithTransaction(trx, {
+        name: payload.title,
+        owner_id: payload.owner_id,
+        code: code,
+      });
+
+      return this.wishlistRepo.insertWithTransaction(trx, {
+        owner_id: payload.owner_id,
+        title: payload.title,
+        imageurl: payload.imageUrl,
+        producturl: payload.productUrl,
+        code: code,
+      });
     });
   }
 
   async findAll(params: GetWishlistListDto) {
-    const { limit = 10, offset = 0, search, owner_id } = params;
+    const { limit = 10, offset = 0, search, code } = params;
     limit;
     const query = this.wishlistRepo.knex
       .select(['id', 'title', 'imageurl', 'producturl'])
       .from(this.wishlistRepo.tableName)
-      .where('owner_id', owner_id)
+      .where('code', code)
       // .limit(limit)
       .offset(offset);
 
@@ -43,6 +69,9 @@ export class WishlistService {
       .modify((qb) => {
         if (search) {
           qb.where('title', 'ilike', `%${search}%`);
+        }
+        if (code) {
+          qb.where('code', code);
         }
       })
       .first();

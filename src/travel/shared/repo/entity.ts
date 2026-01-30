@@ -82,6 +82,14 @@ export interface WishlistEntity {
   imageurl?: string;
   producturl?: string;
   owner_id: string;
+  code: string;
+}
+
+export interface WishlistCodesEntity {
+  id?: string;
+  name: string;
+  owner_id: string;
+  code: string;
 }
 
 export interface WishlistUserEntity {
