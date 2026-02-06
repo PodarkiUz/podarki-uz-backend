@@ -15,4 +15,8 @@ export class WishlistUserRepo extends BaseRepo<WishlistUserEntity> {
   findByTelegramId(telegramId: number) {
     return this.getOne({ telegram_id: telegramId });
   }
+
+  findByGoogleId(googleId: string) {
+    return this.getOne({ google_id: googleId });
+  }
 }

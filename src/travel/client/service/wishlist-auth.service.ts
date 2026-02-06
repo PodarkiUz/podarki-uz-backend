@@ -14,12 +14,17 @@ import {
 import { verifyTelegramAuthData } from '@shared/utils/telegram-hash';
 import { WishlistCodesRepo } from 'src/travel/shared/repo/wishlist.repo';
 import { generateRandomCode } from 'src/travel/shared/utils';
+import { GoogleOAuthService } from 'src/travel/core/auth/google-oauth.service';
 
 @Injectable()
 export class WishlistAuthService {
   private readonly botToken: string;
 
-  constructor(private readonly wishlistUserRepo: WishlistUserRepo, private readonly wishlistCodesRepo: WishlistCodesRepo) {
+  constructor(
+    private readonly wishlistUserRepo: WishlistUserRepo,
+    private readonly wishlistCodesRepo: WishlistCodesRepo,
+    private readonly googleOAuthService: GoogleOAuthService,
+  ) {
     this.botToken = process.env.TELEGRAM_BOT_TOKEN || '';
     if (!this.botToken) {
       console.warn(
@@ -169,6 +174,52 @@ export class WishlistAuthService {
       last_name: user.last_name,
       username: user.username,
       photo_url: user.photo_url,
+    };
+  }
+
+  async signInWithGoogle(idToken: string) {
+    if (!idToken?.trim()) {
+      throw new BadRequestException('Google ID token is required');
+    }
+
+    const userInfo = await this.googleOAuthService.verifyIdToken(idToken.trim(), 'weesh');
+    const googleId = userInfo.sub;
+    const login = userInfo.email ?? `google_${googleId}`;
+
+    let user = await this.wishlistUserRepo.findByGoogleId(googleId);
+
+    if (!user) {
+      return this.wishlistUserRepo.knex.transaction(async (trx) => {
+        const newUser = await this.wishlistUserRepo.insertWithTransaction(trx, {
+          google_id: googleId,
+          login,
+          first_name: userInfo.given_name,
+          last_name: userInfo.family_name,
+          photo_url: userInfo.picture,
+        });
+        const code = generateRandomCode(6);
+        const wishlistCode = await this.wishlistCodesRepo.insertWithTransaction(trx, {
+          owner_id: newUser.id,
+          name: `${login}${code}`,
+          code,
+        });
+        return {
+          id: newUser.id,
+          login: newUser.login,
+          code: wishlistCode.code,
+        };
+      });
+    }
+
+    const codeRow = await this.wishlistCodesRepo.getOne({ owner_id: user.id });
+    if (!codeRow) {
+      throw new UnauthorizedException('Wishlist code not found for user');
+    }
+
+    return {
+      id: user.id,
+      login: user.login ?? login,
+      code: codeRow.code,
     };
   }
 

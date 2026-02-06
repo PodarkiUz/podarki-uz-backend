@@ -27,41 +27,55 @@ export class GoogleOAuthService {
     );
   }
 
-  async verifyIdToken(idToken: string): Promise<GoogleUserInfo> {
+  async verifyIdToken(idToken: string, client?: string): Promise<GoogleUserInfo> {
+    const clientId = client === 'weesh' ? process.env.WEESH_GOOGLE_CLIENT_ID : process.env.GOOGLE_CLIENT_ID;
+    if (!clientId?.trim()) {
+      console.error('GOOGLE_CLIENT_ID is not set. Set it to the same value as the frontend (e.g. NEXT_PUBLIC_GOOGLE_CLIENT_ID).');
+      throw new UnauthorizedException('Google sign-in is not configured');
+    }
+
     try {
-      // Verify the ID token
+      // Audience must match the client ID that issued the token (your frontend Web client ID).
       const ticket = await this.client.verifyIdToken({
         idToken,
-        audience: process.env.GOOGLE_CLIENT_ID, // Must match your client ID
+        audience: clientId.trim(),
       });
 
       const payload = ticket.getPayload();
 
-      if (!payload) {
+      if (!payload?.sub) {
         throw new UnauthorizedException('Invalid Google token payload');
       }
 
-      // Check if email is verified
-      if (!payload.email_verified) {
+      // Require verified email when present
+      if (payload.email_verified === false) {
         throw new UnauthorizedException('Google email not verified');
       }
 
       return {
         sub: payload.sub,
-        email: payload.email!,
-        email_verified: payload.email_verified!,
-        name: payload.name!,
-        given_name: payload.given_name!,
-        family_name: payload.family_name!,
-        picture: payload.picture!,
-        locale: payload.locale!,
+        email: payload.email ?? `google_${payload.sub}`,
+        email_verified: payload.email_verified ?? true,
+        name: payload.name ?? '',
+        given_name: payload.given_name ?? '',
+        family_name: payload.family_name ?? '',
+        picture: payload.picture ?? '',
+        locale: payload.locale ?? '',
       };
     } catch (error) {
       if (error instanceof UnauthorizedException) {
         throw error;
       }
 
-      console.error('Google token verification error:', error);
+      const message = error instanceof Error ? error.message : String(error);
+      console.error('Google token verification error:', message);
+
+      // Surface common causes for easier debugging
+      if (message.includes('audience') || message.includes('aud')) {
+        throw new UnauthorizedException(
+          'Invalid Google token: audience mismatch. Set GOOGLE_CLIENT_ID on the backend to the same value as NEXT_PUBLIC_GOOGLE_CLIENT_ID on the frontend.',
+        );
+      }
       throw new UnauthorizedException('Invalid Google token');
     }
   }

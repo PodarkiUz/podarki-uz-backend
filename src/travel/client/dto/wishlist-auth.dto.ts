@@ -72,3 +72,10 @@ export class WishlistTelegramAuthDto {
   @IsNotEmpty()
   hash: string;
 }
+
+export class WishlistGoogleAuthDto {
+  @ApiProperty({ description: 'Google ID token (JWT) from the client' })
+  @IsString()
+  @IsNotEmpty()
+  id_token: string;
+}
